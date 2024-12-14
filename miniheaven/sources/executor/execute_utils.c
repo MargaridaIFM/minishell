@@ -53,14 +53,14 @@ void	ft_execute_pipe(t_minishell *minishell, char *cmd)
 	// sp.sa_flags = 0;
 	// sigemptyset(&sp.sa_mask);
 	// if (sigaction(SIGPIPE, &sp, NULL) != -1) {
-		if (access(split_cmd[0], X_OK) == 0)
-			execve(split_cmd[0], split_cmd, minishell->envp);
-		cmd_path = find_path(minishell, split_cmd[0]);
-		if (cmd_path == NULL)
-			error_execute(minishell, split_cmd, cmd_path, cmd);
-		//free(cmd);
-		execve(cmd_path, split_cmd, minishell->envp);
-		free_array(split_cmd);
+	if (access(split_cmd[0], X_OK) == 0)
+		execve(split_cmd[0], split_cmd, minishell->envp);
+	cmd_path = find_path(minishell, split_cmd[0]);
+	if (cmd_path == NULL)
+		error_execute(minishell, split_cmd, cmd_path, cmd);
+	//free(cmd);
+	execve(cmd_path, split_cmd, minishell->envp);
+	free_array(split_cmd);
 	exit(0);
 	// }
 	// else

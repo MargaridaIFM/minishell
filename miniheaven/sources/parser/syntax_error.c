@@ -43,7 +43,7 @@ bool	check_syntax_pipe(t_token *temp, t_token *last_token)
 	if (!last_token || last_token->type != WORD)
 	{
 		printf("Syntax error near unexpected token `|'\n");
-		// g_signal = 2;
+		//g_signal = 2;
 		return (false);
 	}
 	if (!temp->next || temp->next->type == PIPE)

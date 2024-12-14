@@ -108,9 +108,9 @@ void	wait_pipes(t_minishell *minishell)
 	i = 0;
 	while (i < minishell->commands)
 	{
-	    waitpid(-1, &minishell->exit_status, 0);
-        //waitpid(-1, NULL, 0);
-        minishell->exit_status = WEXITSTATUS(minishell->exit_status);
+	    //waitpid(-1, &minishell->exit_status, 0);
+        waitpid(-1, NULL, 0);
+        //minishell->exit_status = WEXITSTATUS(minishell->exit_status);
 		i++;
 	}
 }
