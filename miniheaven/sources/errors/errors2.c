@@ -79,7 +79,7 @@ void	free_exit(t_minishell *minishell, char *str)
 		close(1);
 	free_utils(minishell);
 	fd_clean();
-	exit(0);
+	exit(g_signal);
 }
 
 void	fd_clean(void)

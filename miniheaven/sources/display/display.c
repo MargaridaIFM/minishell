@@ -14,7 +14,6 @@
 
 void	display_prompt(t_minishell *minishell)
 {
-	printf("Signal %d\n", g_signal);
 	if (g_signal != 0)
 	{
 		minishell->exit_status = g_signal;
@@ -53,7 +52,6 @@ void	process_input(t_minishell *minishell)
 		//print_env(minishell, "ANTES EXECUCAO");
 		if (g_signal)
 		{
-			printf("HERE\n");
 			free_ast(minishell->ast);
 			minishell->ast = NULL;
 		}

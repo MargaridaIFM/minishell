@@ -56,6 +56,7 @@ SRC				=	$(addprefix $(SRC_DIR), minishell.c) \
 					$(addprefix $(SRC_DIR)$(BUILT_INS_DIR), cd.c) \
 					$(addprefix $(SRC_DIR)$(BUILT_INS_DIR), cd_utils.c) \
 					$(addprefix $(SRC_DIR)$(EXECUTOR_DIR), execute.c heredoc.c heredoc_utils.c) \
+					$(addprefix $(SRC_DIR)$(EXECUTOR_DIR), pipes.c pipes2.c redir.c execute_utils.c) \
 					$(addprefix $(SRC_DIR)$(EXECUTOR_DIR), my_getenv.c) \
 					$(addprefix $(SRC_DIR)$(PARSER_DIR), tokenization.c tokenization_utils.c expander.c syntax_error.c ast.c ast2.c split_tokens.c remove_quotes.c) \
 					$(addprefix $(SRC_DIR)$(PARSER_DIR), expander_vars.c replace_var_in_str.c split_tokens2.c)
@@ -111,5 +112,3 @@ val: $(NAME)
 
 .PHONY:				all clean fclean re val
 
-
-					$(addprefix $(SRC_DIR)$(EXECUTOR_DIR), pipes.c redir.c execute_utils.c) \

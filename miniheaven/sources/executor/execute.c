@@ -137,7 +137,10 @@ void	ft_execute(t_minishell *minishell, char *cmd)
 	if (minishell->_pipe_ == 0)
 	{
 		if (find_builtin(minishell, split_cmd, cmd) == 1)
+		{
+			minishell->exit_status = WEXITSTATUS(minishell->exit_status);
 			return (free_array(split_cmd));
+		}
 	}
 	if (my_getenv(minishell, "PATH") == NULL)
 	{

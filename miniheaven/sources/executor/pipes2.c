@@ -41,8 +41,10 @@ void	do_one_pipe(t_minishell *minishell, t_ast *ast)
 	}
 	close (minishell->fd[1]);
 	close(minishell->fd[0]);
-	waitpid(left_fork, NULL, 0);
-	waitpid(right_fork, NULL, 0);
+	waitpid(left_fork, &minishell->exit_status , 0);
+	//minishell->exit_status = WEXITSTATUS(minishell->exit_status);
+	waitpid(right_fork, &minishell->exit_status, 0);
+	//minishell->exit_status = WEXITSTATUS(minishell->exit_status);
 	free_cmd_path(ast->left);
 	free_cmd_path(ast->right);
 	//dup2(minishell->temp_stdin, STDIN_FILENO);
