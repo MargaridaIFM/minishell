@@ -1,0 +1,66 @@
+///  EXPORT  ///
+export teste=1 
+export teste=1 | export teste2=2
+export teste=1 | export teste=2
+export teste
+export teste=
+export 9172teste=1
+
+///  LOCAL_VAR ///
+teste=1
+teste2=
+teste=1 | teste=2
+918teste=teste
+
+///  LOCAL_VAR + EXPORT ///
+teste=1 | export teste
+teste=1 | export teste | teste=2
+
+///  PIPEX  ///
+< infile cat | cut -d ' ' -f 1  ( ./pipex cat "cut -d ' ' -f 1" )
+
+
+///  REDIR  ///
+
+ls
+echo hello
+ls -a
+cd ..
+export a=b
+export a=c b=d
+ls -a > outfile 
+> outfile echo hello
+ls > outfile echo hello 
+ls -a < infile 
+< infile echo hello
+ls < infile echo hello
+< infile cat > outfile
+cat < infile > outfile 
+cat < infile > outfile echo hello
+< infile cat > outfile echo hello
+< infile < infile2 cat > outfile
+< infile < infile2 cat > outfile > outfile2
+
+ls | wc x
+ls -a | wc
+echo hello | wc 
+< infile cat | wc
+cat < infile | wc
+< infile cat > outfile | wc
+cat < infile > outfile | wc
+cat < infile echo hello | wc
+cat < infile echo hello > outfile | wc
+
+echo hello | echo hello
+echo hello | echo hello -a
+echo hello | echo hello
+echo hello | < infile cat x
+echo hello | cat < infile
+echo hello | < infile cat > outfile
+echo hello | cat < infile > outfile
+echo hello | cat < infile echo hello
+echo hello | cat < infile echo hello > outfile
+
+
+< infile echo hello | < infile cat | wc x
+< infile ls | < infile pwd | < infile pwd | < infile wc > outfile | > outfile2 --> esta a passar o erro para dentro do outfile
