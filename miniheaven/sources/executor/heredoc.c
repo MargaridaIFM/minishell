@@ -73,8 +73,7 @@ void process_prompt(t_minishell *minishell, t_heredoc *heredoc, t_ast *top)
     }
     close(heredoc->fd[1]);
 	waitpid(heredoc->id, &minishell->exit_status, 0);
-    printf("Exit status -> %d %d %d\n", minishell->exit_status, WEXITSTATUS(minishell->exit_status), WTERMSIG(minishell->exit_status));
-    minishell->exit_status =  WEXITSTATUS(minishell->exit_status);
+        minishell->exit_status =  WEXITSTATUS(minishell->exit_status);
     if (minishell->exit_status == 130)
         g_signal = 130;
     

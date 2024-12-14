@@ -75,7 +75,12 @@ void	execute_ast(t_minishell *minishell, t_ast *ast, int flag)
 			ft_execute_pipe(minishell, cmd);
 	}
 	if (ast->token->type == PIPE)
-		do_pipeline(minishell, ast);
+	{
+		if (ast->right->token->type != PIPE)
+			do_one_pipe(minishell, ast);
+		else
+			do_pipeline(minishell, ast);
+	}
 	rebuild_fileno(minishell);
 	close_redir(minishell);
 	free(cmd);
@@ -129,14 +134,10 @@ void	ft_execute(t_minishell *minishell, char *cmd)
 	split_cmd = ft_split(cmd, ' ');
 	if (redirect_read(minishell) == -1)
 		free_exit(minishell, "Something went wrong with dup2\n");
-	printf("%d\n", minishell->exit_status);
 	if (minishell->_pipe_ == 0)
 	{
 		if (find_builtin(minishell, split_cmd, cmd) == 1)
-		{
-			minishell->exit_status = WEXITSTATUS(minishell->exit_status);
 			return (free_array(split_cmd));
-		}
 	}
 	if (my_getenv(minishell, "PATH") == NULL)
 	{
@@ -148,7 +149,6 @@ void	ft_execute(t_minishell *minishell, char *cmd)
 		execute_cmd(minishell, split_cmd, cmd);
 	else
 		waitpid(child, &minishell->exit_status, 0);
-		//waitpid(child, NULL, 0);
 	minishell->exit_status = WEXITSTATUS(minishell->exit_status);
 	rebuild_fileno(minishell);
 	free_array(split_cmd);

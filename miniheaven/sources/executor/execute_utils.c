@@ -45,7 +45,8 @@ void	ft_execute_pipe(t_minishell *minishell, char *cmd)
 		free_array(split_cmd);
 		free_exit(minishell, "");
 	}
-
+	if (ft_strcmp("cat", cmd) == 0)
+		close(minishell->fd[0]);
 	// struct sigaction	sp;
 
 	// sp.sa_handler = NULL;
@@ -60,6 +61,7 @@ void	ft_execute_pipe(t_minishell *minishell, char *cmd)
 		//free(cmd);
 		execve(cmd_path, split_cmd, minishell->envp);
 		free_array(split_cmd);
+	exit(0);
 	// }
 	// else
 	// 	free_exit(minishell, "");

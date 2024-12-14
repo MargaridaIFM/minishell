@@ -254,4 +254,6 @@ void	redir_out(t_minishell *minishell, t_ast *ast, int flag);
 
 void	setup_signals_executer(void);
 void	free_cmd_path(t_ast *left_side);
+
+void	do_one_pipe(t_minishell *minishell, t_ast *ast);
 #endif
