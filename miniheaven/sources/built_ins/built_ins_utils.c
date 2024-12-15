@@ -18,27 +18,43 @@
  * @param char **envp;
  * @return (char **);
  */
-char	**dup_envp(char **envp)
+char	**dup_envp(t_minishell *minishell, char **envp)
 {
 	char	**envp_dup;
 	int		envp_counter;
 	int		i;
+	int		x;
 
+	x = 0;
 	i = 0;
 	envp_counter = 0;
 	while (envp[envp_counter])
 		envp_counter++;
+	while (minishell->local[i])
+	{
+		envp_counter++;
+		i++;
+	}
 	envp_dup = malloc(sizeof (char *) * (envp_counter + 1));
+	i = 0;
 	if (!envp_dup)
 	{
 		printf("Failed to allocate the env_dup\n");
 		free_array(envp_dup);
 		return (NULL);
 	}
-	while (i < envp_counter)
+	//printf("entrou\n");
+	while (envp[i] && i < envp_counter)
 	{
-		envp_dup[i] = strdup(envp[i]);
+		envp_dup[i] = ft_strdup(envp[i]);
 		i++;
+	}
+	while (minishell->local[x])
+	{
+		printf("local %s\n", minishell->local[x]);
+		envp_dup[i] = ft_strdup(minishell->local[x]);
+		i++;
+		x++;
 	}
 	envp_dup[i] = NULL;
 	return (envp_dup);

@@ -83,8 +83,9 @@ typedef struct s_minishell
 	t_ast		*ast;
 	t_expand	*expander;
 	t_heredoc	*heredoc;
-	char		*display;
 	char		**envp;
+	char		**local;
+	char		*display;
 	char		*cmd;
 	int			first;
 	int			fd[2];
@@ -211,6 +212,8 @@ void	ft_env(t_minishell *minishell);
 int		check_var(char *var, t_minishell *minishell);
 void	add_var(t_minishell *minishell, char *var);
 void	ft_export(char **split_cmd, t_minishell *minishell);
+int	find_equal(char *var);
+int	add_local(t_minishell *minishell, char *var);
 
 // PWD //
 void	ft_pwd(t_minishell *minishell);
@@ -219,7 +222,7 @@ void	ft_pwd(t_minishell *minishell);
 void	ft_unset(char **split_cmd, t_minishell *minishell);
 
 // Built_ins_utils //
-char	**dup_envp(char **envp); /*Usado no export*/
+char	**dup_envp(t_minishell *minishell, char **envp); /*Usado no export*/
 char	*find_path(t_minishell *minishell, char *cmd); /*Usado no env*/
 
 // EXECUTOR //

@@ -49,6 +49,11 @@ void	free_all(t_minishell *minishell, char *str)
 
 void	free_exit(t_minishell *minishell, char *str)
 {
+	if (minishell->local)
+	{
+		free_array(minishell->local);
+		minishell->local = NULL;
+	}
 	if (str && str[0] != '\0')
 		ft_putstr_fd(str, 2);
 	if (minishell->envp)

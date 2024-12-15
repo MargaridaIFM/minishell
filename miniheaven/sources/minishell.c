@@ -51,7 +51,10 @@ static void	initialization(char *envp[], t_minishell *minishell)
 
 	envp_counter = 0;
 	i = 0;
+	//printf("Pid %d", getpid());
 	ft_bzero(minishell, sizeof(t_minishell));
+	minishell->local = malloc(sizeof(char *) * 1);
+	minishell->local[0] = NULL;
 	minishell->_pipe_ = 0;
 	minishell->temp_stdin = -1;
 	minishell->temp_stdout = -1;

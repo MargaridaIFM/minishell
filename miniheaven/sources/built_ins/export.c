@@ -19,14 +19,14 @@
  * @param char **envp
  * @return (char **);
  */
-static char	**sort_envp(char **envp)
+static char	**sort_envp(t_minishell *minishell, char **envp)
 {
 	char	**copy_envp;
 	char	*temp;
 	int		i;
 	int		x;
 
-	copy_envp = dup_envp(envp);
+	copy_envp = dup_envp(minishell, envp);
 	if (!copy_envp)
 		return (NULL);
 	i = 0;
@@ -60,9 +60,8 @@ static void	print_export(t_minishell *minishell, char **envp)
 	int		i;
 	int		x;
 
-	(void)minishell;
 	i = 0;
-	copy_envp = sort_envp(envp);
+	copy_envp = sort_envp(minishell, envp);
 	while (copy_envp[i])
 	{
 		printf("declare -x ");
@@ -156,12 +155,17 @@ void	ft_export(char **split_cmd, t_minishell *minishell)
 
 	i = 1;
 	if (split_cmd[1] == NULL)
+	{
 		print_export(minishell, minishell->envp);
+		//printf("minishell->local %s\n", minishell->local[0]);
+	}
 	else
 	{
 		while (split_cmd[i])
 		{
-			if (check_var(split_cmd[i], minishell) == 0)
+			if (find_equal(split_cmd[i]) == -1)
+				add_local(minishell, split_cmd[i]);
+			else if (check_var(split_cmd[i], minishell) == 0)
 				add_var(minishell, split_cmd[i]);
 			i++;
 		}

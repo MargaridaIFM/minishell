@@ -49,7 +49,7 @@ SRC				=	$(addprefix $(SRC_DIR), minishell.c) \
 					$(addprefix $(SRC_DIR)$(DISPLAY_DIR), display.c find_files.c) \
 					$(addprefix $(SRC_DIR)$(BUILT_INS_DIR), pwd.c) \
 					$(addprefix $(SRC_DIR)$(BUILT_INS_DIR), env.c) \
-					$(addprefix $(SRC_DIR)$(BUILT_INS_DIR), export.c) \
+					$(addprefix $(SRC_DIR)$(BUILT_INS_DIR), export.c local_export.c) \
 					$(addprefix $(SRC_DIR)$(BUILT_INS_DIR), built_ins_utils.c) \
 					$(addprefix $(SRC_DIR)$(BUILT_INS_DIR), unset.c) \
 					$(addprefix $(SRC_DIR)$(BUILT_INS_DIR), echo.c) \
