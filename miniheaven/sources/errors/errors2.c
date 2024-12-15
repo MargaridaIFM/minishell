@@ -29,7 +29,7 @@ static void	free_utils(t_minishell *minishell)
 	if (minishell->heredoc)
 	{
 		free_heredoc(minishell->heredoc);
-		// free(minishell->heredoc);
+		//free(minishell->heredoc);
 		minishell->heredoc = NULL;
 	}
 	if (minishell->expander)

@@ -87,8 +87,10 @@ void	execute_ast(t_minishell *minishell, t_ast *ast, int flag)
 void	error_execute(t_minishell *minishell,
 		char **split_cmd, char *cmd_path, char *cmd)
 {
+	g_signal = 127;
 	printf("%s: commad not found\n", split_cmd[0]);
-	free(cmd_path);
+	if (cmd_path != NULL)
+		free(cmd_path);
 	free(cmd);
 	free_array(split_cmd);
 	free_exit(minishell, "");
@@ -104,10 +106,10 @@ int	find_builtin(t_minishell *minishell, char **dp, char *cmd)
 		return (ft_env(minishell), 1);
 	else if (ft_strcmp(dp[0], "export") == 0)
 		return (ft_export(dp, minishell), 1);
-	else if (ft_strcmp(dp[0], "pwd") == 0)
-		return (ft_pwd(minishell), 1);
 	else if (ft_strcmp(dp[0], "unset") == 0)
 		return (ft_unset(dp, minishell), 1);
+	else if (ft_strcmp(dp[0], "pwd") == 0)
+		return (ft_pwd(minishell), 1);
 	else if (ft_strcmp(dp[0], "exit") == 0)
 	{
 		free(cmd);
@@ -143,6 +145,8 @@ void	ft_execute(t_minishell *minishell, char *cmd)
 	if (my_getenv(minishell, "PATH") == NULL)
 	{
 		printf("%s: command not found\n", split_cmd[0]);
+		g_signal = 127;
+		free_array(split_cmd);
 		return ;
 	}
 	child = fork();

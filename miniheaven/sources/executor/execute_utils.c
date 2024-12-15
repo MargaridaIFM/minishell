@@ -37,7 +37,7 @@ void	ft_execute_pipe(t_minishell *minishell, char *cmd)
 	if (my_getenv(minishell, "PATH") == NULL)
 	{
 		printf("%s: command not found\n", split_cmd[0]);
-		return ;
+		error_execute(minishell, split_cmd, NULL, cmd);
 	}
 	if (find_builtin(minishell, split_cmd, cmd) == 1)
 	{
@@ -54,12 +54,16 @@ void	ft_execute_pipe(t_minishell *minishell, char *cmd)
 	// sigemptyset(&sp.sa_mask);
 	// if (sigaction(SIGPIPE, &sp, NULL) != -1) {
 	if (access(split_cmd[0], X_OK) == 0)
-		execve(split_cmd[0], split_cmd, minishell->envp);
+	{
+		if (execve(split_cmd[0], split_cmd, minishell->envp) == -1)
+			error_execute(minishell, split_cmd, NULL, cmd);
+	}
 	cmd_path = find_path(minishell, split_cmd[0]);
 	if (cmd_path == NULL)
 		error_execute(minishell, split_cmd, cmd_path, cmd);
 	//free(cmd);
-	execve(cmd_path, split_cmd, minishell->envp);
+	if (execve(cmd_path, split_cmd, minishell->envp) == -1)
+		error_execute(minishell, split_cmd, cmd_path, cmd);
 	free_array(split_cmd);
 	exit(0);
 	// }

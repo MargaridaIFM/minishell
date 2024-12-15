@@ -50,7 +50,6 @@ void process_heredoc(t_minishell *minishell, t_ast *ast, t_ast *top)
         free_exit(minishell, "Error - Fail creating fork\n");
 	}
 	process_prompt(minishell, temp, top);
-	
 }
 
 void process_prompt(t_minishell *minishell, t_heredoc *heredoc, t_ast *top)
