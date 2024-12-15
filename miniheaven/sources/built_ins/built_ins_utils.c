@@ -51,7 +51,6 @@ char	**dup_envp(t_minishell *minishell, char **envp)
 	}
 	while (minishell->local[x])
 	{
-		printf("local %s\n", minishell->local[x]);
 		envp_dup[i] = ft_strdup(minishell->local[x]);
 		i++;
 		x++;
@@ -112,4 +111,25 @@ char	*find_path(t_minishell *minishell, char *cmd)
 	else
 		full_path = find_path_util(full_path, split_cmd, split_env);
 	return (full_path);
+}
+
+int	bigger_var_name(char *original, char *step_ahead)
+{
+	int	i;
+
+	i = 0;
+	while ((original[i] || step_ahead[i])
+		&& original[i] != '='
+		&& step_ahead[i] != '=')
+	{
+		if (original[i] < step_ahead[i])
+			return (0);
+		if (original[i] > step_ahead[i])
+		{
+			//printf("comparar %s %s\n", original, step_ahead);
+			return 1;
+		}
+		i++;
+	}
+	return (0);
 }

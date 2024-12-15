@@ -35,7 +35,7 @@ static char	**sort_envp(t_minishell *minishell, char **envp)
 		x = i + 1;
 		while (copy_envp[x])
 		{
-			if (ft_strcmp(copy_envp[i], copy_envp[x]) > 0)
+			if (bigger_var_name(copy_envp[i], copy_envp[x]) > 0)
 			{
 				temp = copy_envp[i];
 				copy_envp[i] = copy_envp[x];

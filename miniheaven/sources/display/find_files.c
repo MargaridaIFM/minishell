@@ -24,6 +24,7 @@ t_token	*copy_token_list(const t_token *token)
 	copy->type = token->type;
 	copy->str = ft_strdup(token->str);
 	copy->path = ft_strdup(token->path);
+	copy->cmd = ft_strdup(token->cmd);
 	copy->next = copy_token_list(token->next);
 	return (copy);
 }
@@ -48,6 +49,7 @@ t_ast	*copy_ast(t_ast *original)
 		copy->token->type = original->token->type;
 		copy->token->str = ft_strdup(original->token->str);
 		copy->token->path = ft_strdup(original->token->path);
+		copy->token->cmd = ft_strdup(original->token->cmd);
 		copy->token->next = NULL;
 	}
 	else

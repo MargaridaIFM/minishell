@@ -27,5 +27,5 @@ void	ft_pwd(t_minishell *minishell)
 		printf("Error - No PWD\n");
 		exit(0);
 	}
-	ft_putstr_fd(pwd, 1);
+	printf("%s\n", pwd);
 }

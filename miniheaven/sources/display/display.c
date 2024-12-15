@@ -33,12 +33,15 @@ void	display_prompt(t_minishell *minishell)
 void	process_input(t_minishell *minishell)
 {
 	//int teste;
+	t_ast *ast;
+
 	stop_signals();
 	tokenization(minishell);
 	if (check_syntax(minishell->tokens) == true)
 	{
 		expander(minishell);
 		minishell->ast = create_ast(minishell->tokens);
+		ast = minishell->ast;
 		if(!minishell->ast)
 			return ;
 		minishell->tokens = NULL;
@@ -59,7 +62,7 @@ void	process_input(t_minishell *minishell)
 		{
 			minishell->first = 0;
 			setup_signals_executer();
-			execute_ast(minishell, minishell->ast, -1);
+			execute_ast(minishell, ast, -1);
 			free_ast(minishell->ast);
 			// teste = open("infile", O_RDONLY);
 			// printf("teste %d\n", teste);

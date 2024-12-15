@@ -26,10 +26,8 @@ void	free_cmd_path(t_ast *left_side)
 
 void	do_pipeline(t_minishell *minishell, t_ast *ast)
 {
-	t_ast *left_side;
 	int final;
 
-	left_side = NULL;
 	minishell->commands = 1;
 	minishell->_pipe_ = 1;
 	minishell->temp_stdin = dup(STDIN_FILENO);
@@ -37,18 +35,11 @@ void	do_pipeline(t_minishell *minishell, t_ast *ast)
 	{
 		minishell->commands++;
 		pipe_fork(minishell, ast);
-		if (ast->left->token->type <= 3)
-		{
-			left_side = ast->left;
-			free_cmd_path(left_side);
-		}
 		ast = ast->right;
 	}
 	final = fork();
 	if (final == 0)
 		execute_ast(minishell, ast, 1);
-	if (ast->token->type <= 3)
-		free_cmd_path(ast);
 	wait_pipes(minishell);
 	minishell->_pipe_ = 0;
 	dup2(minishell->temp_stdin, STDIN_FILENO);
@@ -58,20 +49,12 @@ void	do_pipeline(t_minishell *minishell, t_ast *ast)
 void	pipe_fork(t_minishell *minishell, t_ast *ast)
 {
 	pid_t	child;
-	t_ast	*right_ast;
-
-	right_ast = ast->right;
+	
 	// minishell->infile = -1;
 	// minishell->outfile = -1;
 	fork_and_pipe(minishell, ast->left, &child);
 	if (child == 0)
 	{
-		while (right_ast->token->type == PIPE)
-		{
-			free_cmd_path(right_ast->left);
-			right_ast = right_ast->right;
-		}
-		free_cmd_path(right_ast);
 		execute_ast(minishell, ast->left, 1);
 		return ;
 	}

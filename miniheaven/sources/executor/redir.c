@@ -15,9 +15,9 @@
 int	open_file(t_minishell *minishell, t_ast *ast)
 {
 	char	*file;
-	t_heredoc *temp_here;
+	// t_heredoc *temp_here;
 
-	temp_here = minishell->heredoc;
+	// temp_here = minishell->heredoc;
 	if (ast->token->type == REDIR_IN)
 	{
 		file = ast->token->path;
@@ -29,7 +29,6 @@ int	open_file(t_minishell *minishell, t_ast *ast)
 		if (minishell->infile != -1)
 			close(minishell->infile);
 		minishell->infile = open(file, O_RDONLY, 0644);
-		free(ast->token->path);
 	}	
 	else if (ast->token->type == REDIR_OUT || ast->token->type == REDIR_APPEND)
 	{
@@ -40,13 +39,11 @@ int	open_file(t_minishell *minishell, t_ast *ast)
 			minishell->outfile = open(file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 		else
 			minishell->outfile = open(file, O_WRONLY | O_CREAT | O_APPEND, 0644);
-		free(ast->token->path);
 	}
 	else if (ast->token->type == REDIR_HEREDOC)
 	{
 		// if (minishell->temp_stdin == -1)
 		// 	minishell->temp_stdin = dup(STDIN_FILENO);
-		free(ast->token->path);
 		if (minishell->infile != -1)
 			close(minishell->infile);
 		minishell->infile = dup(minishell->heredoc->fd[0]);
@@ -54,8 +51,6 @@ int	open_file(t_minishell *minishell, t_ast *ast)
 		close(minishell->heredoc->fd[0]);
 		//minishell->heredoc->fd[0] = -1;
 		minishell->heredoc = minishell->heredoc->next;
-		free(temp_here->delimiter);
-		free(temp_here);
 		//free(minishell->heredoc->delimiter);
 		//free(minishell->heredoc);
 		// if (minishell->heredoc != NULL)

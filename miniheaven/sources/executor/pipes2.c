@@ -25,7 +25,6 @@ void	do_one_pipe(t_minishell *minishell, t_ast *ast)
 		dup2(minishell->fd[1], STDOUT_FILENO);
 		close(minishell->fd[1]);
 		close(minishell->fd[0]);
-		free_cmd_path(ast->right);
 		execute_ast(minishell, ast->left, -1);
 		free_exit(minishell, "");
 	}
@@ -35,7 +34,6 @@ void	do_one_pipe(t_minishell *minishell, t_ast *ast)
         dup2(minishell->fd[0], STDIN_FILENO);
        	close(minishell->fd[1]);
 		close(minishell->fd[0]);
-		free_cmd_path(ast->left);
         execute_ast(minishell, ast->right, -1);
         free_exit(minishell, ""); // Se falhar, encerra o processo
 	}
@@ -45,8 +43,6 @@ void	do_one_pipe(t_minishell *minishell, t_ast *ast)
 	//minishell->exit_status = WEXITSTATUS(minishell->exit_status);
 	waitpid(right_fork, &minishell->exit_status, 0);
 	//minishell->exit_status = WEXITSTATUS(minishell->exit_status);
-	free_cmd_path(ast->left);
-	free_cmd_path(ast->right);
 	//dup2(minishell->temp_stdin, STDIN_FILENO);
 	//close(minishell->temp_stdin);
 	//minishell->temp_stdin = -1;

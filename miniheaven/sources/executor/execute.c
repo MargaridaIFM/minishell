@@ -43,13 +43,11 @@ void	execute_ast(t_minishell *minishell, t_ast *ast, int flag)
 			if (!cmd)
 			{
 				cmd = ft_strdup(ast->token->cmd);
-				free(ast->token->cmd);
 			}
 			else
 			{
 				cmd = ft_strjoin_gnl(cmd, " ");
 				cmd = ft_strjoin_gnl(cmd, ast->token->cmd);
-				free(ast->token->cmd);
 			}
 		}
 		open_file(minishell, ast);
