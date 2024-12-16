@@ -71,11 +71,7 @@ void	fork_and_pipe(t_minishell *minishell, t_ast *ast, int *child)
 void	redir_pipe(t_minishell *minishell, int child)
 {
 	if (child == 0)
-	{
 		dup2(minishell->fd[1], STDOUT_FILENO);
-		// close(minishell->fd[1]); // Mexi nisto para resolver SIGPIPE
-		// close(minishell->fd[0]);
-	}
 	else
 	{
 		dup2(minishell->fd[0], STDIN_FILENO);
@@ -91,9 +87,7 @@ void	wait_pipes(t_minishell *minishell)
 	i = 0;
 	while (i < minishell->commands)
 	{
-	    //waitpid(-1, &minishell->exit_status, 0);
-        waitpid(-1, NULL, 0);
-        //minishell->exit_status = WEXITSTATUS(minishell->exit_status);
+        waitpid(-1, &minishell->exit_status, 0);
 		i++;
 	}
 }

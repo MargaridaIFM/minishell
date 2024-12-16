@@ -24,16 +24,42 @@ void	display_prompt(t_minishell *minishell)
 	if (!minishell->display)
 		free_exit(minishell, "");
 	if (!*minishell->display)
-		return free_all(minishell, "");
-	add_history(minishell->display); // Verificar o caso < infile cat > outfile e depois andar para tras e frente --> come o 'ell' do 'minishell'
+	{
+		free_all(minishell, "");
+		return ;
+	}
+	add_history(minishell->display);
 	process_input(minishell);
 	free_all(minishell, "");
 }
 
+void	process_util(t_minishell *minishell, t_ast *ast)
+{
+	if (minishell->nbr_heredoc > 0)
+	{
+		process_ast_heredoc(minishell, minishell->ast, minishell->ast);
+		minishell->nbr_heredoc = 0;
+	}
+	//print_ast(minishell->ast, 0);
+	//print_env(minishell, "ANTES EXECUCAO");
+	if (g_signal)
+	{
+		free_ast(minishell->ast);
+		minishell->ast = NULL;
+	}
+	else
+	{
+		minishell->first = 0;
+		setup_signals_executer();
+		execute_ast(minishell, ast, -1);
+		free_ast(minishell->ast);
+		minishell->ast = NULL;
+	}
+}
+
 void	process_input(t_minishell *minishell)
 {
-	//int teste;
-	t_ast *ast;
+	t_ast	*ast;
 
 	stop_signals();
 	tokenization(minishell);
@@ -42,33 +68,11 @@ void	process_input(t_minishell *minishell)
 		expander(minishell);
 		minishell->ast = create_ast(minishell->tokens);
 		ast = minishell->ast;
-		if(!minishell->ast)
+		if (!minishell->ast)
 			return ;
 		minishell->tokens = NULL;
 		set_redirs(minishell, minishell->ast);
-		if(minishell->nbr_heredoc > 0)
-		{
-			process_ast_heredoc(minishell, minishell->ast, minishell->ast);
-			minishell->nbr_heredoc = 0;
-		}
-		print_ast(minishell->ast, 0);
-		//print_env(minishell, "ANTES EXECUCAO");
-		if (g_signal)
-		{
-			free_ast(minishell->ast);
-			minishell->ast = NULL;
-		}
-		else
-		{
-			minishell->first = 0;
-			setup_signals_executer();
-			execute_ast(minishell, ast, -1);
-			free_ast(minishell->ast);
-			// teste = open("infile", O_RDONLY);
-			// printf("teste %d\n", teste);
-			//close(teste);
-			minishell->ast = NULL;
-		}
+		process_util(minishell, ast);
 	}
 	else
 	{

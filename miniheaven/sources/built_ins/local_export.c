@@ -1,11 +1,23 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   local_export.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mistery576 <mistery576@student.42.fr>      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/12/15 23:04:01 by mistery576        #+#    #+#             */
+/*   Updated: 2024/12/15 23:04:50 by mistery576       ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/minishell.h"
 
 int	find_equal(char *var)
 {
-	int i;
+	int	i;
 
 	i = 0;
-	while(var[i])
+	while (var[i])
 	{
 		if (var[i] == '=')
 			return (0);
@@ -17,8 +29,8 @@ int	find_equal(char *var)
 char	**update_local(t_minishell *minishell, char *var, int len)
 {
 	char	**dup_arr;
-	int 	i;
-	
+	int		i;
+
 	i = 0;
 	dup_arr = malloc(sizeof(char *) * (len + 2));
 	while (minishell->local[i])
@@ -27,7 +39,7 @@ char	**update_local(t_minishell *minishell, char *var, int len)
 		i++;
 	}
 	i = 0;
-	while(minishell->local[i])
+	while (minishell->local[i])
 	{
 		free(minishell->local[i]);
 		i++;
@@ -36,7 +48,7 @@ char	**update_local(t_minishell *minishell, char *var, int len)
 	dup_arr[i] = ft_strdup(var);
 	i++;
 	dup_arr[i] = NULL;
-	return dup_arr;
+	return (dup_arr);
 }
 
 int	add_local(t_minishell *minishell, char *var)
@@ -44,8 +56,8 @@ int	add_local(t_minishell *minishell, char *var)
 	int	i;
 
 	i = 0;
-	while(minishell->local[i])
+	while (minishell->local[i])
 		i++;
 	minishell->local = update_local(minishell, var, i);
-	return 0;
+	return (0);
 }

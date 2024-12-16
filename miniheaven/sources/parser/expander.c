@@ -75,7 +75,6 @@ char	*extrat_var_content(t_minishell *minishell)
 		return (NULL);
 	if (ft_strcmp(minishell->expander->var_name, "?") == 0)
 	{
-		// printf("%d\n", minishell->exit_status);
 		str = ft_itoa(minishell->exit_status);
 		return (str);
 	}

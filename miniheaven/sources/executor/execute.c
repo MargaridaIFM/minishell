@@ -88,7 +88,7 @@ void	error_execute(t_minishell *minishell,
 		char **split_cmd, char *cmd_path, char *cmd)
 {
 	g_signal = 127;
-	printf("%s: commad not found\n", split_cmd[0]);
+	printf("%s: command not found\n", split_cmd[0]);
 	if (cmd_path != NULL)
 		free(cmd_path);
 	free(cmd);

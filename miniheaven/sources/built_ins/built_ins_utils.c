@@ -12,6 +12,28 @@
 
 #include "../../includes/minishell.h"
 
+void	copy_content(t_minishell *minishell, char **envp,
+		char **envp_dup, int envp_counter)
+{
+	int	i;
+	int	x;
+
+	x = 0;
+	i = 0;
+	while (envp[i] && i < envp_counter)
+	{
+		envp_dup[i] = ft_strdup(envp[i]);
+		i++;
+	}
+	while (minishell->local[x])
+	{
+		envp_dup[i] = ft_strdup(minishell->local[x]);
+		i++;
+		x++;
+	}
+	envp_dup[i] = NULL;
+}
+
 /**
  * @brief Usado na funcao export(), vai duplicar 
  * o envp, organizar, e retornar esse array.
@@ -23,9 +45,7 @@ char	**dup_envp(t_minishell *minishell, char **envp)
 	char	**envp_dup;
 	int		envp_counter;
 	int		i;
-	int		x;
 
-	x = 0;
 	i = 0;
 	envp_counter = 0;
 	while (envp[envp_counter])
@@ -43,19 +63,7 @@ char	**dup_envp(t_minishell *minishell, char **envp)
 		free_array(envp_dup);
 		return (NULL);
 	}
-	//printf("entrou\n");
-	while (envp[i] && i < envp_counter)
-	{
-		envp_dup[i] = ft_strdup(envp[i]);
-		i++;
-	}
-	while (minishell->local[x])
-	{
-		envp_dup[i] = ft_strdup(minishell->local[x]);
-		i++;
-		x++;
-	}
-	envp_dup[i] = NULL;
+	copy_content(minishell, envp, envp_dup, envp_counter);
 	return (envp_dup);
 }
 
@@ -125,10 +133,7 @@ int	bigger_var_name(char *original, char *step_ahead)
 		if (original[i] < step_ahead[i])
 			return (0);
 		if (original[i] > step_ahead[i])
-		{
-			//printf("comparar %s %s\n", original, step_ahead);
-			return 1;
-		}
+			return (1);
 		i++;
 	}
 	return (0);

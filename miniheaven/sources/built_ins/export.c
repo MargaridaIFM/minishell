@@ -12,8 +12,6 @@
 
 #include "../../includes/minishell.h"
 
-///////////////////////////////////////////////////// ORDENAR O ENV QUANDO MANDAMOS ALGUMA VARIAVEL COM EXPORT ////////////////////////////////////////////////////////
-
 /**
  * @brief Da sort na variavel envp, e retorna uma copia
  * @param char **envp
@@ -155,10 +153,7 @@ void	ft_export(char **split_cmd, t_minishell *minishell)
 
 	i = 1;
 	if (split_cmd[1] == NULL)
-	{
 		print_export(minishell, minishell->envp);
-		//printf("minishell->local %s\n", minishell->local[0]);
-	}
 	else
 	{
 		while (split_cmd[i])

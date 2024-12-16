@@ -12,22 +12,22 @@
 
 #include "../includes/minishell.h"
 
-t_token	*copy_token_list(const t_token *token)
-{
-	t_token	*copy;
+// t_token	*copy_token_list(const t_token *token)
+// {
+// 	t_token	*copy;
 
-	if (!token)
-		return (NULL);
-	copy = malloc(sizeof(t_token));
-	if (!copy)
-		return (NULL);
-	copy->type = token->type;
-	copy->str = ft_strdup(token->str);
-	copy->path = ft_strdup(token->path);
-	copy->cmd = ft_strdup(token->cmd);
-	copy->next = copy_token_list(token->next);
-	return (copy);
-}
+// 	if (!token)
+// 		return (NULL);
+// 	copy = malloc(sizeof(t_token));
+// 	if (!copy)
+// 		return (NULL);
+// 	copy->type = token->type;
+// 	copy->str = ft_strdup(token->str);
+// 	copy->path = ft_strdup(token->path);
+// 	copy->cmd = ft_strdup(token->cmd);
+// 	copy->next = copy_token_list(token->next);
+// 	return (copy);
+// }
 
 t_ast	*copy_ast(t_ast *original)
 {
@@ -52,38 +52,42 @@ t_ast	*copy_ast(t_ast *original)
 		copy->token->cmd = ft_strdup(original->token->cmd);
 		copy->token->next = NULL;
 	}
-	else
-		copy->token = NULL;
 	copy->left = copy_ast(original->left);
 	copy->right = copy_ast(original->right);
 	return (copy);
+}
+
+void	no_pipe(t_ast *temp_copy, t_ast *orig, t_ast *save_node)
+{
+	char	*cmd_built;
+
+	cmd_built = NULL;
+	if (temp_copy->left)
+		orig->token->cmd = built_cmd(save_node->left);
+	if (temp_copy->right->token->type > 3 && temp_copy->right->right)
+	{
+		cmd_built = built_cmd(temp_copy->right->right);
+		orig->token->cmd = ft_strjoin_gnl(orig->token->cmd, " ");
+		orig->token->cmd = ft_strjoin_gnl(orig->token->cmd, cmd_built);
+		free(cmd_built);
+	}
 }
 
 void	find_commands(t_ast *orig, t_ast *temp_copy, int flag)
 {
 	t_ast	*save_node;
 	char	*cmd_built;
-	
+
 	cmd_built = NULL;
 	save_node = temp_copy;
-	//printf("flag = %d\n", flag);
 	if (flag == 0)
-	{
-		if (temp_copy->left)
-			orig->token->cmd = built_cmd(save_node->left);
-		if (temp_copy->right->token->type > 3 && temp_copy->right->right)
-		{
-			cmd_built = built_cmd(temp_copy->right->right);
-			orig->token->cmd = ft_strjoin_gnl(orig->token->cmd, " ");
-			orig->token->cmd = ft_strjoin_gnl(orig->token->cmd, cmd_built);
-			free(cmd_built);
-		}
-	}
-	else if (temp_copy->right->token->type > 3 && temp_copy->right->right) // < infile cat
+		no_pipe(temp_copy, orig, save_node);
+	else if (temp_copy->right->token->type > 3
+		&& temp_copy->right->right)
 	{
 		if (temp_copy->left && temp_copy->left->right)
 			orig->token->cmd = built_cmd(save_node->left->right);
-		if (orig->token->cmd)	
+		if (orig->token->cmd)
 		{
 			cmd_built = built_cmd(temp_copy->right->right);
 			orig->token->cmd = ft_strjoin_gnl(orig->token->cmd, " ");
