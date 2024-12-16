@@ -6,7 +6,7 @@
 /*   By: miafonso <miafonso@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 23:04:01 by mistery576        #+#    #+#             */
-/*   Updated: 2024/12/16 16:40:28 by miafonso         ###   ########.fr       */
+/*   Updated: 2024/12/16 20:02:23 by miafonso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,4 +60,28 @@ int	add_local(t_minishell *minishell, char *var)
 		i++;
 	minishell->local = update_local(minishell, var, i);
 	return (0);
+}
+
+void	check_local(t_minishell *minishell, char *var, int x)
+{
+	char *temp;
+	int i;
+
+	i = 0;
+	
+	while (minishell->local[i])
+	{
+		if (ft_strncmp(minishell->local[i], var, x) == 0)
+		{
+			while (minishell->local[i])
+			{
+				if (minishell->local[i + 1])
+					temp = minishell->local[i + 1];
+				free(minishell->local[i]);
+				minishell->local[i] = temp;
+				i++;
+			}					
+		}
+		i++;
+	}
 }

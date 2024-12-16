@@ -215,6 +215,7 @@ void	ft_export(t_minishell *minishell);
 int	find_equal(char *var);
 int	add_local(t_minishell *minishell, char *var);
 int	bigger_var_name(char *original, char *step_ahead);
+void	check_local(t_minishell *minishell, char *var, int x);
 
 // PWD //
 void	ft_pwd(t_minishell *minishell);

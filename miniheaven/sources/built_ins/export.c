@@ -88,7 +88,6 @@ void	add_var(t_minishell *minishell, char *var)
 	char	**copy_envp;
 
 	i = 0;
-	printf("VAR %s\n", var);
 	while (minishell->envp[i])
 		i++;
 	copy_envp = malloc((i + 2) * sizeof(char *));
@@ -136,6 +135,7 @@ int	check_var(char *var, t_minishell *minishell)
 			return (1);
 		}
 	}
+	check_local(minishell, var, x);
 	return (0);
 }
 
