@@ -12,21 +12,9 @@
 
 #include "../includes/minishell.h"
 
-void	free_cmd_path(t_ast *left_side)
-{
-	while (left_side->token->type <= 3)
-	{
-		if (left_side->token->cmd)
-			free(left_side->token->cmd);
-		if (left_side->token->path)
-			free(left_side->token->path);
-		left_side = left_side->right;
-	}
-}
-
 void	do_pipeline(t_minishell *minishell, t_ast *ast)
 {
-	int final;
+	int	final;
 
 	minishell->commands = 1;
 	minishell->_pipe_ = 1;
@@ -49,9 +37,7 @@ void	do_pipeline(t_minishell *minishell, t_ast *ast)
 void	pipe_fork(t_minishell *minishell, t_ast *ast)
 {
 	pid_t	child;
-	
-	// minishell->infile = -1;
-	// minishell->outfile = -1;
+
 	fork_and_pipe(minishell, ast->left, &child);
 	if (child == 0)
 	{
@@ -87,8 +73,7 @@ void	wait_pipes(t_minishell *minishell)
 	i = 0;
 	while (i < minishell->commands)
 	{
-        waitpid(-1, &minishell->exit_status, 0);
+		waitpid(-1, &minishell->exit_status, 0);
 		i++;
 	}
 }
-

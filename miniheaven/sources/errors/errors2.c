@@ -98,3 +98,15 @@ void	fd_clean(void)
 		i++;
 	}
 }
+
+void	free_cmd_path(t_ast *left_side)
+{
+	while (left_side->token->type <= 3)
+	{
+		if (left_side->token->cmd)
+			free(left_side->token->cmd);
+		if (left_side->token->path)
+			free(left_side->token->path);
+		left_side = left_side->right;
+	}
+}

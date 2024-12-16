@@ -134,20 +134,16 @@ void	ft_execute(t_minishell *minishell, char *cmd)
 	split_cmd = ft_split(cmd, ' ');
 	if (redirect_read(minishell) == -1)
 		free_exit(minishell, "Something went wrong with dup2\n");
-	if (minishell->_pipe_ == 0)
+	if (find_builtin(minishell, split_cmd, cmd) == 1)
 	{
-		if (find_builtin(minishell, split_cmd, cmd) == 1)
-		{
-			minishell->exit_status = WEXITSTATUS(minishell->exit_status);
-			return (free_array(split_cmd));
-		}
+		minishell->exit_status = WEXITSTATUS(minishell->exit_status);
+		return (free_array(split_cmd));
 	}
 	if (my_getenv(minishell, "PATH") == NULL)
 	{
 		printf("%s: command not found\n", split_cmd[0]);
 		g_signal = 127;
-		free_array(split_cmd);
-		return ;
+		return (free_array(split_cmd));
 	}
 	child = fork();
 	if (child == 0)
