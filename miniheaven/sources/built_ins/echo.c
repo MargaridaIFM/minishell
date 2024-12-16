@@ -12,97 +12,108 @@
 
 #include "../../includes/minishell.h"
 
+static int	find_char(char *str, char c)
+{
+	int i;
+
+	i = 0;
+	while(str[i] && str[i] == c)
+		i++;
+	if (!str[i])
+		return (1);
+	return (0);
+}
+
 /**
  * @brief Vou dar skip no 'echo' e no '-n', caso tenha o '-n', ativar a flag.
  * @param char *str, int *flag.
  * @return (int);
  */
-static int	skip(char *str, int *flag)
+static t_ast	*skip(t_ast *ast, int *flag)
 {
-	char	**split_str;
-	int		i;
+	t_ast *temp;
+	int i;
 
-	i = 0;
-	split_str = ft_split(str, ' ');
-	if (ft_strcmp(split_str[1], "-n") == 0)
+	temp = ast;
+	i = 2;
+	while(find_char(ast->token->str + 1, 'n') == 1 )
+	{
 		*flag = 1;
-	while (str[i] != 'o')
-		i++;
+		ast = ast->right;
+	}
 	if (*flag == 1)
-	{
-		while (str[i] != 'n')
-			i++;
-	}
-	i++;
-	free_array(split_str);
-	return (i);
+		return (ast);
+	return (temp);
 }
 
-/**
- * @brief Vai permitir imprimir espacos enquanto nao encontrar o sinal ( " || ' )
- * @param char *sign, char *str
- * @return (int);
- */
-static int	print_space(char sign, char *str)
-{
-	int	i;
+// /**
+//  * @brief Vai permitir imprimir espacos enquanto nao encontrar o sinal ( " || ' )
+//  * @param char *sign, char *str
+//  * @return (int);
+//  */
+// static int	print_space(char sign, char *str)
+// {
+// 	int	i;
 
-	i = 0;
-	i++;
-	while (str[i] != sign)
-	{
-		printf("%c", str[i]);
-		i++;
-	}
-	i++;
-	return (i);
-}
+// 	i = 0;
+// 	i++;
+// 	while (str[i] != sign)
+// 	{
+// 		printf("%c", str[i]);
+// 		i++;
+// 	}
+// 	i++;
+// 	return (i);
+// }
 
-/**
- * @brief Vou printar a str, mas sem os espacos
- * @param char *str.
- * @return (int);
- */
-static int	print_no_space(char *str)
-{
-	int	i;
+// /**
+//  * @brief Vou printar a str, mas sem os espacos
+//  * @param char *str.
+//  * @return (int);
+//  */
+// static int	print_no_space(char *str)
+// {
+// 	int	i;
 
-	i = 0;
-	while (str[i] && (str[i] != '\'' || str[i] != '"'))
-	{
-		if ((str[i] >= 9 && str[i] <= 13) || str[i] == 32)
-		{
-			printf("%c", str[i]);
-			while ((str[i] >= 9 && str[i] <= 13) || str[i] == 32)
-				i++;
-			return (i);
-		}
-		printf("%c", str[i]);
-		i++;
-	}
-	return (i);
-}
+// 	i = 0;
+// 	while (str[i] && (str[i] != '\'' || str[i] != '"'))
+// 	{
+// 		if ((str[i] >= 9 && str[i] <= 13) || str[i] == 32)
+// 		{
+// 			printf("%c", str[i]);
+// 			while ((str[i] >= 9 && str[i] <= 13) || str[i] == 32)
+// 				i++;
+// 			return (i);
+// 		}
+// 		printf("%c", str[i]);
+// 		i++;
+// 	}
+// 	return (i);
+// }
 
 /**
  * @brief Vai imprimir a 'str' que recebe
  * @param char *str
  * @return (void);
  */
-void	ft_echo(char *str)
+void	ft_echo(t_minishell *minishell)
 {
-	int	i;
+	t_ast *ast;
+
+	if (minishell->ast->right)
+		ast = minishell->ast->right;
+	else
+		return ;
 	int	flag;
 
 	flag = 0;
-	i = skip(str, &flag);
-	while ((str[i] >= 9 && str[i] <= 13) || str[i] == 32)
-		i++;
-	while (str[i])
+	ast = skip(ast, &flag);
+	while (ast)
 	{
-		if (str[i] == '"' || str[i] == '\'' )
-			i += print_space(str[i], str + i);
-		else
-			i += print_no_space(str + i);
+		printf("%s", ast->token->str);
+		if (ast->right)
+			printf(" ");
+		ast = ast->right;
 	}
 	if (flag == 0)
 		printf("\n");

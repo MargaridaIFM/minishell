@@ -103,7 +103,7 @@ int	find_builtin(t_minishell *minishell, char **dp, char *cmd)
 	if (ft_strcmp(dp[0], "cd") == 0)
 		return (ft_cd(dp, minishell), 1);
 	else if (ft_strcmp(dp[0], "echo") == 0)
-		return (ft_echo(cmd), 1);
+		return (ft_echo(minishell), 1);
 	else if (ft_strcmp(dp[0], "env") == 0)
 		return (ft_env(minishell), 1);
 	else if (ft_strcmp(dp[0], "export") == 0)

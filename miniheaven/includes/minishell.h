@@ -203,7 +203,7 @@ int		change_pwd(t_minishell *minishell, char *new_path);
 void	ft_cd(char **split_cmd, t_minishell *minishell);
 
 // ECHO //
-void	ft_echo(char *str);
+void	ft_echo(t_minishell *minishell);
 
 // ENV //
 void	ft_env(t_minishell *minishell);
