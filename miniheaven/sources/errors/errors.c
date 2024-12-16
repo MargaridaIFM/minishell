@@ -152,6 +152,11 @@ void	free_ast(t_ast *ast)
 {
 	if (ast == NULL)
 		return ;
+	if (ast->token->type <= 3)
+	{
+		free(ast->token->path);
+		free(ast->token->cmd);
+	}
 	if (ast->left)
 		free_ast(ast->left);
 	free(ast->token->str);

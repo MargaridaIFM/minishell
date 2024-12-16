@@ -57,6 +57,8 @@ void	add_token_between(t_minishell *minishell, t_token *current, char *str)
 		free_exit(minishell, "Error - Fail allocating token in split\n");
 	new_node->type = WORD;
 	new_node->str = ft_strdup(str);
+	new_node->cmd = NULL;
+	new_node->path = NULL;
 	if (!new_node->str)
 		free_exit(minishell, "Error - Fail allocating token str in split\n");
 	if (current->next)

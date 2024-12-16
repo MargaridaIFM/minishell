@@ -12,21 +12,19 @@
 
 #include "../../includes/minishell.h"
 
-///////////////////////////////////////////////////// ORDENAR O ENV QUANDO MANDAMOS ALGUMA VARIAVEL COM EXPORT ////////////////////////////////////////////////////////
-
 /**
  * @brief Da sort na variavel envp, e retorna uma copia
  * @param char **envp
  * @return (char **);
  */
-static char	**sort_envp(char **envp)
+static char	**sort_envp(t_minishell *minishell, char **envp)
 {
 	char	**copy_envp;
 	char	*temp;
 	int		i;
 	int		x;
 
-	copy_envp = dup_envp(envp);
+	copy_envp = dup_envp(minishell, envp);
 	if (!copy_envp)
 		return (NULL);
 	i = 0;
@@ -35,7 +33,7 @@ static char	**sort_envp(char **envp)
 		x = i + 1;
 		while (copy_envp[x])
 		{
-			if (ft_strcmp(copy_envp[i], copy_envp[x]) > 0)
+			if (bigger_var_name(copy_envp[i], copy_envp[x]) > 0)
 			{
 				temp = copy_envp[i];
 				copy_envp[i] = copy_envp[x];
@@ -60,9 +58,8 @@ static void	print_export(t_minishell *minishell, char **envp)
 	int		i;
 	int		x;
 
-	(void)minishell;
 	i = 0;
-	copy_envp = sort_envp(envp);
+	copy_envp = sort_envp(minishell, envp);
 	while (copy_envp[i])
 	{
 		printf("declare -x ");
@@ -161,7 +158,9 @@ void	ft_export(char **split_cmd, t_minishell *minishell)
 	{
 		while (split_cmd[i])
 		{
-			if (check_var(split_cmd[i], minishell) == 0)
+			if (find_equal(split_cmd[i]) == -1)
+				add_local(minishell, split_cmd[i]);
+			else if (check_var(split_cmd[i], minishell) == 0)
 				add_var(minishell, split_cmd[i]);
 			i++;
 		}

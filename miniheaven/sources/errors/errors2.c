@@ -29,7 +29,7 @@ static void	free_utils(t_minishell *minishell)
 	if (minishell->heredoc)
 	{
 		free_heredoc(minishell->heredoc);
-		// free(minishell->heredoc);
+		//free(minishell->heredoc);
 		minishell->heredoc = NULL;
 	}
 	if (minishell->expander)
@@ -49,6 +49,11 @@ void	free_all(t_minishell *minishell, char *str)
 
 void	free_exit(t_minishell *minishell, char *str)
 {
+	if (minishell->local)
+	{
+		free_array(minishell->local);
+		minishell->local = NULL;
+	}
 	if (str && str[0] != '\0')
 		ft_putstr_fd(str, 2);
 	if (minishell->envp)
@@ -91,5 +96,17 @@ void	fd_clean(void)
 	{
 		close(i);
 		i++;
+	}
+}
+
+void	free_cmd_path(t_ast *left_side)
+{
+	while (left_side->token->type <= 3)
+	{
+		if (left_side->token->cmd)
+			free(left_side->token->cmd);
+		if (left_side->token->path)
+			free(left_side->token->path);
+		left_side = left_side->right;
 	}
 }

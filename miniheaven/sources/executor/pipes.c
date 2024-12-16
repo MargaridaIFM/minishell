@@ -12,24 +12,10 @@
 
 #include "../includes/minishell.h"
 
-void	free_cmd_path(t_ast *left_side)
-{
-	while (left_side->token->type <= 3)
-	{
-		if (left_side->token->cmd)
-			free(left_side->token->cmd);
-		if (left_side->token->path)
-			free(left_side->token->path);
-		left_side = left_side->right;
-	}
-}
-
 void	do_pipeline(t_minishell *minishell, t_ast *ast)
 {
-	t_ast *left_side;
-	int final;
+	int	final;
 
-	left_side = NULL;
 	minishell->commands = 1;
 	minishell->_pipe_ = 1;
 	minishell->temp_stdin = dup(STDIN_FILENO);
@@ -37,18 +23,11 @@ void	do_pipeline(t_minishell *minishell, t_ast *ast)
 	{
 		minishell->commands++;
 		pipe_fork(minishell, ast);
-		if (ast->left->token->type <= 3)
-		{
-			left_side = ast->left;
-			free_cmd_path(left_side);
-		}
 		ast = ast->right;
 	}
 	final = fork();
 	if (final == 0)
 		execute_ast(minishell, ast, 1);
-	if (ast->token->type <= 3)
-		free_cmd_path(ast);
 	wait_pipes(minishell);
 	minishell->_pipe_ = 0;
 	dup2(minishell->temp_stdin, STDIN_FILENO);
@@ -58,20 +37,10 @@ void	do_pipeline(t_minishell *minishell, t_ast *ast)
 void	pipe_fork(t_minishell *minishell, t_ast *ast)
 {
 	pid_t	child;
-	t_ast	*right_ast;
 
-	right_ast = ast->right;
-	// minishell->infile = -1;
-	// minishell->outfile = -1;
 	fork_and_pipe(minishell, ast->left, &child);
 	if (child == 0)
 	{
-		while (right_ast->token->type == PIPE)
-		{
-			free_cmd_path(right_ast->left);
-			right_ast = right_ast->right;
-		}
-		free_cmd_path(right_ast);
 		execute_ast(minishell, ast->left, 1);
 		return ;
 	}
@@ -88,11 +57,7 @@ void	fork_and_pipe(t_minishell *minishell, t_ast *ast, int *child)
 void	redir_pipe(t_minishell *minishell, int child)
 {
 	if (child == 0)
-	{
 		dup2(minishell->fd[1], STDOUT_FILENO);
-		// close(minishell->fd[1]); // Mexi nisto para resolver SIGPIPE
-		// close(minishell->fd[0]);
-	}
 	else
 	{
 		dup2(minishell->fd[0], STDIN_FILENO);
@@ -108,10 +73,7 @@ void	wait_pipes(t_minishell *minishell)
 	i = 0;
 	while (i < minishell->commands)
 	{
-	    //waitpid(-1, &minishell->exit_status, 0);
-        waitpid(-1, NULL, 0);
-        //minishell->exit_status = WEXITSTATUS(minishell->exit_status);
+		waitpid(-1, &minishell->exit_status, 0);
 		i++;
 	}
 }
-

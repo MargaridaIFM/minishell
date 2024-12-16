@@ -12,13 +12,35 @@
 
 #include "../../includes/minishell.h"
 
+void	copy_content(t_minishell *minishell, char **envp,
+		char **envp_dup, int envp_counter)
+{
+	int	i;
+	int	x;
+
+	x = 0;
+	i = 0;
+	while (envp[i] && i < envp_counter)
+	{
+		envp_dup[i] = ft_strdup(envp[i]);
+		i++;
+	}
+	while (minishell->local[x])
+	{
+		envp_dup[i] = ft_strdup(minishell->local[x]);
+		i++;
+		x++;
+	}
+	envp_dup[i] = NULL;
+}
+
 /**
  * @brief Usado na funcao export(), vai duplicar 
  * o envp, organizar, e retornar esse array.
  * @param char **envp;
  * @return (char **);
  */
-char	**dup_envp(char **envp)
+char	**dup_envp(t_minishell *minishell, char **envp)
 {
 	char	**envp_dup;
 	int		envp_counter;
@@ -28,19 +50,20 @@ char	**dup_envp(char **envp)
 	envp_counter = 0;
 	while (envp[envp_counter])
 		envp_counter++;
+	while (minishell->local[i])
+	{
+		envp_counter++;
+		i++;
+	}
 	envp_dup = malloc(sizeof (char *) * (envp_counter + 1));
+	i = 0;
 	if (!envp_dup)
 	{
 		printf("Failed to allocate the env_dup\n");
 		free_array(envp_dup);
 		return (NULL);
 	}
-	while (i < envp_counter)
-	{
-		envp_dup[i] = strdup(envp[i]);
-		i++;
-	}
-	envp_dup[i] = NULL;
+	copy_content(minishell, envp, envp_dup, envp_counter);
 	return (envp_dup);
 }
 
@@ -96,4 +119,22 @@ char	*find_path(t_minishell *minishell, char *cmd)
 	else
 		full_path = find_path_util(full_path, split_cmd, split_env);
 	return (full_path);
+}
+
+int	bigger_var_name(char *original, char *step_ahead)
+{
+	int	i;
+
+	i = 0;
+	while ((original[i] || step_ahead[i])
+		&& original[i] != '='
+		&& step_ahead[i] != '=')
+	{
+		if (original[i] < step_ahead[i])
+			return (0);
+		if (original[i] > step_ahead[i])
+			return (1);
+		i++;
+	}
+	return (0);
 }

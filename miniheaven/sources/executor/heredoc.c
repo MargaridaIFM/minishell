@@ -50,11 +50,11 @@ void process_heredoc(t_minishell *minishell, t_ast *ast, t_ast *top)
         free_exit(minishell, "Error - Fail creating fork\n");
 	}
 	process_prompt(minishell, temp, top);
-	
 }
 
 void process_prompt(t_minishell *minishell, t_heredoc *heredoc, t_ast *top)
 {
+    (void)top;
     if(heredoc->id == 0)
     {
         // child process
@@ -62,12 +62,6 @@ void process_prompt(t_minishell *minishell, t_heredoc *heredoc, t_ast *top)
         close(heredoc->fd[0]);
         write_to_pipe(minishell, heredoc);
         close(heredoc->fd[1]);
-        while (top->token->type == PIPE)
-        {
-            free_cmd_path(top->left);
-            top = top->right;
-        }
-        free_cmd_path(top);
 		//free_paths(top);
         free_exit(minishell, "");
     }

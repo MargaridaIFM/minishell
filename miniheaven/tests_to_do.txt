@@ -64,3 +64,34 @@ echo hello | cat < infile echo hello > outfile
 
 < infile echo hello | < infile cat | wc x
 < infile ls | < infile pwd | < infile pwd | < infile wc > outfile | > outfile2 --> esta a passar o erro para dentro do outfile
+
+
+
+//////          FINAL TESTSSS           /////////
+
+Simple execution ✅
+
+ls
+ls -a
+echo hello
+echo -n hello
+echo -nn hello
+pwd
+export a=b b c=2 1a=2 a2=1 / export
+
+Redireções ✅
+
+< infile echo hello
+< infile cat
+echo hello < infile
+cat < infile
+echo hello < infile > outfile
+cat < infile > outfile
+< infile echo hello > outfile
+< infile cat > outfile
+< infile > outfile echo hello
+< infile > outfile cat
+
+here_doc
+ls << eof
+ls << eof << eof2 << eof3

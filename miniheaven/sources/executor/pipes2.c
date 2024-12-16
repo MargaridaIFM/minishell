@@ -12,43 +12,38 @@
 
 #include "../includes/minishell.h"
 
+void	execute_child(t_minishell *minishell, t_ast *ast)
+{
+	dup2(minishell->fd[1], STDOUT_FILENO);
+	close(minishell->fd[1]);
+	close(minishell->fd[0]);
+	execute_ast(minishell, ast, -1);
+	free_exit(minishell, "");
+}
+
 void	do_one_pipe(t_minishell *minishell, t_ast *ast)
 {
 	pid_t	right_fork;
 	pid_t	left_fork;
-	
+
 	minishell->temp_stdin = dup(STDIN_FILENO);
 	pipe(minishell->fd);
 	left_fork = fork();
 	if (left_fork == 0)
 	{
-		dup2(minishell->fd[1], STDOUT_FILENO);
-		close(minishell->fd[1]);
-		close(minishell->fd[0]);
-		free_cmd_path(ast->right);
-		execute_ast(minishell, ast->left, -1);
-		free_exit(minishell, "");
+		execute_child(minishell, ast->left);
 	}
 	right_fork = fork();
-	if (right_fork == 0) 
+	if (right_fork == 0)
 	{
-        dup2(minishell->fd[0], STDIN_FILENO);
-       	close(minishell->fd[1]);
+		dup2(minishell->fd[0], STDIN_FILENO);
+		close(minishell->fd[1]);
 		close(minishell->fd[0]);
-		free_cmd_path(ast->left);
-        execute_ast(minishell, ast->right, -1);
-        free_exit(minishell, ""); // Se falhar, encerra o processo
+		execute_ast(minishell, ast->right, -1);
+		free_exit(minishell, "");
 	}
 	close (minishell->fd[1]);
 	close(minishell->fd[0]);
-	waitpid(left_fork, &minishell->exit_status , 0);
-	//minishell->exit_status = WEXITSTATUS(minishell->exit_status);
+	waitpid(left_fork, &minishell->exit_status, 0);
 	waitpid(right_fork, &minishell->exit_status, 0);
-	//minishell->exit_status = WEXITSTATUS(minishell->exit_status);
-	free_cmd_path(ast->left);
-	free_cmd_path(ast->right);
-	//dup2(minishell->temp_stdin, STDIN_FILENO);
-	//close(minishell->temp_stdin);
-	//minishell->temp_stdin = -1;
-	//free_exit(minishell, "");
 }
