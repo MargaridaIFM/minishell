@@ -21,7 +21,9 @@ char	*built_cmd(t_ast *ast)
 	cmd = NULL;
 	free(cmd);
 	if (!cmd)
+	{
 		cmd = ft_strdup(ast->token->str);
+	}
 	while (ast->right && (ast->token->type == WORD || ast->token->type == STR))
 	{
 		cmd = ft_strjoin_gnl(cmd, " ");
@@ -88,7 +90,7 @@ void	error_execute(t_minishell *minishell,
 		char **split_cmd, char *cmd_path, char *cmd)
 {
 	g_signal = 127;
-	printf("%s: command not found\n", split_cmd[0]);
+	printf("%s: command not found\n", cmd);
 	if (cmd_path != NULL)
 		free(cmd_path);
 	free(cmd);
@@ -105,7 +107,7 @@ int	find_builtin(t_minishell *minishell, char **dp, char *cmd)
 	else if (ft_strcmp(dp[0], "env") == 0)
 		return (ft_env(minishell), 1);
 	else if (ft_strcmp(dp[0], "export") == 0)
-		return (ft_export(dp, minishell), 1);
+		return (ft_export(minishell), 1);
 	else if (ft_strcmp(dp[0], "unset") == 0)
 		return (ft_unset(dp, minishell), 1);
 	else if (ft_strcmp(dp[0], "pwd") == 0)

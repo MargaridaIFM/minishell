@@ -88,6 +88,7 @@ void	add_var(t_minishell *minishell, char *var)
 	char	**copy_envp;
 
 	i = 0;
+	printf("VAR %s\n", var);
 	while (minishell->envp[i])
 		i++;
 	copy_envp = malloc((i + 2) * sizeof(char *));
@@ -147,22 +148,22 @@ int	check_var(char *var, t_minishell *minishell)
  * @param char **split_cmd, t_minishell *minishell
  * @return (void);
  */
-void	ft_export(char **split_cmd, t_minishell *minishell)
+void	ft_export(t_minishell *minishell)
 {
-	int	i;
+	t_ast *ast;
 
-	i = 1;
-	if (split_cmd[1] == NULL)
+	if (!minishell->ast->right)
 		print_export(minishell, minishell->envp);
 	else
 	{
-		while (split_cmd[i])
+		ast = minishell->ast->right;
+		while (ast)
 		{
-			if (find_equal(split_cmd[i]) == -1)
-				add_local(minishell, split_cmd[i]);
-			else if (check_var(split_cmd[i], minishell) == 0)
-				add_var(minishell, split_cmd[i]);
-			i++;
+			if (find_equal(ast->token->str) == -1)
+				add_local(minishell, ast->token->str);
+			else if (check_var(ast->token->str, minishell) == 0)
+				add_var(minishell, ast->token->str);
+			ast = ast->right;
 		}
 	}
 }

@@ -28,7 +28,7 @@ void	expander(t_minishell *minishell)
 		else if (temp->type == WORD)
 		{
 			expand_vars(minishell, temp);
-			split_tokens(minishell, &temp);
+			//split_tokens(minishell, &temp);
 		}
 		temp = temp->next;
 	}

@@ -211,7 +211,7 @@ void	ft_env(t_minishell *minishell);
 // EXPORT//
 int		check_var(char *var, t_minishell *minishell);
 void	add_var(t_minishell *minishell, char *var);
-void	ft_export(char **split_cmd, t_minishell *minishell);
+void	ft_export(t_minishell *minishell);
 int	find_equal(char *var);
 int	add_local(t_minishell *minishell, char *var);
 int	bigger_var_name(char *original, char *step_ahead);
