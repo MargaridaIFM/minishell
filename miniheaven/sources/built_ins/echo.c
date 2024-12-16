@@ -46,51 +46,6 @@ static t_ast	*skip(t_ast *ast, int *flag)
 	return (temp);
 }
 
-// /**
-//  * @brief Vai permitir imprimir espacos enquanto nao encontrar o sinal ( " || ' )
-//  * @param char *sign, char *str
-//  * @return (int);
-//  */
-// static int	print_space(char sign, char *str)
-// {
-// 	int	i;
-
-// 	i = 0;
-// 	i++;
-// 	while (str[i] != sign)
-// 	{
-// 		printf("%c", str[i]);
-// 		i++;
-// 	}
-// 	i++;
-// 	return (i);
-// }
-
-// /**
-//  * @brief Vou printar a str, mas sem os espacos
-//  * @param char *str.
-//  * @return (int);
-//  */
-// static int	print_no_space(char *str)
-// {
-// 	int	i;
-
-// 	i = 0;
-// 	while (str[i] && (str[i] != '\'' || str[i] != '"'))
-// 	{
-// 		if ((str[i] >= 9 && str[i] <= 13) || str[i] == 32)
-// 		{
-// 			printf("%c", str[i]);
-// 			while ((str[i] >= 9 && str[i] <= 13) || str[i] == 32)
-// 				i++;
-// 			return (i);
-// 		}
-// 		printf("%c", str[i]);
-// 		i++;
-// 	}
-// 	return (i);
-// }
-
 /**
  * @brief Vai imprimir a 'str' que recebe
  * @param char *str

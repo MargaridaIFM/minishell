@@ -31,6 +31,17 @@ static void	print_env(t_minishell *minishell)
  */
 void	ft_env(t_minishell *minishell)
 {
+	if (minishell->ast->right)
+	{
+		if (minishell->ast->right->token->str[1])
+		{
+			ft_putstr_fd("env: invalid option -- '", 2);
+			ft_putchar_fd(minishell->ast->right->token->str[1], 2);
+			ft_putstr_fd("'\n", 2);
+			return ;
+		}
+		return ;
+	}
 	if (my_getenv(minishell, "PATH") == NULL)
 	{
 		printf("bash: env: No such file or directory\n");
