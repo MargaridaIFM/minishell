@@ -32,10 +32,8 @@ static int	find_char(char *str, char c)
 static t_ast	*skip(t_ast *ast, int *flag)
 {
 	t_ast *temp;
-	int i;
 
 	temp = ast;
-	i = 2;
 	while(find_char(ast->token->str + 1, 'n') == 1 )
 	{
 		*flag = 1;

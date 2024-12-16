@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   local_export.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: miafonso <miafonso@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mistery576 <mistery576@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 23:04:01 by mistery576        #+#    #+#             */
-/*   Updated: 2024/12/16 20:02:23 by miafonso         ###   ########.fr       */
+/*   Updated: 2024/12/16 22:54:07 by mistery576       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,23 +64,23 @@ int	add_local(t_minishell *minishell, char *var)
 
 void	check_local(t_minishell *minishell, char *var, int x)
 {
-	char *temp;
-	int i;
+	int		i;
+	int		j;
 
 	i = 0;
-	
 	while (minishell->local[i])
 	{
 		if (ft_strncmp(minishell->local[i], var, x) == 0)
 		{
-			while (minishell->local[i])
+			free(minishell->local[i]);
+			j = i;
+			while (minishell->local[j + 1])
 			{
-				if (minishell->local[i + 1])
-					temp = minishell->local[i + 1];
-				free(minishell->local[i]);
-				minishell->local[i] = temp;
-				i++;
-			}					
+				minishell->local[j] = minishell->local[j + 1];
+				j++;
+			}
+			minishell->local[j] = NULL;
+			return;
 		}
 		i++;
 	}
