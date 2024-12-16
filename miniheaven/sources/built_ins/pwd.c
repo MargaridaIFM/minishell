@@ -19,13 +19,13 @@
  */
 void	ft_pwd(t_minishell *minishell)
 {
-	char	*pwd;
-
-	pwd = my_getenv(minishell, "PWD");
-	if (!pwd)
+	(void)minishell;
+	char *cwd = getcwd(NULL, 0);
+    if (cwd != NULL) 
 	{
-		printf("Error - No PWD\n");
-		exit(0);
-	}
-	printf("%s\n", pwd);
+        printf("%s\n", cwd);
+        free(cwd);
+    }
+	else
+        ft_putstr_fd("Error doing getcwd\n", 2);
 }
