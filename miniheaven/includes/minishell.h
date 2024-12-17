@@ -215,14 +215,14 @@ void	ft_export(t_minishell *minishell, char **cmd);
 int	find_equal(char *var);
 int	add_local(t_minishell *minishell, char *var);
 int	bigger_var_name(char *original, char *step_ahead);
-void	check_local(t_minishell *minishell, char *var, int x);
+void	clear_local(t_minishell *minishell, char *var, int x);
 int check_local_env(t_minishell *minishell, char *var);
 
 // PWD //
 void	ft_pwd(t_minishell *minishell);
 
 // UNSET //
-void	ft_unset(char **split_cmd, t_minishell *minishell);
+void	ft_unset(char **cmd, t_minishell *minishell);
 
 // Built_ins_utils //
 char	**dup_envp(t_minishell *minishell, char **envp); /*Usado no export*/

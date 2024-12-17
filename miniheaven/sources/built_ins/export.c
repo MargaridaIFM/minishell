@@ -135,7 +135,7 @@ int	check_var(char *var, t_minishell *minishell)
 			return (1);
 		}
 	}
-	check_local(minishell, var, x);
+	clear_local(minishell, var, x);
 	return (0);
 }
 
