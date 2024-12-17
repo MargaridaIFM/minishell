@@ -6,7 +6,7 @@
 /*   By: mistery576 <mistery576@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 23:04:01 by mistery576        #+#    #+#             */
-/*   Updated: 2024/12/17 01:56:46 by mistery576       ###   ########.fr       */
+/*   Updated: 2024/12/17 03:20:11 by mistery576       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,7 @@ int 	check_local_env(t_minishell *minishell, char *var)
 		x = 0;
 		while(minishell->envp[i][x] && minishell->envp[i][x] != '=')
 			x++;
-		if (ft_strncmp(minishell->envp[i], var, x + 1) == 0)
+		if (ft_strncmp(minishell->envp[i], var, x) == 0)
 			return (1);
 		i++;
 	}

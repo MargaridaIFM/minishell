@@ -19,11 +19,13 @@
  */
 void	ft_pwd(void)
 {
-	char *cwd = getcwd(NULL, 0);
-    if (cwd != NULL) 
+	char *pwd;
+    
+    pwd = getcwd(NULL, 0);
+    if (pwd != NULL) 
 	{
-        printf("%s\n", cwd);
-        free(cwd);
+        printf("%s\n", pwd);
+        free(pwd);
     }
 	else
         ft_putstr_fd("Error doing getcwd\n", 2);

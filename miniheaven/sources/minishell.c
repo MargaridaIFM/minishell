@@ -41,7 +41,38 @@ static int	create_env(t_minishell *minishell, char *envp[], int envp_counter)
 			free_exit(minishell, "Error - Memory envp fail\n");
 		i++;
 	}
+	if (envp_counter < 3)
+	{
+
+		i = 3;
+	}
 	return (i);
+}
+
+static void mandatory_env(t_minishell *minishell)
+{
+	char *pwd;
+	char *shlvl;
+	char *oldpwd;
+
+	if (my_getenv(minishell, "PWD") == NULL)
+	{
+		pwd = ft_strjoin("PWD=", getcwd(NULL, 0));
+		minishell->envp = add_string_to_array(minishell->envp, pwd);
+		free(pwd);
+	}
+	if (my_getenv(minishell, "OLDPWD") == NULL)
+	{
+		oldpwd = ft_strdup("OLDPWD");
+		minishell->envp = add_string_to_array(minishell->envp, oldpwd);
+		free(oldpwd);
+	}
+	if (my_getenv(minishell, "SHLVL") == NULL)
+	{
+		shlvl = ft_strdup("SHLVL=1");
+		minishell->envp = add_string_to_array(minishell->envp, shlvl);
+		free(shlvl);
+	}
 }
 
 static void	initialization(char *envp[], t_minishell *minishell)
@@ -66,6 +97,7 @@ static void	initialization(char *envp[], t_minishell *minishell)
 	if (!minishell->envp)
 		free_exit(minishell, "Error - Memory allocation fail\n");
 	i = create_env(minishell, envp, envp_counter);
+	mandatory_env(minishell);
 	minishell->envp[i] = NULL;
 }
 

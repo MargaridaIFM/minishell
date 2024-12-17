@@ -160,7 +160,10 @@ void	ft_export(t_minishell *minishell, char **cmd)
 		while (cmd[i])
 		{
 			if (find_equal(cmd[i]) == -1 && check_local_env(minishell, cmd[i]) == 0)
+			{
+				printf("entrou\n");
 				add_local(minishell, cmd[i]);
+			}
 			else if (find_equal(cmd[i]) == 0 && check_var(cmd[i], minishell) == 0)
 				add_var(minishell, cmd[i]);
 			i++;

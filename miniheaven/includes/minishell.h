@@ -115,6 +115,9 @@ void	free_ast(t_ast *ast);
 void	free_heredoc(t_heredoc *heredoc);
 void	fd_clean(void);
 
+// MINISHELL UTILS //
+char **add_string_to_array(char **array, char *new_string);
+
 // Display Prompt
 void	display_prompt(t_minishell *minishell);
 void	process_input(t_minishell *minishell);
