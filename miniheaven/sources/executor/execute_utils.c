@@ -75,17 +75,17 @@ void	execute_cmd(t_minishell *minishell, char **split_cmd, char *cmd)
 {
 	char	*cmd_path;
 
-	if (minishell->_pipe_ == 1)
-	{
-		if (find_builtin(minishell, split_cmd) == 1)
-		{
-			rebuild_fileno(minishell);
-			free(cmd);
-			fd_clean();
-			free_array(split_cmd);
-			free_exit(minishell, "");
-		}
-	}
+	// if (minishell->_pipe_ == 1)
+	// {
+	// 	if (find_builtin(minishell, split_cmd) == 1)
+	// 	{
+	// 		rebuild_fileno(minishell);
+	// 		free(cmd);
+	// 		fd_clean();
+	// 		free_array(split_cmd);
+	// 		free_exit(minishell, "");
+	// 	}
+	// }
 	if (access(split_cmd[0], X_OK) == 0)
 		execve(split_cmd[0], split_cmd, minishell->envp);
 	cmd_path = find_path(minishell, split_cmd[0]);

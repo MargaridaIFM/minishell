@@ -73,13 +73,12 @@ void	execute_ast(t_minishell *minishell, t_ast *ast, int flag)
 }
 
 void	error_execute(t_minishell *minishell,
-		char **split_cmd, char *cmd_path, char *cmd)
+		char **split_cmd, char *cmd_path)
 {
 	g_signal = 127;
 	printf("%s: command not found\n", cmd);
 	if (cmd_path != NULL)
 		free(cmd_path);
-	free(cmd);
 	free_array(split_cmd);
 	free_exit(minishell, "");
 }

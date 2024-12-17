@@ -236,8 +236,7 @@ void	execute_ast(t_minishell *minishell, t_ast *ast, int flag);
 char	*remove_equal(char *path);
 char	*my_getenv(t_minishell *minishell, char *path);
 int		find_builtin(t_minishell *minishell, char **dp);
-void	error_execute(t_minishell *minishell, char **split_cmd, char *cmd_path,
-			char *cmd);
+void	error_execute(t_minishell *minishell, char **split_cmd, char *cmd_path);
 void	ft_execute(t_minishell *minishell, char **split_cmd);
 void	execute_cmd(t_minishell *minishell, char **split_cmd, char *cmd);
 char	*built_cmd(t_ast *ast);
