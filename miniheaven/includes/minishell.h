@@ -206,16 +206,17 @@ void	ft_cd(char **split_cmd, t_minishell *minishell);
 void	ft_echo(char **cmd);
 
 // ENV //
-void	ft_env(t_minishell *minishell);
+void	ft_env(t_minishell *minishell, char **cmd);
 
 // EXPORT//
 int		check_var(char *var, t_minishell *minishell);
 void	add_var(t_minishell *minishell, char *var);
-void	ft_export(t_minishell *minishell);
+void	ft_export(t_minishell *minishell, char **cmd);
 int	find_equal(char *var);
 int	add_local(t_minishell *minishell, char *var);
 int	bigger_var_name(char *original, char *step_ahead);
 void	check_local(t_minishell *minishell, char *var, int x);
+int check_local_env(t_minishell *minishell, char *var);
 
 // PWD //
 void	ft_pwd(t_minishell *minishell);

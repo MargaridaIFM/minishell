@@ -29,14 +29,14 @@ static void	print_env(t_minishell *minishell)
  * @param char *cmd, char **envp
  * @return (void);
  */
-void	ft_env(t_minishell *minishell)
+void	ft_env(t_minishell *minishell, char **cmd)
 {
-	if (minishell->ast->right)
+	if (cmd[1])
 	{
-		if (minishell->ast->right->token->str[1])
+		if (cmd[1][1])
 		{
 			ft_putstr_fd("env: invalid option -- '", 2);
-			ft_putchar_fd(minishell->ast->right->token->str[1], 2);
+			ft_putchar_fd(cmd[1][1], 2);
 			ft_putstr_fd("'\n", 2);
 			return ;
 		}

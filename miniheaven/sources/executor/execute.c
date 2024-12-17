@@ -91,9 +91,9 @@ int	find_builtin(t_minishell *minishell, char **dp)
 	else if (ft_strcmp(dp[0], "echo") == 0)
 		return (ft_echo(dp), 1);
 	else if (ft_strcmp(dp[0], "env") == 0)
-		return (ft_env(minishell), 1);
+		return (ft_env(minishell, dp), 1);
 	else if (ft_strcmp(dp[0], "export") == 0)
-		return (ft_export(minishell), 1);
+		return (ft_export(minishell, dp), 1);
 	else if (ft_strcmp(dp[0], "unset") == 0)
 		return (ft_unset(dp, minishell), 1);
 	else if (ft_strcmp(dp[0], "pwd") == 0)

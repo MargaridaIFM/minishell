@@ -148,22 +148,22 @@ int	check_var(char *var, t_minishell *minishell)
  * @param char **split_cmd, t_minishell *minishell
  * @return (void);
  */
-void	ft_export(t_minishell *minishell)
+void	ft_export(t_minishell *minishell, char **cmd)
 {
-	t_ast *ast;
+	int i;
 
-	if (!minishell->ast->right)
+	i = 1;
+	if (!cmd[i])
 		print_export(minishell, minishell->envp);
 	else
 	{
-		ast = minishell->ast->right;
-		while (ast)
+		while (cmd[i])
 		{
-			if (find_equal(ast->token->str) == -1)
-				add_local(minishell, ast->token->str);
-			else if (check_var(ast->token->str, minishell) == 0)
-				add_var(minishell, ast->token->str);
-			ast = ast->right;
+			if (find_equal(cmd[i]) == -1 && check_local_env(minishell, cmd[i]) == 0)
+				add_local(minishell, cmd[i]);
+			else if (find_equal(cmd[i]) == 0 && check_var(cmd[i], minishell) == 0)
+				add_var(minishell, cmd[i]);
+			i++;
 		}
 	}
 }
