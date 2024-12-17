@@ -17,9 +17,8 @@
  * @param t_minishell *minishell
  * @return (void);
  */
-void	ft_pwd(t_minishell *minishell)
+void	ft_pwd(void)
 {
-	(void)minishell;
 	char *cwd = getcwd(NULL, 0);
     if (cwd != NULL) 
 	{

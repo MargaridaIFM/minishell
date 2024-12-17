@@ -219,7 +219,7 @@ void	clear_local(t_minishell *minishell, char *var, int x);
 int check_local_env(t_minishell *minishell, char *var);
 
 // PWD //
-void	ft_pwd(t_minishell *minishell);
+void	ft_pwd(void);
 
 // UNSET //
 void	ft_unset(char **cmd, t_minishell *minishell);
