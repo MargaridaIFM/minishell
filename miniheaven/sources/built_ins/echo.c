@@ -29,19 +29,19 @@ static int	find_char(char *str, char c)
  * @param char *str, int *flag.
  * @return (int);
  */
-static t_ast	*skip(t_ast *ast, int *flag)
+static int	skip(char **cmd, int *flag)
 {
-	t_ast *temp;
+	int i;
 
-	temp = ast;
-	while(find_char(ast->token->str + 1, 'n') == 1 )
+	i = 1;
+	while(find_char(cmd[i] + 1, 'n') == 1)
 	{
 		*flag = 1;
-		ast = ast->right;
+		i++;
 	}
 	if (*flag == 1)
-		return (ast);
-	return (temp);
+		return (i);
+	return (i);
 }
 
 /**
@@ -49,24 +49,19 @@ static t_ast	*skip(t_ast *ast, int *flag)
  * @param char *str
  * @return (void);
  */
-void	ft_echo(t_minishell *minishell)
+void	ft_echo(char **cmd)
 {
-	t_ast *ast;
-
-	if (minishell->ast->right)
-		ast = minishell->ast->right;
-	else
-		return ;
 	int	flag;
+	int i;
 
 	flag = 0;
-	ast = skip(ast, &flag);
-	while (ast)
+	i = skip(cmd, &flag);
+	while (cmd[i])
 	{
-		printf("%s", ast->token->str);
-		if (ast->right)
+		printf("%s", cmd[i]);
+		i++;
+		if (cmd[i])
 			printf(" ");
-		ast = ast->right;
 	}
 	if (flag == 0)
 		printf("\n");

@@ -35,44 +35,31 @@ char	*built_cmd(t_ast *ast)
 
 void	execute_ast(t_minishell *minishell, t_ast *ast, int flag)
 {
-	char	*cmd;
+	char	**cmd;
+	//int		i;
 
+	//i = 0;
 	cmd = NULL;
-	while (ast->token->type <= 3)
-	{
-		if (ast->token->cmd)
-		{
-			if (!cmd)
-			{
-				cmd = ft_strdup(ast->token->cmd);
-			}
-			else
-			{
-				cmd = ft_strjoin_gnl(cmd, " ");
-				cmd = ft_strjoin_gnl(cmd, ast->token->cmd);
-			}
-		}
-		open_file(minishell, ast);
-		ast = ast->right;
-	}
-	if (cmd)
+	if (ast->token->type <= 3)
+		cmd = collect_commands_redirs(ast, minishell);
+	if (cmd != NULL)
 	{
 		if (flag == -1)
 			ft_execute(minishell, cmd);
 		else
-			ft_execute_pipe(minishell, cmd);
+			ft_execute_pipe(minishell, cmd[0]);
 		rebuild_fileno(minishell);
 		close_redir(minishell);
-		free(cmd);
+		free(*cmd);
 		return ;
 	}
 	if (ast->token->type == WORD || ast->token->type == STR)
 	{
-		cmd = built_cmd(ast);
+		cmd = collect_commands(ast);
 		if (flag == -1)
 			ft_execute(minishell, cmd);
 		else
-			ft_execute_pipe(minishell, cmd);
+			ft_execute_pipe(minishell, cmd[0]);
 	}
 	if (ast->token->type == PIPE)
 	{
@@ -83,7 +70,6 @@ void	execute_ast(t_minishell *minishell, t_ast *ast, int flag)
 	}
 	rebuild_fileno(minishell);
 	close_redir(minishell);
-	free(cmd);
 }
 
 void	error_execute(t_minishell *minishell,
@@ -98,12 +84,12 @@ void	error_execute(t_minishell *minishell,
 	free_exit(minishell, "");
 }
 
-int	find_builtin(t_minishell *minishell, char **dp, char *cmd)
+int	find_builtin(t_minishell *minishell, char **dp)
 {
 	if (ft_strcmp(dp[0], "cd") == 0)
 		return (ft_cd(dp, minishell), 1);
 	else if (ft_strcmp(dp[0], "echo") == 0)
-		return (ft_echo(minishell), 1);
+		return (ft_echo(dp), 1);
 	else if (ft_strcmp(dp[0], "env") == 0)
 		return (ft_env(minishell), 1);
 	else if (ft_strcmp(dp[0], "export") == 0)
@@ -114,7 +100,6 @@ int	find_builtin(t_minishell *minishell, char **dp, char *cmd)
 		return (ft_pwd(minishell), 1);
 	else if (ft_strcmp(dp[0], "exit") == 0)
 	{
-		free(cmd);
 		free_array(dp);
 		free_exit(minishell, "");
 	}
@@ -128,31 +113,29 @@ int	find_builtin(t_minishell *minishell, char **dp, char *cmd)
  * @param t_minishell *minishell, char **split_cmd
  * @return (void);
  */
-void	ft_execute(t_minishell *minishell, char *cmd)
+void	ft_execute(t_minishell *minishell, char **cmd)
 {
-	char	**split_cmd;
 	int		child;
 
-	split_cmd = ft_split(cmd, ' ');
 	if (redirect_read(minishell) == -1)
 		free_exit(minishell, "Something went wrong with dup2\n");
-	if (find_builtin(minishell, split_cmd, cmd) == 1)
+	if (find_builtin(minishell, cmd) == 1)
 	{
 		minishell->exit_status = WEXITSTATUS(minishell->exit_status);
-		return (free_array(split_cmd));
+		return (free_array(cmd));
 	}
 	if (my_getenv(minishell, "PATH") == NULL)
 	{
-		printf("%s: command not found\n", split_cmd[0]);
+		printf("%s: command not found\n", cmd[0]);
 		g_signal = 127;
-		return (free_array(split_cmd));
+		return (free_array(cmd));
 	}
 	child = fork();
 	if (child == 0)
-		execute_cmd(minishell, split_cmd, cmd);
+		execute_cmd(minishell, cmd, cmd[0]);
 	else
 		waitpid(child, &minishell->exit_status, 0);
 	minishell->exit_status = WEXITSTATUS(minishell->exit_status);
 	rebuild_fileno(minishell);
-	free_array(split_cmd);
+	free_array(cmd);
 }

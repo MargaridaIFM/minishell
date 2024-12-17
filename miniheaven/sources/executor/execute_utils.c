@@ -39,7 +39,7 @@ void	ft_execute_pipe(t_minishell *minishell, char *cmd)
 		printf("%s: command not found\n", split_cmd[0]);
 		error_execute(minishell, split_cmd, NULL, cmd);
 	}
-	if (find_builtin(minishell, split_cmd, cmd) == 1)
+	if (find_builtin(minishell, split_cmd) == 1)
 	{
 		free(cmd);
 		free_array(split_cmd);
@@ -77,7 +77,7 @@ void	execute_cmd(t_minishell *minishell, char **split_cmd, char *cmd)
 
 	if (minishell->_pipe_ == 1)
 	{
-		if (find_builtin(minishell, split_cmd, cmd) == 1)
+		if (find_builtin(minishell, split_cmd) == 1)
 		{
 			rebuild_fileno(minishell);
 			free(cmd);
