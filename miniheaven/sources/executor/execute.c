@@ -64,7 +64,7 @@ void	execute_ast(t_minishell *minishell, t_ast *ast, int flag)
 		free(cmd);
 		return ;
 	}
-	if (ast->token->type == WORD || ast->token->type == STR)
+	if (ast->token->type == WORD)
 	{
 		cmd = built_cmd(ast);
 		if (flag == -1)
