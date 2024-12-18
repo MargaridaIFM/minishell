@@ -61,11 +61,21 @@ void	ft_execute_pipe(t_minishell *minishell, char **cmd)
 	// 	free_exit(minishell, "");
 }
 
+void	parse_cmd(char **split_cmd)
+{
+	int i;
+
+	i = 0;
+	while (split)
+}
+
 void	execute_cmd(t_minishell *minishell, char **split_cmd, char *cmd)
 {
 	(void)cmd;
 	char	*cmd_path;
+	char	**parse_cmd;
 
+	parse_cmd = parse_cmd(split_cmd);
 	// if (minishell->_pipe_ == 1)
 	// {
 	// 	if (find_builtin(minishell, split_cmd) == 1)

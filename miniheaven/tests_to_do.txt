@@ -77,7 +77,16 @@ echo hello
 echo -n hello
 echo -nn hello
 pwd
-export a=b b c=2 1a=2 a2=1 / export
+export a="ls -la" b=ls c='echo "hello    world"' / export
+
+Quotes -> str a="ls -la" b=ls c='echo "hello    world"
+$a ❌
+"$a" -> Nao executa 
+$c 
+"$c"
+"ls -la"
+"ls"
+"cat | ls"
 
 Redireções ✅
 
@@ -95,3 +104,5 @@ cat < infile > outfile
 here_doc
 ls << eof
 ls << eof << eof2 << eof3
+
+

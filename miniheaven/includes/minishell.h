@@ -65,6 +65,7 @@ typedef struct s_token
 	char			*str;
 	char			*path;
 	char			**cmd;
+	int				dq;
 }	t_token;
 
 typedef struct s_ast
@@ -274,6 +275,6 @@ char **copy_array(t_ast *ast, int count);
 
 void	free_cmd_path(t_ast *left_side);
 
-
+void	check_is_str(t_minishell *minishell);
 void		do_one_pipe(t_minishell *minishell, t_ast *ast);
 #endif

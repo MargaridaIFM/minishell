@@ -43,6 +43,11 @@ char **collect_commands_redirs(t_minishell *minishell, t_ast *ast)
         return NULL;
 
     int index = 0;
+    if (ast->token->dq == 1 && ft_count_words(ast->token->str) > 1)
+    {
+        printf("entrou\n");
+        minishell->_str_ = 1;
+    }
     while (ast) 
     {
         if (ast->token->cmd)
@@ -59,8 +64,6 @@ char **collect_commands_redirs(t_minishell *minishell, t_ast *ast)
                 index++;
             }
         }
-        if (ast->token->type == STR)
-            minishell->_str_ = 1;
         //open_file(minishell, ast);
         ast = ast->right; // Avança para o próximo nó
     }
@@ -109,7 +112,12 @@ char    **collect_commands(t_minishell *minishell, t_ast *ast)
 
     cmd = NULL;
     count = 0;
-
+    (void)minishell;
+    if (ast->token->dq == 1 && ft_count_words(ast->token->str) > 1)
+    {
+        printf("entrou\n");
+        minishell->_str_ = 1;
+    }
     while (ast)
     {
         temp = cmd;
@@ -125,8 +133,6 @@ char    **collect_commands(t_minishell *minishell, t_ast *ast)
         cmd[count] = NULL;
         if (temp)
             free(temp);
-        if (ast->token->type == STR)
-            minishell->_str_ = 1;
         ast = ast->right;
     }
     return (cmd);
