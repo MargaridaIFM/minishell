@@ -61,32 +61,83 @@ void	ft_execute_pipe(t_minishell *minishell, char **cmd)
 	// 	free_exit(minishell, "");
 }
 
-void	parse_cmd(char **split_cmd)
-{
-	int i;
+char **ft_split_cmd(char **cmd, int cmd_count) {
+    char **result = NULL;   // Array para armazenar os tokens
+    int result_count = 0;   // Contador para o número total de tokens
+    int result_size = 0;    // Capacidade alocada (em elementos)
 
-	i = 0;
-	while (split)
+    // Iterar sobre cada comando na lista original
+    for (int i = 0; i < cmd_count; i++) {
+        // Obter os tokens da string atual usando ft_split
+        char **tokens = ft_split(cmd[i], ' ');
+        if (!tokens) continue; // Garantir que ft_split não retornou NULL
+
+        // Adicionar os tokens ao array de resultados
+        for (int j = 0; tokens[j] != NULL; j++) {
+            // Realocar espaço para o novo token, se necessário
+            if (result_count >= result_size) {
+                int new_size = result_size == 0 ? 4 : result_size * 2; // Crescimento exponencial
+                result = ft_realloc(result, result_size * sizeof(char *), new_size * sizeof(char *));
+                if (!result) {
+                    perror("Error reallocating memory");
+                    exit(EXIT_FAILURE);
+                }
+                result_size = new_size;
+            }
+
+            // Adicionar o token ao array
+            result[result_count] = tokens[j];
+            result_count++;
+        }
+
+        free(tokens); // Liberar o array intermediário do ft_split (não as strings)
+    }
+
+    // Adicionar NULL no final do array de resultados
+    if (result_count >= result_size) {
+        result = ft_realloc(result, result_size * sizeof(char *), (result_count + 1) * sizeof(char *));
+        if (!result) {
+            perror("Error reallocating memory");
+            exit(EXIT_FAILURE);
+        }
+    }
+    result[result_count] = NULL;
+
+    return result;
 }
+
+// char **ft_split_cmd(char **cmd, int cmd_count) {
+//     char **result = NULL;
+//     int result_count = 0;
+
+//     // Iterar sobre cada comando na lista original
+//     for (int i = 0; i < cmd_count; i++) {
+//         char *temp = ft_strdup(cmd[i]);
+//         char *token = strtok(temp, " ");
+
+//         while (token != NULL) 
+// 		{
+//             result = ft_realloc(result, result_size * sizeof(char *), (result_count + 1) * sizeof(char *));
+//             result[result_count] = strdup(token);
+//             result_count++;
+//             token = strtok(NULL, " ");
+//         }
+//         free(temp);
+//     }
+//     result = ft_realloc(result, result_size * sizeof(char *), (result_count + 1) * sizeof(char *));
+//     result[result_count] = NULL;
+
+//     return result;
+// }
 
 void	execute_cmd(t_minishell *minishell, char **split_cmd, char *cmd)
 {
 	(void)cmd;
 	char	*cmd_path;
-	char	**parse_cmd;
+	int		count;
 
-	parse_cmd = parse_cmd(split_cmd);
-	// if (minishell->_pipe_ == 1)
-	// {
-	// 	if (find_builtin(minishell, split_cmd) == 1)
-	// 	{
-	// 		rebuild_fileno(minishell);
-	// 		free(cmd);
-	// 		fd_clean();
-	// 		free_array(split_cmd);
-	// 		free_exit(minishell, "");
-	// 	}
-	// }
+	count = count_array(split_cmd);
+	split_cmd = ft_split_cmd(split_cmd, count);
 	if (access(split_cmd[0], X_OK) == 0)
 		execve(split_cmd[0], split_cmd, minishell->envp);
 	cmd_path = find_path(minishell, split_cmd[0]);

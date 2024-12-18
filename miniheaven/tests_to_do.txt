@@ -79,8 +79,8 @@ echo -nn hello
 pwd
 export a="ls -la" b=ls c='echo "hello    world"' / export
 
-Quotes -> str a="ls -la" b=ls c='echo "hello    world"
-$a ❌
+EXPANDER a="ls -la" b=ls c='echo "hello    world" ✅
+$a 
 "$a" -> Nao executa 
 $c 
 "$c"
@@ -91,7 +91,7 @@ $c
 Redireções ✅
 
 < infile echo hello
-< infile cat
+< infile cat 
 echo hello < infile
 cat < infile
 echo hello < infile > outfile

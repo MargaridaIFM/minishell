@@ -33,6 +33,16 @@ int contar_total_strings(t_ast *ast)
     return total;
 }
 
+int count_array(char **arr)
+{
+    int i;
+
+    i = 0;
+    while(arr[i])
+        i++;
+    return i;
+}
+
 // Função principal para concatenar arrays de strings de ast->cmd
 char **collect_commands_redirs(t_minishell *minishell, t_ast *ast) 
 {
@@ -64,7 +74,7 @@ char **collect_commands_redirs(t_minishell *minishell, t_ast *ast)
                 index++;
             }
         }
-        //open_file(minishell, ast);
+        open_file(minishell, ast);
         ast = ast->right; // Avança para o próximo nó
     }
     resultado[index] = NULL; // Finaliza o array com NULL

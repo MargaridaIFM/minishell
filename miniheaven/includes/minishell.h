@@ -277,4 +277,6 @@ void	free_cmd_path(t_ast *left_side);
 
 void	check_is_str(t_minishell *minishell);
 void		do_one_pipe(t_minishell *minishell, t_ast *ast);
+int count_array(char **arr);
+
 #endif
