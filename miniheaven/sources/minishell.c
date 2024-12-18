@@ -85,6 +85,7 @@ static void	initialization(char *envp[], t_minishell *minishell)
 	ft_bzero(minishell, sizeof(t_minishell));
 	minishell->local = malloc(sizeof(char *) * 1);
 	minishell->local[0] = NULL;
+	minishell->_str_ = 0;
 	minishell->_pipe_ = 0;
 	minishell->temp_stdin = -1;
 	minishell->temp_stdout = -1;

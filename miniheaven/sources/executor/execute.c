@@ -67,7 +67,7 @@ void	execute_ast(t_minishell *minishell, t_ast *ast, int flag)
 	}
 	if (ast->token->type == WORD || ast->token->type == STR)
 	{
-		cmd = collect_commands(ast);
+		cmd = collect_commands(minishell, ast);
 		if (flag == -1)
 			ft_execute(minishell, cmd);
 		else
@@ -130,15 +130,15 @@ void	ft_execute(t_minishell *minishell, char **cmd)
 
 	if (redirect_read(minishell) == -1)
 		free_exit(minishell, "Something went wrong with dup2\n");
-	if (find_builtin(minishell, cmd) == 1)
-	{
-		minishell->exit_status = WEXITSTATUS(minishell->exit_status);
-		return (free_array(cmd));
-	}
-	if (my_getenv(minishell, "PATH") == NULL)
+	if (my_getenv(minishell, "PATH") == NULL || minishell->_str_ == 1)
 	{
 		printf("%s: command not found\n", cmd[0]);
 		g_signal = 127;
+		return (free_array(cmd));
+	}
+	if (find_builtin(minishell, cmd) == 1)
+	{
+		minishell->exit_status = WEXITSTATUS(minishell->exit_status);
 		return (free_array(cmd));
 	}
 	child = fork();

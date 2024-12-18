@@ -6,7 +6,7 @@
 /*   By: mistery576 <mistery576@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 23:34:18 by mistery576        #+#    #+#             */
-/*   Updated: 2024/12/18 01:44:58 by mistery576       ###   ########.fr       */
+/*   Updated: 2024/12/18 11:59:51 by mistery576       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,8 @@ char **collect_commands_redirs(t_minishell *minishell, t_ast *ast)
                 index++;
             }
         }
+        if (ast->token->type == STR)
+            minishell->_str_ = 1;
         //open_file(minishell, ast);
         ast = ast->right; // Avança para o próximo nó
     }
@@ -99,7 +101,7 @@ char **collect_commands_redirs(t_minishell *minishell, t_ast *ast)
 // 	return (cmd);
 // }
 
-char    **collect_commands(t_ast *ast)
+char    **collect_commands(t_minishell *minishell, t_ast *ast)
 {
     char	**cmd;
     char	**temp;
@@ -123,6 +125,8 @@ char    **collect_commands(t_ast *ast)
         cmd[count] = NULL;
         if (temp)
             free(temp);
+        if (ast->token->type == STR)
+            minishell->_str_ = 1;
         ast = ast->right;
     }
     return (cmd);

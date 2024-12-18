@@ -6,7 +6,7 @@
 /*   By: mistery576 <mistery576@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 12:29:31 by mistery576        #+#    #+#             */
-/*   Updated: 2024/12/17 16:38:45 by mistery576       ###   ########.fr       */
+/*   Updated: 2024/12/18 11:51:23 by mistery576       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,6 @@ char    **built_cmd(t_ast *ast)
         count++;
         temp = temp->right;
     }
-
     // Usar a função para copiar tokens para o array
     cmd_array = copy_array(ast, count);
     return cmd_array;

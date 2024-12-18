@@ -75,12 +75,12 @@ void	print_ast(t_ast *ast, int level)
 	if (ast->token->type <= 3)
 	{
 		if (ast->token->cmd)
-			printf("(BRUH: %s file associated %s  comand %s)\n", ast->token->str, ast->token->path, ast->token->cmd[0]);
+			printf("(%d: %s file associated %s  comand %s)\n", ast->token->type, ast->token->str, ast->token->path, ast->token->cmd[0]);
 		else
-			printf("(BRUH: %s file associated %s)\n", ast->token->str, ast->token->path);
+			printf("(%d: %s file associated %s)\n", ast->token->type, ast->token->str, ast->token->path);
 	}
 	else
-		printf("(BRUH: %s file associated %s)\n", ast->token->str, ast->token->path);
+		printf("(%d: %s file associated %s)\n", ast->token->type, ast->token->str, ast->token->path);
 	if (ast->left != NULL)
 		print_ast(ast->left, level + 1);
 	if (ast->right != NULL)

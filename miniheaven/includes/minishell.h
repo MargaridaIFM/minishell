@@ -87,6 +87,7 @@ typedef struct s_minishell
 	char		**local;
 	char		*display;
 	char		*cmd;
+	int			_str_;
 	int			first;
 	int			fd[2];
 	int			exit_status;
@@ -243,7 +244,7 @@ char	**built_cmd(t_ast *ast);
 
 //	EXECUTOR_UTILS  //
 char	**collect_commands_redirs(t_minishell *minishell, t_ast *ast);
-char    **collect_commands(t_ast *ast);
+char    **collect_commands(t_minishell *minishell, t_ast *ast);
 
 // PIPEX //
 void	do_pipeline(t_minishell *minishell, t_ast *ast);
