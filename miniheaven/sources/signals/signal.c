@@ -26,7 +26,7 @@ static void	sig_handler(int signal)
 
 static void	here_handler(int signal)
 {
-	if(signal == SIGINT)
+	if (signal == SIGINT)
 	{
 		g_signal = 130;
 		ft_putchar_fd('\n', 1);
@@ -74,4 +74,3 @@ void	setup_signals_here(void)
 	sigaction(SIGINT, &sig_int, NULL);
 	sigaction(SIGQUIT, &sig_quit, NULL);
 }
-

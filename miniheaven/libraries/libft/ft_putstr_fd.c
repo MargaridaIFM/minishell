@@ -2,9 +2,12 @@
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   ft_putstr_fd.c                                     :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mfrancis <mfrancis@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
+/*                                                    +:+ +:+        
+	+:+     */
+/*   By: mfrancis <mfrancis@student.42.fr>          +#+  +:+      
+	+#+        */
+/*                                                +#+#+#+#+#+  
+	+#+           */
 /*   Created: 2024/04/09 13:55:10 by mfrancis          #+#    #+#             */
 /*   Updated: 2024/04/15 11:23:04 by mfrancis         ###   ########.fr       */
 /*                                                                            */
@@ -17,12 +20,10 @@ Return Value None.
  */
 void	ft_putstr_fd(char *s, int fd)
 {
-	//write(fd, s, ft_strlen(s));
-
 	int	idx;
 
 	idx = 0;
-	if(!s)
+	if (!s)
 		return ;
 	while (s[idx])
 	{
@@ -32,7 +33,7 @@ void	ft_putstr_fd(char *s, int fd)
 }
 /* int main()
 {
-    ft_putstr_fd("Hello\n", 1);
-    ft_putstr_fd("Good bye\n",1);
+	ft_putstr_fd("Hello\n", 1);
+	ft_putstr_fd("Good bye\n",1);
 }
  */

@@ -65,7 +65,7 @@ void	execute_ast(t_minishell *minishell, t_ast *ast, int flag)
 		close_redir(minishell);
 		return ;
 	}
-	if (ast->token->type == WORD || ast->token->type == STR)
+	if (ast->token->type == WORD)
 	{
 		cmd = collect_commands(minishell, ast);
 		if (flag == -1)

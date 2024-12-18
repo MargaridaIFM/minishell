@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: mfrancis <mfrancis@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/16 23:41:40 by mfrancis          #+#    #+#             */
-/*   Updated: 2024/11/13 09:45:52 by mfrancis         ###   ########.fr       */
+/*   Created: 2024/12/16 17:54:32 by mfrancis          #+#    #+#             */
+/*   Updated: 2024/12/16 17:54:32 by mfrancis         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ void	print_token(t_minishell *data)
 	if (data->tokens->next == NULL)
 		ft_printf("NULL\n");
 }
+
 void	print_token2(t_token *data)
 {
 	t_token	*current;
@@ -99,24 +100,13 @@ char	*token_type_to_str(t_tk_tp type)
 		return ("REDIR_APPEND");
 	else if (type == REDIR_HEREDOC)
 		return ("REDIR_HEREDOC");
-	else if (type == WORD )
+	else if (type == WORD)
 		return ("WORD");
-	else if (type == STR )
+	else if (type == STR)
 		return ("STR");
 	else
 		return ("UNKNOWN");
 }
-// int verify_quotes(char *str, int idx, char quotes)
-// {
-//     idx++;
-//     if (quotes == '\'')
-//     {
-//         while(str[idx] != quotes)
-//             idx++;
-//         return(idx);
-//     }
-//     return(idx);
-// }
 
 void	print_heredoc(t_minishell *data)
 {
@@ -130,10 +120,10 @@ void	print_heredoc(t_minishell *data)
 	}
 	while (current)
 	{
-		ft_printf("id: %d \n delitimer: %s \n fd[0]: %d \n fd[1]: %d quotes: %d \n ", current->id,
-			current->delimiter, current->fd[0], current->fd[1], current->quotes);
+		ft_printf("id: %d \n delitimer: %s \n fd[0]: %d \n fd[1]: %d \
+			quotes: %d \n ", current->id, current->delimiter, \
+			current->fd[0], current->fd[1], current->quotes);
 		current = current->next;
-		
 	}
 	if (data->heredoc->next == NULL)
 		ft_printf("NULL\n");

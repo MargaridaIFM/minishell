@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   display.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mistery576 <mistery576@student.42.fr>      +#+  +:+       +#+        */
+/*   By: mfrancis <mfrancis@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/10 21:31:38 by mfrancis          #+#    #+#             */
-/*   Updated: 2024/11/14 11:26:42 by mfrancis         ###   ########.fr       */
+/*   Created: 2024/12/16 14:35:32 by mfrancis          #+#    #+#             */
+/*   Updated: 2024/12/16 14:35:32 by mfrancis         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,6 @@ void	process_util(t_minishell *minishell, t_ast *ast)
 		minishell->nbr_heredoc = 0;
 	}
 	print_ast(minishell->ast, 0);
-	//print_env(minishell, "ANTES EXECUCAO");
 	if (g_signal)
 	{
 		free_ast(minishell->ast);
@@ -82,7 +81,7 @@ void	process_input(t_minishell *minishell)
 }
 
 /* EM FALTA:
-	[/] expander 
+	[/] expander
 		[x] onde faco
 		[x] exemplo do ls -l
 		[] verificar se vou buscar ao getenv;
@@ -91,7 +90,7 @@ void	process_input(t_minishell *minishell)
 	[] split token
 	[x] testar ast
 	[] correr ast
-		[] heredoc cat << EOF 
+		[] heredoc cat << EOF
 	[] signals
 */
 // teste: cat file.txt |ls | grep "example" > output.txt
@@ -104,7 +103,7 @@ void	process_input(t_minishell *minishell)
 			[] cria pipe
 			[] fork esquerda
 				[]execute_ast
-			[] if (ast->rigth == PIPE 
+			[] if (ast->rigth == PIPE
 				[] skip
 			[] else if  != PIPE
 				[] fork direita
@@ -112,5 +111,5 @@ void	process_input(t_minishell *minishell)
 		// []if ast == REDIR
 		// 	[] handle_redir
 		// 	[] execute_ast
-		
+
  */

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mistery576 <mistery576@student.42.fr>      +#+  +:+       +#+        */
+/*   By: mfrancis <mfrancis@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/07 00:56:33 by mistery576        #+#    #+#             */
-/*   Updated: 2024/12/07 00:56:33 by mistery576       ###   ########.fr       */
+/*   Created: 2024/12/16 14:45:40 by mfrancis          #+#    #+#             */
+/*   Updated: 2024/12/16 14:45:40 by mfrancis         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,6 @@ void	ft_execute_pipe(t_minishell *minishell, char **cmd)
 {
 	char	*cmd_path;
 
-	// signal(SIGPIPE, SIG_IGN);
 	redirect_read(minishell);
 	if (my_getenv(minishell, "PATH") == NULL)
 	{
@@ -44,12 +43,6 @@ void	ft_execute_pipe(t_minishell *minishell, char **cmd)
 	}
 	if (ft_strncmp("cat", cmd[0], 3) == 0)
 		close(minishell->fd[0]);
-	// struct sigaction	sp;
-
-	// sp.sa_handler = NULL;
-	// sp.sa_flags = 0;
-	// sigemptyset(&sp.sa_mask);
-	// if (sigaction(SIGPIPE, &sp, NULL) != -1) {
 	if (access(cmd[0], X_OK) == 0)
 	{
 		if (execve(cmd[0], cmd, minishell->envp) == -1)
