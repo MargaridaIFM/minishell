@@ -43,7 +43,7 @@ void	ft_execute_pipe(t_minishell *minishell, char **cmd)
 	}
 	if (ft_strncmp("cat", cmd[0], 3) == 0)
 		close(minishell->fd[0]);
-	if (access(split_cmd[0], X_OK) == 0)
+	if (access(cmd[0], X_OK) == 0)
 	{
 		if (execve(cmd[0], cmd, minishell->envp) == -1)
 			error_execute(minishell, cmd, NULL);
