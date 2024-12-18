@@ -64,7 +64,7 @@ typedef struct s_token
 	t_tk_tp			type;
 	char			*str;
 	char			*path;
-	char			*cmd;
+	char			**cmd;
 }	t_token;
 
 typedef struct s_ast
@@ -84,6 +84,7 @@ typedef struct s_minishell
 	char		**local;
 	char		*display;
 	char		*cmd;
+	int			_str_;
 	int			first;
 	int			fd[2];
 	int			exit_status;
@@ -118,6 +119,9 @@ void		free_heredoc(t_heredoc *heredoc);
 //errors2
 void		close_pipe(int fd);
 void		free_pointer(void *ptr);
+
+// MINISHELL UTILS //
+char **add_string_to_array(char **array, char *new_string);
 
 // Display Prompt
 void		display_prompt(t_minishell *minishell);
@@ -206,47 +210,56 @@ int			change_pwd(t_minishell *minishell, char *new_path);
 void		ft_cd(char **split_cmd, t_minishell *minishell);
 
 // ECHO //
-void		ft_echo(char *str);
+void	ft_echo(char **cmd);
 
 // ENV //
-void		ft_env(t_minishell *minishell);
+void	ft_env(t_minishell *minishell, char **cmd);
 
 // EXPORT//
-int			check_var(char *var, t_minishell *minishell);
 void		add_var(t_minishell *minishell, char *var);
 void		ft_export(char **split_cmd, t_minishell *minishell);
 int			find_equal(char *var);
 int			add_local(t_minishell *minishell, char *var);
 int			bigger_var_name(char *original, char *step_ahead);
+int		check_var(char *var, t_minishell *minishell);
+void	add_var(t_minishell *minishell, char *var);
+void	ft_export(t_minishell *minishell, char **cmd);
+int	find_equal(char *var);
+int	add_local(t_minishell *minishell, char *var);
+void	clear_local(t_minishell *minishell, char *var, int x);
+int check_local_env(t_minishell *minishell, char *var);
 
 // PWD //
-void		ft_pwd(t_minishell *minishell);
+void	ft_pwd(void);
 
 // UNSET //
-void		ft_unset(char **split_cmd, t_minishell *minishell);
+void	ft_unset(char **cmd, t_minishell *minishell);
 
 // Built_ins_utils //
 char		**dup_envp(t_minishell *minishell, char **envp); /*Usado no export*/
 char		*find_path(t_minishell *minishell, char *cmd); /*Usado no env*/
 
 // EXECUTOR //
-void		execute_ast(t_minishell *minishell, t_ast *ast, int flag);
-char		*remove_equal(char *path);
-char		*my_getenv(t_minishell *minishell, char *path);
-int			find_builtin(t_minishell *minishell, char **dp, char *cmd);
-void		error_execute(t_minishell *minishell, char **split_cmd,
-				char *cmd_path, char *cmd);
-void		ft_execute(t_minishell *minishell, char *cmd);
-void		execute_cmd(t_minishell *minishell, char **split_cmd, char *cmd);
-char		*built_cmd(t_ast *ast);
+void	execute_ast(t_minishell *minishell, t_ast *ast, int flag);
+char	*remove_equal(char *path);
+char	*my_getenv(t_minishell *minishell, char *path);
+int		find_builtin(t_minishell *minishell, char **dp);
+void	error_execute(t_minishell *minishell, char **split_cmd, char *cmd_path);
+void	ft_execute(t_minishell *minishell, char **split_cmd);
+void	execute_cmd(t_minishell *minishell, char **split_cmd, char *cmd);
+char	**built_cmd(t_ast *ast);
+
+//	EXECUTOR_UTILS  //
+char	**collect_commands_redirs(t_minishell *minishell, t_ast *ast);
+char    **collect_commands(t_minishell *minishell, t_ast *ast);
 
 // PIPEX //
-void		do_pipeline(t_minishell *minishell, t_ast *ast);
-void		pipe_fork(t_minishell *minishell, t_ast *ast);
-void		fork_and_pipe(t_minishell *minishell, t_ast *ast, int *child);
-void		redir_pipe(t_minishell *minishell, int child);
-void		wait_pipes(t_minishell *minishell);
-void		ft_execute_pipe(t_minishell *minishell, char *cmd);
+void	do_pipeline(t_minishell *minishell, t_ast *ast);
+void	pipe_fork(t_minishell *minishell, t_ast *ast);
+void	fork_and_pipe(t_minishell *minishell, t_ast *ast, int *child);
+void	redir_pipe(t_minishell *minishell, int child);
+void	wait_pipes(t_minishell *minishell);
+void	ft_execute_pipe(t_minishell *minishell, char **cmd);
 
 //	REDIR  //
 int			open_file(t_minishell *minishell, t_ast *ast);
@@ -259,7 +272,11 @@ void		set_redirs(t_minishell *minishell, t_ast *ast);
 void		redir_in(t_minishell *minishell, t_ast *ast, int flag);
 void		redir_out(t_minishell *minishell, t_ast *ast, int flag);
 
-void		setup_signals_executer(void);
+//	FIND FILES	//
+char **copy_array(t_ast *ast, int count);
+
+void	setup_signals_executer(void);
+void	free_cmd_path(t_ast *left_side);
 
 
 void		do_one_pipe(t_minishell *minishell, t_ast *ast);

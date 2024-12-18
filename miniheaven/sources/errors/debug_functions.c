@@ -61,7 +61,7 @@ void	print_token2(t_token *data)
 void	print_ast(t_ast *ast, int level)
 {
 	int		idx;
-	char	*str;
+	//char	*str;
 
 	idx = 0;
 	if (ast == NULL)
@@ -71,10 +71,17 @@ void	print_ast(t_ast *ast, int level)
 		ft_printf("    ");
 		idx++;
 	}
-	str = token_type_to_str(ast->token->type);
-	if (str)
-		printf("(%s: %s file associated %s  comand %s)\n", str, ast->token->str,
-			ast->token->path, ast->token->cmd);
+	//str = token_type_to_str(ast->token->type);
+	//id (str)
+	if (ast->token->type <= 3)
+	{
+		if (ast->token->cmd)
+			printf("(%d: %s file associated %s  comand %s)\n", ast->token->type, ast->token->str, ast->token->path, ast->token->cmd[0]);
+		else
+			printf("(%d: %s file associated %s)\n", ast->token->type, ast->token->str, ast->token->path);
+	}
+	else
+		printf("(%d: %s file associated %s)\n", ast->token->type, ast->token->str, ast->token->path);
 	if (ast->left != NULL)
 		print_ast(ast->left, level + 1);
 	if (ast->right != NULL)

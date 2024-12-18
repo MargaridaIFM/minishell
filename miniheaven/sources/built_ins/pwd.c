@@ -17,15 +17,16 @@
  * @param t_minishell *minishell
  * @return (void);
  */
-void	ft_pwd(t_minishell *minishell)
+void	ft_pwd(void)
 {
-	char	*pwd;
-
-	pwd = my_getenv(minishell, "PWD");
-	if (!pwd)
+	char *pwd;
+    
+    pwd = getcwd(NULL, 0);
+    if (pwd != NULL) 
 	{
-		printf("Error - No PWD\n");
-		exit(0);
-	}
-	printf("%s\n", pwd);
+        printf("%s\n", pwd);
+        free(pwd);
+    }
+	else
+        ft_putstr_fd("Error doing getcwd\n", 2);
 }

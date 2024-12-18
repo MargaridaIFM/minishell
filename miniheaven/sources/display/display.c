@@ -40,6 +40,7 @@ void	process_util(t_minishell *minishell, t_ast *ast)
 		process_ast_heredoc(minishell, minishell->ast, minishell->ast);
 		minishell->nbr_heredoc = 0;
 	}
+	print_ast(minishell->ast, 0);
 	if (g_signal)
 	{
 		free_ast(minishell->ast);

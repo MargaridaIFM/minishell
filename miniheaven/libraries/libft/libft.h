@@ -101,6 +101,8 @@ int					organize_buffer(char *buffer);
 
 //New function for minishell
 int					ft_strcmp(char *s1, char *s2);
+char				*ft_strstr(const char *str, const char *sub_str);
+
 
 // List / New functions from push_swap
 // void				print_data_a_front(t_data *data);
