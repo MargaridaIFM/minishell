@@ -67,7 +67,7 @@ typedef struct s_token
 	t_tk_tp			type;
 	char			*str;
 	char			*path;
-	char			*cmd;
+	char			**cmd;
 }	t_token;
 
 typedef struct s_ast
@@ -239,10 +239,10 @@ int		find_builtin(t_minishell *minishell, char **dp);
 void	error_execute(t_minishell *minishell, char **split_cmd, char *cmd_path);
 void	ft_execute(t_minishell *minishell, char **split_cmd);
 void	execute_cmd(t_minishell *minishell, char **split_cmd, char *cmd);
-char	*built_cmd(t_ast *ast);
+char	**built_cmd(t_ast *ast);
 
 //	EXECUTOR_UTILS  //
-char	**collect_commands_redirs(t_ast *ast, t_minishell *minishell);
+char	**collect_commands_redirs(t_minishell *minishell, t_ast *ast);
 char    **collect_commands(t_ast *ast);
 
 // PIPEX //
@@ -251,7 +251,7 @@ void	pipe_fork(t_minishell *minishell, t_ast *ast);
 void	fork_and_pipe(t_minishell *minishell, t_ast *ast, int *child);
 void	redir_pipe(t_minishell *minishell, int child);
 void	wait_pipes(t_minishell *minishell);
-void	ft_execute_pipe(t_minishell *minishell, char *cmd);
+void	ft_execute_pipe(t_minishell *minishell, char **cmd);
 
 //	REDIR  //
 int		open_file(t_minishell *minishell, t_ast *ast);
@@ -263,6 +263,9 @@ int		rebuild_fileno(t_minishell *minishell);
 void	set_redirs(t_minishell *minishell, t_ast *ast);
 void	redir_in(t_minishell *minishell, t_ast *ast, int flag);
 void	redir_out(t_minishell *minishell, t_ast *ast, int flag);
+
+//	FIND FILES	//
+char **copy_array(t_ast *ast, int count);
 
 void	setup_signals_executer(void);
 void	free_cmd_path(t_ast *left_side);

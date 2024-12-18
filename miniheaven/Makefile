@@ -46,7 +46,7 @@ LFT_PATH		=	$(addprefix $(LIBS_DIR), libft/)
 SRC				=	$(addprefix $(SRC_DIR), minishell.c minishell_utils.c) \
 					$(addprefix $(SRC_DIR)$(SIGNALS_DIR), signal.c signal2.c) \
 					$(addprefix $(SRC_DIR)$(ERROR_DIR), errors.c debug_functions.c errors2.c) \
-					$(addprefix $(SRC_DIR)$(DISPLAY_DIR), display.c find_files.c) \
+					$(addprefix $(SRC_DIR)$(DISPLAY_DIR), display.c find_files.c find_files_utils.c) \
 					$(addprefix $(SRC_DIR)$(BUILT_INS_DIR), pwd.c) \
 					$(addprefix $(SRC_DIR)$(BUILT_INS_DIR), env.c) \
 					$(addprefix $(SRC_DIR)$(BUILT_INS_DIR), export.c local_export.c) \

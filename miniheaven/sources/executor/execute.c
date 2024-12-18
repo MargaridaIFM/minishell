@@ -14,43 +14,55 @@
 
 //wextitstatus - pesquisar e falar com a melhor parceira do mundo 
 
-char	*built_cmd(t_ast *ast)
-{
-	char	*cmd;
+// char    **built_cmd(t_ast *ast)
+// {
+//     char    **cmd_array;
+//     int     count;
+//     int     i;
+//     t_ast *temp;
 
-	cmd = NULL;
-	free(cmd);
-	if (!cmd)
-	{
-		cmd = ft_strdup(ast->token->str);
-	}
-	while (ast->right && (ast->token->type == WORD || ast->token->type == STR))
-	{
-		cmd = ft_strjoin_gnl(cmd, " ");
-		cmd = ft_strjoin_gnl(cmd, ast->right->token->str);
-		ast = ast->right;
-	}
-	return (cmd);
-}
+// 	temp = ast;
+//     count = 0;
+//     while (temp && (temp->token->type == WORD || temp->token->type == STR)) {
+//         count++;
+//         temp = temp->right;
+//     }
+//     cmd_array = malloc((count + 1) * sizeof(char *));
+//     if (!cmd_array)
+//         return (NULL);
+//     i = 0;
+//     while (ast && (ast->token->type == WORD || ast->token->type == STR)) {
+//         cmd_array[i] = ft_strdup(ast->token->str);
+//         if (!cmd_array[i]) {
+//             while (i > 0)
+//                 free(cmd_array[--i]);
+//             free(cmd_array);
+//             return (NULL);
+//         }
+//         ast = ast->right;
+//         i++;
+//     }
+//     cmd_array[i] = NULL;
+//     return (cmd_array);
+// }
 
 void	execute_ast(t_minishell *minishell, t_ast *ast, int flag)
 {
 	char	**cmd;
-	//int		i;
 
-	//i = 0;
 	cmd = NULL;
 	if (ast->token->type <= 3)
-		cmd = collect_commands_redirs(ast, minishell);
+	{
+		cmd = collect_commands_redirs(minishell, ast);
+	}
 	if (cmd != NULL)
 	{
 		if (flag == -1)
 			ft_execute(minishell, cmd);
 		else
-			ft_execute_pipe(minishell, cmd[0]);
+			ft_execute_pipe(minishell, cmd);
 		rebuild_fileno(minishell);
 		close_redir(minishell);
-		free(*cmd);
 		return ;
 	}
 	if (ast->token->type == WORD || ast->token->type == STR)
@@ -59,7 +71,7 @@ void	execute_ast(t_minishell *minishell, t_ast *ast, int flag)
 		if (flag == -1)
 			ft_execute(minishell, cmd);
 		else
-			ft_execute_pipe(minishell, cmd[0]);
+			ft_execute_pipe(minishell, cmd);
 	}
 	if (ast->token->type == PIPE)
 	{
@@ -76,7 +88,7 @@ void	error_execute(t_minishell *minishell,
 		char **split_cmd, char *cmd_path)
 {
 	g_signal = 127;
-	printf("%s: command not found\n", cmd);
+	printf("%s: command not found\n", split_cmd[0]);
 	if (cmd_path != NULL)
 		free(cmd_path);
 	free_array(split_cmd);
