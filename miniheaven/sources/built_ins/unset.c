@@ -55,18 +55,20 @@ static void	clear_var(t_minishell *minishell, int start)
  * @param t_minishell *minishell
  * @return (void);
  */
-void	ft_unset(char **split_cmd, t_minishell *minishell)
+void	ft_unset(char **cmd, t_minishell *minishell)
 {
 	int	i;
 	int	x;
 
 	i = 1;
-	while (split_cmd[i])
+	while (cmd[i])
 	{
 		x = 0;
 		while (minishell->envp[x])
 		{
-			if (compare_vars(split_cmd[i], minishell->envp[x]) == 0)
+			if (check_local_env(minishell, cmd[i]) == 1)
+				clear_local(minishell, cmd[i], ft_strlen(cmd[i]));
+			else if (compare_vars(cmd[i], minishell->envp[x]) == 0)
 				clear_var(minishell, x);
 			x++;
 		}

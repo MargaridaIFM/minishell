@@ -135,6 +135,7 @@ int	check_var(char *var, t_minishell *minishell)
 			return (1);
 		}
 	}
+	clear_local(minishell, var, x);
 	return (0);
 }
 
@@ -147,21 +148,23 @@ int	check_var(char *var, t_minishell *minishell)
  * @param char **split_cmd, t_minishell *minishell
  * @return (void);
  */
-void	ft_export(char **split_cmd, t_minishell *minishell)
+void	ft_export(t_minishell *minishell, char **cmd)
 {
-	int	i;
+	int i;
 
 	i = 1;
-	if (split_cmd[1] == NULL)
+	if (!cmd[i])
 		print_export(minishell, minishell->envp);
 	else
 	{
-		while (split_cmd[i])
+		while (cmd[i])
 		{
-			if (find_equal(split_cmd[i]) == -1)
-				add_local(minishell, split_cmd[i]);
-			else if (check_var(split_cmd[i], minishell) == 0)
-				add_var(minishell, split_cmd[i]);
+			if (find_equal(cmd[i]) == -1 && check_local_env(minishell, cmd[i]) == 0)
+			{
+				add_local(minishell, cmd[i]);
+			}
+			else if (find_equal(cmd[i]) == 0 && check_var(cmd[i], minishell) == 0)
+				add_var(minishell, cmd[i]);
 			i++;
 		}
 	}

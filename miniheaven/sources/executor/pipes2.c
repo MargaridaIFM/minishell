@@ -30,9 +30,7 @@ void	do_one_pipe(t_minishell *minishell, t_ast *ast)
 	pipe(minishell->fd);
 	left_fork = fork();
 	if (left_fork == 0)
-	{
 		execute_child(minishell, ast->left);
-	}
 	right_fork = fork();
 	if (right_fork == 0)
 	{
