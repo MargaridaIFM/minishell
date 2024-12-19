@@ -48,37 +48,47 @@ char **collect_commands_redirs(t_minishell *minishell, t_ast *ast)
 {
     (void)minishell;
     int total_strings = contar_total_strings(ast);
-    char **resultado = malloc((total_strings + 1) * sizeof(char *)); // Aloca espaço para o resultado
-    if (!resultado)
-        return NULL;
-
-    int index = 0;
-    if (ast->token->dq == 1 && ft_count_words(ast->token->str) > 1)
+    if (total_strings != 0)
     {
-        printf("entrou\n");
-        minishell->_str_ = 1;
-    }
-    while (ast) 
-    {
-        if (ast->token->cmd)
+        char **resultado = malloc((total_strings + 1) * sizeof(char *)); // Aloca espaço para o resultado
+        if (!resultado)
+            return NULL;
+        int index = 0;
+        if (ast->token->dq == 1 && ft_count_words(ast->token->str) > 1)
         {
-            for (int i = 0; ast->token->cmd[i]; i++) {
-                resultado[index] = strdup(ast->token->cmd[i]); // Copia cada string do array atual
-                if (!resultado[index]) {
-                    // Libera memória em caso de falha
-                    while (index > 0)
-                        free(resultado[--index]);
-                    free(resultado);
-                    return NULL;
-                }
-                index++;
-            }
+            minishell->_str_ = 1;
         }
-        open_file(minishell, ast);
-        ast = ast->right; // Avança para o próximo nó
+        while (ast) 
+        {
+            if (ast->token->cmd)
+            {
+                for (int i = 0; ast->token->cmd[i]; i++) {
+                    resultado[index] = strdup(ast->token->cmd[i]); // Copia cada string do array atual
+                    if (!resultado[index]) {
+                        // Libera memória em caso de falha
+                        while (index > 0)
+                            free(resultado[--index]);
+                        free(resultado);
+                        return NULL;
+                    }
+                    index++;
+                }
+            }
+            open_file(minishell, ast);
+            ast = ast->right; // Avança para o próximo nó
+        }
+        resultado[index] = NULL; // Finaliza o array com NULL
+        return resultado;
     }
-    resultado[index] = NULL; // Finaliza o array com NULL
-    return resultado;
+    else 
+    {
+        while (ast->token->type <= 3)
+        {
+            open_file(minishell, ast);
+            ast = ast->right;
+        }
+        return NULL;
+    }
 }
 
 // char	**collect_commands_redirs(t_ast *ast, t_minishell *minishell)

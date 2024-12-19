@@ -54,9 +54,19 @@ void	execute_ast(t_minishell *minishell, t_ast *ast, int flag)
 	if (ast->token->type <= 3)
 	{
 		cmd = collect_commands_redirs(minishell, ast);
-	}
-	if (cmd != NULL)
-	{
+		//printf("cmd %s\n", cmd[0]);
+		if (cmd == NULL)
+		{
+			rebuild_fileno(minishell);
+			close_redir(minishell);
+			if (minishell->_pipe_ == 1)
+			{
+				//free(cmd);
+				free_exit(minishell, "");
+			}
+			free_all(minishell, "");
+			return ;
+		}
 		if (flag == -1)
 			ft_execute(minishell, cmd);
 		else
@@ -64,6 +74,7 @@ void	execute_ast(t_minishell *minishell, t_ast *ast, int flag)
 		rebuild_fileno(minishell);
 		close_redir(minishell);
 		return ;
+		
 	}
 	if (ast->token->type == WORD || ast->token->type == STR)
 	{
