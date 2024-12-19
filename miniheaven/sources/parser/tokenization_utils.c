@@ -83,6 +83,7 @@ void	add_token_back(t_minishell *minishell, char *token, t_tk_tp type)
 	new_token->path = NULL;
 	new_token->next = NULL;
 	new_token->cmd = NULL;
+	new_token->dq = 0;
 	if (!minishell->tokens)
 	{
 		minishell->tokens = new_token;

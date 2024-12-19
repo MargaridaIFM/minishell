@@ -40,7 +40,6 @@ void	process_util(t_minishell *minishell, t_ast *ast)
 		process_ast_heredoc(minishell, minishell->ast, minishell->ast);
 		minishell->nbr_heredoc = 0;
 	}
-	print_ast(minishell->ast, 0);
 	if (g_signal)
 	{
 		free_ast(minishell->ast);
@@ -56,12 +55,30 @@ void	process_util(t_minishell *minishell, t_ast *ast)
 	}
 }
 
+void	check_is_str(t_minishell *minishell)
+{
+	t_token	*temp;
+
+	temp = minishell->tokens;
+	if (temp->str[0] == '"')
+	{
+		temp->dq = 1;
+	}
+	temp = temp->next;
+	while (temp)
+	{
+		temp->dq = 0;
+		temp = temp->next;
+	}
+}
+
 void	process_input(t_minishell *minishell)
 {
 	t_ast	*ast;
 
 	stop_signals();
 	tokenization(minishell);
+	check_is_str(minishell);
 	if (check_syntax(minishell->tokens) == true)
 	{
 		expander(minishell);

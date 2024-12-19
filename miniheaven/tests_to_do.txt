@@ -77,12 +77,21 @@ echo hello
 echo -n hello
 echo -nn hello
 pwd
-export a=b b c=2 1a=2 a2=1 / export
+export a="ls -la" b=ls c='echo "hello    world"' / export
+
+EXPANDER a="ls -la" b=ls c='echo "hello    world" ✅
+$a 
+"$a" -> Nao executa 
+$c 
+"$c"
+"ls -la"
+"ls"
+"cat | ls"
 
 Redireções ✅
 
 < infile echo hello
-< infile cat
+< infile cat 
 echo hello < infile
 cat < infile
 echo hello < infile > outfile
@@ -92,6 +101,35 @@ cat < infile > outfile
 < infile > outfile echo hello
 < infile > outfile cat
 
+PIPES ✅
+
+cat | ls
+echo hello | wc
+ls | wc
+echo hello | pwd
+
+cat | ls | wc
+ls | echo hello | wc
+ls | echo "hello      world | wc
+echo hello | pwd | wc
+echo hello | wc | ls
+ls | echo "hello world | grep "hello"
+
+< infile cat | wc
+< infile cat > outfile | wc
+< infile < infile < infile cat | echo hello
+echo hello | < infile cat > outfile > outfile2
+ls | wc < infile < infile < infile > outfile
+ls | echo hello < infile < infile > outfile > outfile
+
+< infile cat | > outfile
+< infile cat | wc > outfile
+< infile grep 42 | echo hello | < infile wc < infile > outfile
+< infile < infile ls | cat | wc > outfile
+
 here_doc
 ls << eof
 ls << eof << eof2 << eof3
+
+
+❌

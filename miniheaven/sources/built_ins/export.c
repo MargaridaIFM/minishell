@@ -150,7 +150,7 @@ int	check_var(char *var, t_minishell *minishell)
  */
 void	ft_export(t_minishell *minishell, char **cmd)
 {
-	int i;
+	int	i;
 
 	i = 1;
 	if (!cmd[i])
@@ -159,11 +159,11 @@ void	ft_export(t_minishell *minishell, char **cmd)
 	{
 		while (cmd[i])
 		{
-			if (find_equal(cmd[i]) == -1 && check_local_env(minishell, cmd[i]) == 0)
-			{
+			if (find_equal(cmd[i]) == -1
+				&& check_local_env(minishell, cmd[i]) == 0)
 				add_local(minishell, cmd[i]);
-			}
-			else if (find_equal(cmd[i]) == 0 && check_var(cmd[i], minishell) == 0)
+			else if (find_equal(cmd[i]) == 0
+				&& check_var(cmd[i], minishell) == 0)
 				add_var(minishell, cmd[i]);
 			i++;
 		}

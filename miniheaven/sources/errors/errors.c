@@ -57,6 +57,8 @@ void	free_exit(t_minishell *minishell, char *str)
 	close_pipe(minishell->temp_stdout);
 	if (minishell->_pipe_ == 1)
 	{
+		close(0);
+		close(1);
 		close(minishell->fd[0]);
 		close(minishell->fd[1]);
 	}

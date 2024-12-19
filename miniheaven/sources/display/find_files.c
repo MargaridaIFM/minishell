@@ -29,14 +29,14 @@
 // 	return (copy);
 // }
 
-char **copy_cmd(char **cmd)
+char	**copy_cmd(char **cmd)
 {
-	char **copy;
-	int i;
+	char	**copy;
+	int		i;
 
 	i = 0;
 	if (!cmd)
-		return NULL;
+		return (NULL);
 	while (cmd[i])
 		i++;
 	copy = malloc(sizeof(char *) * (i));
@@ -47,7 +47,7 @@ char **copy_cmd(char **cmd)
 		i++;
 	}
 	copy[i] = NULL;
-	return copy;
+	return (copy);
 }
 
 t_ast	*copy_ast(t_ast *original)
@@ -134,19 +134,4 @@ void	find_files(t_ast *orig, t_ast *temp_copy, t_minishell *minishell)
 		temp_copy = temp_copy->right;
 		orig = orig->right;
 	}
-}
-
-void	set_redirs(t_minishell *minishell, t_ast *ast)
-{
-	t_ast	*copy;
-	t_ast	*orig;
-	t_ast	*temp_copy;
-
-	copy = copy_ast(ast);
-	if (!copy)
-		free_exit(minishell, "Failed to create a copy\n");
-	orig = ast;
-	temp_copy = copy;
-	find_files(orig, temp_copy, minishell);
-	free_ast(copy);
 }

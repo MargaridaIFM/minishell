@@ -12,49 +12,60 @@
 
 #include "../includes/minishell.h"
 
-
-
-char **copy_array(t_ast *ast, int count) {
-    char **cmd_array;
-    int i;
-
-    cmd_array = malloc((count + 1) * sizeof(char *));
-    if (!cmd_array)
-        return (NULL);
-    i = 0;
-    while (ast && (ast->token->type == WORD || ast->token->type == STR)) 
-    {
-        cmd_array[i] = ft_strdup(ast->token->str);
-        if (!cmd_array[i]) 
-        {
-            while (i > 0)
-                free(cmd_array[--i]);
-            free(cmd_array);
-            return (NULL);
-        }
-        ast = ast->right;
-        i++;
-    }
-    cmd_array[i] = NULL;
-    return cmd_array;
-}
-
-char    **built_cmd(t_ast *ast)
+char	**copy_array(t_ast *ast, int count)
 {
-    char    **cmd_array;
-    int     count;
-    t_ast   *temp;
+	char	**cmd_array;
+	int		i;
 
-    // Contar os tokens na árvore
-    count = 0;
-    temp = ast;
-    while (temp && (temp->token->type == WORD || temp->token->type == STR)) 
-    {
-        count++;
-        temp = temp->right;
-    }
-    // Usar a função para copiar tokens para o array
-    cmd_array = copy_array(ast, count);
-    return cmd_array;
+	cmd_array = malloc((count + 1) * sizeof(char *));
+	if (!cmd_array)
+		return (NULL);
+	i = 0;
+	while (ast && (ast->token->type == WORD || ast->token->type == STR))
+	{
+		cmd_array[i] = ft_strdup(ast->token->str);
+		if (!cmd_array[i])
+		{
+			while (i > 0)
+				free(cmd_array[--i]);
+			free(cmd_array);
+			return (NULL);
+		}
+		ast = ast->right;
+		i++;
+	}
+	cmd_array[i] = NULL;
+	return (cmd_array);
 }
 
+char	**built_cmd(t_ast *ast)
+{
+	t_ast	*temp;
+	char	**cmd_array;
+	int		count;
+
+	count = 0;
+	temp = ast;
+	while (temp && (temp->token->type == WORD || temp->token->type == STR))
+	{
+		count++;
+		temp = temp->right;
+	}
+	cmd_array = copy_array(ast, count);
+	return (cmd_array);
+}
+
+void	set_redirs(t_minishell *minishell, t_ast *ast)
+{
+	t_ast	*copy;
+	t_ast	*orig;
+	t_ast	*temp_copy;
+
+	copy = copy_ast(ast);
+	if (!copy)
+		free_exit(minishell, "Failed to create a copy\n");
+	orig = ast;
+	temp_copy = copy;
+	find_files(orig, temp_copy, minishell);
+	free_ast(copy);
+}
