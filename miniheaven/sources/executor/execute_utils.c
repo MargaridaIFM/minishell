@@ -102,7 +102,7 @@ char **ft_split_cmd(char **cmd, int cmd_count) {
         }
     }
     result[result_count] = NULL;
-
+	free_array(cmd);
     return result;
 }
 
@@ -130,6 +130,20 @@ char **ft_split_cmd(char **cmd, int cmd_count) {
 //     return result;
 // }
 
+int		check_dir(char *str)
+{
+	int i;
+
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] == '/')
+			return 1;
+		i++;
+	}
+	return 0;
+}
+
 void	execute_cmd(t_minishell *minishell, char **split_cmd, char *cmd)
 {
 	(void)cmd;
@@ -140,6 +154,15 @@ void	execute_cmd(t_minishell *minishell, char **split_cmd, char *cmd)
 	split_cmd = ft_split_cmd(split_cmd, count);
 	if (access(split_cmd[0], X_OK) == 0)
 		execve(split_cmd[0], split_cmd, minishell->envp);
+	if (check_dir(split_cmd[0]) == 1)
+	{
+		g_signal = 126;
+		ft_putstr_fd("bash: ", 2);
+		ft_putstr_fd(split_cmd[0], 2);
+		ft_putendl_fd(": Is a directory", 2);
+		free_array(split_cmd);
+		free_exit(minishell, " ");
+	}
 	cmd_path = find_path(minishell, split_cmd[0]);
 	if (cmd_path == NULL)
 		error_execute(minishell, split_cmd, cmd_path);
