@@ -14,10 +14,10 @@
 
 static int	find_char(char *str, char c)
 {
-	int i;
+	int	i;
 
 	i = 0;
-	while(str[i] && str[i] == c)
+	while (str[i] && str[i] == c)
 		i++;
 	if (!str[i])
 		return (1);
@@ -31,10 +31,10 @@ static int	find_char(char *str, char c)
  */
 static int	skip(char **cmd, int *flag)
 {
-	int i;
+	int	i;
 
 	i = 1;
-	while(find_char(cmd[i] + 1, 'n') == 1)
+	while (find_char(cmd[i] + 1, 'n') == 1)
 	{
 		*flag = 1;
 		i++;
@@ -52,7 +52,7 @@ static int	skip(char **cmd, int *flag)
 void	ft_echo(char **cmd)
 {
 	int	flag;
-	int i;
+	int	i;
 
 	flag = 0;
 	i = skip(cmd, &flag);

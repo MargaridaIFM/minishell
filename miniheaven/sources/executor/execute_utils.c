@@ -51,49 +51,39 @@ void	ft_execute_pipe(t_minishell *minishell, char **cmd)
 	cmd_path = find_path(minishell, cmd[0]);
 	if (cmd_path == NULL)
 		error_execute(minishell, cmd, cmd_path);
-	//free(cmd);
 	if (execve(cmd_path, cmd, minishell->envp) == -1)
 		error_execute(minishell, cmd, cmd_path);
-	free_array(cmd);
-	exit(0);
-	// }
-	// else
-	// 	free_exit(minishell, "");
 }
 
 char **ft_split_cmd(char **cmd, int cmd_count) {
-    char **result = NULL;   // Array para armazenar os tokens
-    int result_count = 0;   // Contador para o número total de tokens
-    int result_size = 0;    // Capacidade alocada (em elementos)
+    char **result;
+    int result_count;
+    int result_size;
+	char **tokens;
 
-    // Iterar sobre cada comando na lista original
+	result = NULL;
+	result_count = 0;
+	result_size = 0;
     for (int i = 0; i < cmd_count; i++) {
-        // Obter os tokens da string atual usando ft_split
-        char **tokens = ft_split(cmd[i], ' ');
-        if (!tokens) continue; // Garantir que ft_split não retornou NULL
-
-        // Adicionar os tokens ao array de resultados
+        tokens = ft_split(cmd[i], ' ');
+        if (!tokens) 
+			continue;
         for (int j = 0; tokens[j] != NULL; j++) {
-            // Realocar espaço para o novo token, se necessário
             if (result_count >= result_size) {
-                int new_size = result_size == 0 ? 4 : result_size * 2; // Crescimento exponencial
+                int new_size = result_size == 0 ? 4 : result_size * 2;
                 result = ft_realloc(result, result_size * sizeof(char *), new_size * sizeof(char *));
-                if (!result) {
+                if (!result)
+				{
                     perror("Error reallocating memory");
                     exit(EXIT_FAILURE);
                 }
                 result_size = new_size;
             }
-
-            // Adicionar o token ao array
             result[result_count] = tokens[j];
             result_count++;
-        }
-
-        free(tokens); // Liberar o array intermediário do ft_split (não as strings)
+		}
+        free(tokens);
     }
-
-    // Adicionar NULL no final do array de resultados
     if (result_count >= result_size) {
         result = ft_realloc(result, result_size * sizeof(char *), (result_count + 1) * sizeof(char *));
         if (!result) {
@@ -105,30 +95,6 @@ char **ft_split_cmd(char **cmd, int cmd_count) {
 	free_array(cmd);
     return result;
 }
-
-// char **ft_split_cmd(char **cmd, int cmd_count) {
-//     char **result = NULL;
-//     int result_count = 0;
-
-//     // Iterar sobre cada comando na lista original
-//     for (int i = 0; i < cmd_count; i++) {
-//         char *temp = ft_strdup(cmd[i]);
-//         char *token = strtok(temp, " ");
-
-//         while (token != NULL) 
-// 		{
-//             result = ft_realloc(result, result_size * sizeof(char *), (result_count + 1) * sizeof(char *));
-//             result[result_count] = strdup(token);
-//             result_count++;
-//             token = strtok(NULL, " ");
-//         }
-//         free(temp);
-//     }
-//     result = ft_realloc(result, result_size * sizeof(char *), (result_count + 1) * sizeof(char *));
-//     result[result_count] = NULL;
-
-//     return result;
-// }
 
 int		check_dir(char *str)
 {
