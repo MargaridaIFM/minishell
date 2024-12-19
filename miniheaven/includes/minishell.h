@@ -281,6 +281,6 @@ int count_array(char **arr);
 t_ast	*copy_ast(t_ast *original);
 void	find_files(t_ast *orig, t_ast *temp_copy, t_minishell *minishell);
 
-char **join_arrays(t_minishell *minishell, char **array_first, char **array_sec)
+char **join_arrays(char **array_first, char *array);
 
 #endif

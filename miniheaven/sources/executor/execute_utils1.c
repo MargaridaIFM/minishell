@@ -39,7 +39,8 @@ int count_array(char **arr)
 
     i = 0;
     while(arr[i])
-        i++;
+       i++;
+	printf("said\n");
     return i;
 }
 

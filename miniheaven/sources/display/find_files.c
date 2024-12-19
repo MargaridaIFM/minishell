@@ -82,8 +82,8 @@ void	no_pipe(t_ast *temp_copy, t_ast *orig, t_ast *save_node)
 {
 	if (temp_copy->left)
 		orig->token->cmd = built_cmd(save_node->left);
-	if (temp_copy->right->token->type > 3 && temp_copy->right->right)
-		orig->token->cmd = built_cmd(temp_copy->right->right);
+	if (temp_copy->right->token->type > 3 && temp_copy->right->right->token)
+		orig->token->cmd = join_arrays(orig->token->cmd, temp_copy->right->right->token->str);
 }
 
 void	find_commands(t_ast *orig, t_ast *temp_copy, int flag)
