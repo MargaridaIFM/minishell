@@ -122,6 +122,7 @@ int	find_builtin(t_minishell *minishell, char **dp)
 		return (ft_pwd(), 1);
 	else if (ft_strcmp(dp[0], "exit") == 0)
 	{
+		g_signal = ft_atoi(dp[1]);
 		free_array(dp);
 		free_exit(minishell, "");
 	}
