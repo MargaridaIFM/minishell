@@ -99,7 +99,8 @@ void	error_execute(t_minishell *minishell,
 		char **split_cmd, char *cmd_path)
 {
 	g_signal = 127;
-	printf("%s: command not found\n", split_cmd[0]);
+	ft_putstr_fd(split_cmd[0], 2);
+	ft_putstr_fd(": command not found\n", 2);
 	if (cmd_path != NULL)
 		free(cmd_path);
 	free_array(split_cmd);
@@ -143,14 +144,16 @@ void	ft_execute(t_minishell *minishell, char **cmd)
 		free_exit(minishell, "Something went wrong with dup2\n");
 	if (my_getenv(minishell, "PATH") == NULL && access(cmd[0], X_OK) != 0)
 	{
-		printf("%s: command not found\n", cmd[0]);
+		ft_putstr_fd(cmd[0], 2);
+		ft_putstr_fd(": command not found\n", 2);
 		g_signal = 127;
 		minishell->_str_ = 0;
 		return (free_array(cmd));
 	}
 	if (minishell->_str_ == 1)
 	{
-		printf("%s: command not found\n", cmd[0]);
+		ft_putstr_fd(cmd[0], 2);
+		ft_putstr_fd(": command not found\n", 2);
 		g_signal = 127;
 		minishell->_str_ = 0;
 		return (free_array(cmd));

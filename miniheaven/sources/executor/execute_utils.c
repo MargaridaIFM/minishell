@@ -31,10 +31,21 @@ void	ft_execute_pipe(t_minishell *minishell, char **cmd)
 	char	*cmd_path;
 
 	redirect_read(minishell);
-	if (my_getenv(minishell, "PATH") == NULL)
+	if (my_getenv(minishell, "PATH") == NULL && access(cmd[0], X_OK) != 0)
 	{
-		printf("%s: command not found\n", cmd[0]);
-		error_execute(minishell, cmd, NULL);
+		ft_putstr_fd(cmd[0], 2);
+		ft_putstr_fd(": command not found\n", 2);
+		g_signal = 127;
+		minishell->_str_ = 0;
+		free_exit(minishell, "");
+	}
+	if (minishell->_str_ == 1)
+	{
+		ft_putstr_fd(cmd[0], 2);
+		ft_putstr_fd(": command not found\n", 2);
+		g_signal = 127;
+		minishell->_str_ = 0;
+		free_exit(minishell, "");
 	}
 	if (find_builtin(minishell, cmd) == 1)
 	{

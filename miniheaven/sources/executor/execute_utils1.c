@@ -54,14 +54,16 @@ char **collect_commands_redirs(t_minishell *minishell, t_ast *ast)
         if (!resultado)
             return NULL;
         int index = 0;
-        if (ast->token->dq == 1 && ft_count_words(ast->token->str) > 1)
-        {
-            minishell->_str_ = 1;
-        }
         while (ast) 
         {
             if (ast->token->cmd)
             {
+                if (ast->token->dq == 1 && minishell->_str_ == 0)
+                {
+                    minishell->_str_ = 1;
+                }
+                else
+                    minishell->_str_ = 2;
                 for (int i = 0; ast->token->cmd[i]; i++) {
                     resultado[index] = strdup(ast->token->cmd[i]); // Copia cada string do array atual
                     if (!resultado[index]) {
@@ -135,7 +137,7 @@ char    **collect_commands(t_minishell *minishell, t_ast *ast)
     (void)minishell;
     if (ast->token->dq == 1 && ft_count_words(ast->token->str) > 1)
     {
-        printf("entrou\n");
+        //printf("entrou\n");
         minishell->_str_ = 1;
     }
     while (ast)

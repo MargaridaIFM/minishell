@@ -55,13 +55,16 @@ void	ft_echo(char **cmd)
 	int	i;
 
 	flag = 0;
-	i = skip(cmd, &flag);
-	while (cmd[i])
-	{
-		printf("%s", cmd[i]);
-		i++;
-		if (cmd[i])
-			printf(" ");
+	if (cmd[1])
+	{		
+		i = skip(cmd, &flag);
+		while (cmd[i])
+		{
+			printf("%s", cmd[i]);
+			i++;
+			if (cmd[i])
+				printf(" ");
+		}
 	}
 	if (flag == 0)
 		printf("\n");

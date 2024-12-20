@@ -37,11 +37,13 @@ static void	free_utils(t_minishell *minishell)
 		free(minishell->expander);
 		minishell->expander = NULL;
 	}
+	minishell->_str_ = 0;
 }
 
 void	free_all(t_minishell *minishell, char *str)
 {
 	free_utils(minishell);
+	minishell->_str_ = 0;
 	if (str && str[0] != '\0')
 		ft_putstr_fd(str, 2);
 }

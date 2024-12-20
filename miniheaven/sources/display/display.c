@@ -58,16 +58,21 @@ void	process_util(t_minishell *minishell, t_ast *ast)
 void	check_is_str(t_minishell *minishell)
 {
 	t_token	*temp;
+	int flag;
 
+	flag = 0;
 	temp = minishell->tokens;
-	if (temp->str[0] == '"')
-	{
-		temp->dq = 1;
-	}
-	temp = temp->next;
 	while (temp)
 	{
-		temp->dq = 0;
+		if (temp->str[0] == '"' && flag == 0)
+		{
+			temp->dq = 1;
+			flag = 1;
+		}
+		else
+			temp->dq = 0;
+		if (temp->type == PIPE)
+			flag = 0;
 		temp = temp->next;
 	}
 }
@@ -79,6 +84,7 @@ void	process_input(t_minishell *minishell)
 	stop_signals();
 	tokenization(minishell);
 	check_is_str(minishell);
+	//printf("temp str %d\n", minishell->tokens->dq);
 	if (check_syntax(minishell->tokens) == true)
 	{
 		expander(minishell);

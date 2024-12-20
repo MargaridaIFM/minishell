@@ -68,6 +68,7 @@ t_ast	*copy_ast(t_ast *original)
 			return (NULL);
 		}
 		copy->token->type = original->token->type;
+		copy->token->dq = original->token->dq;
 		copy->token->str = ft_strdup(original->token->str);
 		copy->token->path = ft_strdup(original->token->path);
 		copy->token->cmd = copy_cmd(original->token->cmd);
@@ -81,9 +82,36 @@ t_ast	*copy_ast(t_ast *original)
 void	no_pipe(t_ast *temp_copy, t_ast *orig, t_ast *save_node)
 {
 	if (temp_copy->left)
+	{
+		if (temp_copy->left->token->dq == 1 && ft_count_words(temp_copy->left->token->str) > 1)
+		{
+			printf("entrou120\n");
+			orig->token->dq = 1;
+		}
 		orig->token->cmd = built_cmd(save_node->left);
+	}
 	if (temp_copy->right->token->type > 3 && temp_copy->right->right)
-		orig->token->cmd = built_cmd(temp_copy->right->right);
+	{
+		if (orig->token->cmd)
+		{
+			orig->token->cmd = join_array(orig->token->cmd, temp_copy->right->right->token->str);
+			temp_copy = temp_copy->right->right->right;
+			while (temp_copy)
+			{
+				orig->token->cmd = join_array(orig->token->cmd, temp_copy->token->str);
+				temp_copy = temp_copy->right;
+			}
+		}
+		else
+		{
+			if (orig->right->right->token->dq == 1 && ft_count_words(temp_copy->right->right->token->str) > 1)
+			{
+				printf("entrou\n");	
+				orig->token->dq = 1;
+			}
+			orig->token->cmd = built_cmd(temp_copy->right->right);
+		}
+	}
 }
 
 void	find_commands(t_ast *orig, t_ast *temp_copy, int flag)
@@ -97,13 +125,23 @@ void	find_commands(t_ast *orig, t_ast *temp_copy, int flag)
 		&& temp_copy->right->right)
 	{
 		if (temp_copy->left && temp_copy->left->right)
+		{
+			if (orig->left->right->token->dq == 1)
+				orig->left->right->token->dq = 1;
 			orig->token->cmd = built_cmd(save_node->left->right);
+		}
 		if (orig->token->cmd)
 		{
+			if (orig->right->right->token->dq == 1)
+				orig->right->right->token->dq = 1;
 			orig->token->cmd = built_cmd(temp_copy->right->right);
 		}
 		else
+		{
+			if (orig->right->right->token->dq == 1)
+				orig->right->right->token->dq = 1;
 			orig->token->cmd = built_cmd(temp_copy->right->right);
+		}
 	}
 	else if (temp_copy->left && temp_copy->left->right)
 		orig->token->cmd = built_cmd(temp_copy->left->right);

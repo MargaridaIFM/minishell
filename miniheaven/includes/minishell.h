@@ -280,5 +280,5 @@ void		do_one_pipe(t_minishell *minishell, t_ast *ast);
 int count_array(char **arr);
 t_ast	*copy_ast(t_ast *original);
 void	find_files(t_ast *orig, t_ast *temp_copy, t_minishell *minishell);
-
+char **join_array(char **array_first, char *array);
 #endif

@@ -28,7 +28,7 @@ static int	compare_vars(char *var, char *env)
 			return (var[i] - env[i]);
 		i++;
 	}
-	if ((!env[i] || env[i] == '=') && !var[i])
+	if (env[i] == '=' && !var[i])
 		return (0);
 	return (-1);
 }
@@ -50,6 +50,19 @@ static void	clear_var(t_minishell *minishell, int start)
 	minishell->envp[start] = NULL;
 }
 
+int check_local(char *env, char *var)
+{
+	int i;
+
+	i = 0;
+	while (env[i] && env[i] != '=')
+		i++;
+	//printf("resultado %d\n", ft_strncmp(var, env, i - 1));
+	if (ft_strncmp(var, env, i - 1) == 0)
+		return (1);
+	return (0);
+}
+
 /**
  * @brief Limpa as vairaveis recebidas no split_cmd
  * @param t_minishell *minishell
@@ -66,9 +79,9 @@ void	ft_unset(char **cmd, t_minishell *minishell)
 		x = 0;
 		while (minishell->envp[x])
 		{
-			if (check_local_env(minishell, cmd[i]) == 1)
+			if (check_local(minishell->envp[x], cmd[i]) == 1)
 				clear_local(minishell, cmd[i], ft_strlen(cmd[i]));
-			else if (compare_vars(cmd[i], minishell->envp[x]) == 0)
+			if (compare_vars(cmd[i], minishell->envp[x]) == 0)
 				clear_var(minishell, x);
 			x++;
 		}
