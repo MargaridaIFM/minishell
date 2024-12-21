@@ -1,40 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   array_utils.c                                      :+:      :+:    :+:   */
+/*   errors_execute.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mistery576 <mistery576@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/19 19:49:14 by mistery576        #+#    #+#             */
-/*   Updated: 2024/12/21 00:17:07 by mistery576       ###   ########.fr       */
+/*   Created: 2024/12/20 18:30:23 by mistery576        #+#    #+#             */
+/*   Updated: 2024/12/20 20:54:37 by mistery576       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-char	**join_array(char **array_first, char *array)
+int	check_execute(t_minishell *minishell, char **cmd)
 {
-	char	**new_array;
-	int		i;
-	int		j;
-
-	new_array = malloc(sizeof(char *) * (count_array(array_first) + 2));
-	i = 0;
-	j = 0;
-	if (!new_array)
+	if (my_getenv(minishell, "PATH") == NULL && access(cmd[0], X_OK) != 0)
 	{
-		free_array(array_first);
-		free(array);
+		ft_putstr_fd(cmd[0], 2);
+		ft_putstr_fd(": command not found\n", 2);
+		g_signal = 127;
+		minishell->_str_ = 0;
+		return (free_array(cmd), 1);
 	}
-	while (array_first[i])
+	if (minishell->_str_ == 1)
 	{
-		new_array[j] = strdup(array_first[i]);
-		i++;
-		j++;
+		ft_putstr_fd(cmd[0], 2);
+		ft_putstr_fd(": command not found\n", 2);
+		g_signal = 127;
+		minishell->_str_ = 0;
+		return (free_array(cmd), 1);
 	}
-	new_array[j] = strdup(array);
-	j++;
-	new_array[j] = NULL;
-	free_array(array_first);
-	return (new_array);
+	return (0);
 }

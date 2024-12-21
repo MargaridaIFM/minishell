@@ -58,7 +58,7 @@ void	process_util(t_minishell *minishell, t_ast *ast)
 void	check_is_str(t_minishell *minishell)
 {
 	t_token	*temp;
-	int flag;
+	int		flag;
 
 	flag = 0;
 	temp = minishell->tokens;
@@ -84,7 +84,6 @@ void	process_input(t_minishell *minishell)
 	stop_signals();
 	tokenization(minishell);
 	check_is_str(minishell);
-	//printf("temp str %d\n", minishell->tokens->dq);
 	if (check_syntax(minishell->tokens) == true)
 	{
 		expander(minishell);
@@ -94,6 +93,7 @@ void	process_input(t_minishell *minishell)
 			return ;
 		minishell->tokens = NULL;
 		set_redirs(minishell, minishell->ast);
+		print_ast(minishell->ast, 0);
 		process_util(minishell, ast);
 	}
 	else

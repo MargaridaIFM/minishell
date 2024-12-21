@@ -12,15 +12,10 @@
 
 #include "../includes/minishell.h"
 
-int	open_file(t_minishell *minishell, t_ast *ast)
+int	open_file_util(t_minishell *minishell, t_ast *ast, char *file)
 {
-	char		*file;
-	t_heredoc	*temp_here;
-
-	temp_here = minishell->heredoc;
 	if (ast->token->type == REDIR_IN)
 	{
-		file = ast->token->path;
 		if (access(file, F_OK) != 0)
 		{
 			printf("bash: %s: No such file or directory\n", file);
@@ -30,9 +25,8 @@ int	open_file(t_minishell *minishell, t_ast *ast)
 			close(minishell->infile);
 		minishell->infile = open(file, O_RDONLY, 0644);
 	}
-	else if (ast->token->type == REDIR_OUT || ast->token->type == REDIR_APPEND)
+	if (ast->token->type == REDIR_OUT || ast->token->type == REDIR_APPEND)
 	{
-		file = ast->token->path;
 		if (minishell->outfile != -1)
 			close(minishell->outfile);
 		if (ast->token->type == REDIR_OUT)
@@ -42,6 +36,18 @@ int	open_file(t_minishell *minishell, t_ast *ast)
 			minishell->outfile = open(file, O_WRONLY | O_CREAT | O_APPEND,
 					0644);
 	}
+	return (0);
+}
+
+int	open_file(t_minishell *minishell, t_ast *ast)
+{
+	char		*file;
+	t_heredoc	*temp_here;
+
+	temp_here = minishell->heredoc;
+	file = ast->token->path;
+	if (open_file_util(minishell, ast, file) == -1)
+		return (-1);
 	else if (ast->token->type == REDIR_HEREDOC)
 	{
 		if (minishell->infile != -1)
@@ -50,7 +56,6 @@ int	open_file(t_minishell *minishell, t_ast *ast)
 		close(minishell->heredoc->fd[0]);
 		free(minishell->heredoc->delimiter);
 		temp_here = minishell->heredoc->next;
-		free(minishell->heredoc);
 		minishell->heredoc = temp_here;
 	}
 	return (0);
@@ -112,21 +117,4 @@ void	redir_out(t_minishell *minishell, t_ast *ast, int flag)
 		ast = ast->right;
 	}
 	execute_ast(minishell, node_cmd, flag);
-}
-
-int	rebuild_fileno(t_minishell *minishell)
-{
-	if (minishell->infile != -1)
-	{
-		if (dup2(minishell->temp_stdin, STDIN_FILENO) == -1)
-			return (-1);
-		close(minishell->temp_stdin);
-	}
-	if (minishell->outfile != -1)
-	{
-		if (dup2(minishell->temp_stdout, STDOUT_FILENO) == -1)
-			return (-1);
-		close(minishell->temp_stdout);
-	}
-	return (0);
 }

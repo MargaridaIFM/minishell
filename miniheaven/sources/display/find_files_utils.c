@@ -69,3 +69,50 @@ void	set_redirs(t_minishell *minishell, t_ast *ast)
 	find_files(orig, temp_copy, minishell);
 	free_ast(copy);
 }
+
+void	no_pipe_util(t_ast *orig, t_ast *temp_copy)
+{
+	if (orig->token->cmd)
+	{
+		temp_copy = temp_copy->right->right;
+		while (temp_copy)
+		{
+			orig->token->cmd
+				= join_array(orig->token->cmd, temp_copy->token->str);
+			temp_copy = temp_copy->right;
+		}
+	}
+	else
+	{
+		if (orig->right->right->token->dq == 1
+			&& ft_count_words(temp_copy->right->right->token->str) > 1)
+			orig->token->dq = 1;
+		orig->token->cmd = built_cmd(temp_copy->right->right);
+	}
+}
+
+void	complete_last_redir(t_ast *temp_copy, t_ast *orig, t_ast *save_node)
+{
+	if (temp_copy->left && temp_copy->left->right)
+	{
+		if (orig->left->right->token->dq == 1)
+			orig->left->right->token->dq = 1;
+		orig->token->cmd = built_cmd(save_node->left->right);
+	}
+	if (orig->token->cmd && temp_copy->right->right)
+	{
+		temp_copy = temp_copy->right->right;
+		while (temp_copy)
+		{
+			orig->token->cmd
+				= join_array(orig->token->cmd, temp_copy->token->str);
+			temp_copy = temp_copy->right;
+		}
+	}
+	else
+	{
+		if (orig->right->right->token->dq == 1)
+			orig->right->right->token->dq = 1;
+		orig->token->cmd = built_cmd(temp_copy->right->right);
+	}
+}

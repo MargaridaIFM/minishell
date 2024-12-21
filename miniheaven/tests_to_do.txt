@@ -132,3 +132,9 @@ ls << eof
 ls << eof << eof2 << eof3
 
 ❌
+
+< infile < infile < infile "echo hello"
+$$
+echo < infile 1 < infile 2
+echo $b     / b="hello       world"
+echo hello < infile ls < infile < infile world

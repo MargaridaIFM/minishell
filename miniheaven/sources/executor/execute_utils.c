@@ -12,6 +12,23 @@
 
 #include "../includes/minishell.h"
 
+int	rebuild_fileno(t_minishell *minishell)
+{
+	if (minishell->infile != -1)
+	{
+		if (dup2(minishell->temp_stdin, STDIN_FILENO) == -1)
+			return (-1);
+		close(minishell->temp_stdin);
+	}
+	if (minishell->outfile != -1)
+	{
+		if (dup2(minishell->temp_stdout, STDOUT_FILENO) == -1)
+			return (-1);
+		close(minishell->temp_stdout);
+	}
+	return (0);
+}
+
 void	close_redir(t_minishell *minishell)
 {
 	if (minishell->infile != -1)
@@ -31,22 +48,8 @@ void	ft_execute_pipe(t_minishell *minishell, char **cmd)
 	char	*cmd_path;
 
 	redirect_read(minishell);
-	if (my_getenv(minishell, "PATH") == NULL && access(cmd[0], X_OK) != 0)
-	{
-		ft_putstr_fd(cmd[0], 2);
-		ft_putstr_fd(": command not found\n", 2);
-		g_signal = 127;
-		minishell->_str_ = 0;
+	if (check_execute(minishell, cmd) == 1)
 		free_exit(minishell, "");
-	}
-	if (minishell->_str_ == 1)
-	{
-		ft_putstr_fd(cmd[0], 2);
-		ft_putstr_fd(": command not found\n", 2);
-		g_signal = 127;
-		minishell->_str_ = 0;
-		free_exit(minishell, "");
-	}
 	if (find_builtin(minishell, cmd) == 1)
 	{
 		free_array(cmd);
@@ -66,64 +69,22 @@ void	ft_execute_pipe(t_minishell *minishell, char **cmd)
 		error_execute(minishell, cmd, cmd_path);
 }
 
-char **ft_split_cmd(char **cmd, int cmd_count) {
-    char **result;
-    int result_count;
-    int result_size;
-	char **tokens;
-
-	result = NULL;
-	result_count = 0;
-	result_size = 0;
-    for (int i = 0; i < cmd_count; i++) {
-        tokens = ft_split(cmd[i], ' ');
-        if (!tokens) 
-			continue;
-        for (int j = 0; tokens[j] != NULL; j++) {
-            if (result_count >= result_size) {
-                int new_size = result_size == 0 ? 4 : result_size * 2;
-                result = ft_realloc(result, result_size * sizeof(char *), new_size * sizeof(char *));
-                if (!result)
-				{
-                    perror("Error reallocating memory");
-                    exit(EXIT_FAILURE);
-                }
-                result_size = new_size;
-            }
-            result[result_count] = tokens[j];
-            result_count++;
-		}
-        free(tokens);
-    }
-    if (result_count >= result_size) {
-        result = ft_realloc(result, result_size * sizeof(char *), (result_count + 1) * sizeof(char *));
-        if (!result) {
-            perror("Error reallocating memory");
-            exit(EXIT_FAILURE);
-        }
-    }
-    result[result_count] = NULL;
-	free_array(cmd);
-    return result;
-}
-
-int		check_dir(char *str)
+int	check_dir(char *str)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (str[i])
 	{
 		if (str[i] == '/')
-			return 1;
+			return (1);
 		i++;
 	}
-	return 0;
+	return (0);
 }
 
-void	execute_cmd(t_minishell *minishell, char **split_cmd, char *cmd)
+void	execute_cmd(t_minishell *minishell, char **split_cmd)
 {
-	(void)cmd;
 	char	*cmd_path;
 	int		count;
 

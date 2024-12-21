@@ -243,7 +243,7 @@ char		*my_getenv(t_minishell *minishell, char *path);
 int			find_builtin(t_minishell *minishell, char **dp);
 void		error_execute(t_minishell *minishell, char **split_cmd, char *cmd_path);
 void		ft_execute(t_minishell *minishell, char **split_cmd);
-void		execute_cmd(t_minishell *minishell, char **split_cmd, char *cmd);
+void		execute_cmd(t_minishell *minishell, char **split_cmd);
 char		**built_cmd(t_ast *ast);
 
 //	EXECUTOR_UTILS  //
@@ -272,6 +272,9 @@ void		redir_out(t_minishell *minishell, t_ast *ast, int flag);
 //	FIND FILES	//
 char **copy_array(t_ast *ast, int count);
 
+//	SPLIT_CMD	//
+char	**ft_split_cmd(char **cmd, int cmd_count);
+
 
 void	free_cmd_path(t_ast *left_side);
 
@@ -281,4 +284,10 @@ int count_array(char **arr);
 t_ast	*copy_ast(t_ast *original);
 void	find_files(t_ast *orig, t_ast *temp_copy, t_minishell *minishell);
 char **join_array(char **array_first, char *array);
+void	no_pipe_util(t_ast *orig, t_ast *temp_copy);
+void	complete_last_redir(t_ast *temp_copy, t_ast *orig, t_ast *save_node);
+int	check_execute(t_minishell *minishell, char **cmd);
+void execute_redir(t_minishell *minishell, t_ast *ast, int flag);
+int	count_total_strings(t_ast *ast);
+char **process_ast_commands(t_ast *ast, int *count, char **cmd);
 #endif

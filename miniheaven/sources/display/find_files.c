@@ -12,23 +12,6 @@
 
 #include "../includes/minishell.h"
 
-// t_token	*copy_token_list(const t_token *token)
-// {
-// 	t_token	*copy;
-
-// 	if (!token)
-// 		return (NULL);
-// 	copy = malloc(sizeof(t_token));
-// 	if (!copy)
-// 		return (NULL);
-// 	copy->type = token->type;
-// 	copy->str = ft_strdup(token->str);
-// 	copy->path = ft_strdup(token->path);
-// 	copy->cmd = ft_strdup(token->cmd);
-// 	copy->next = copy_token_list(token->next);
-// 	return (copy);
-// }
-
 char	**copy_cmd(char **cmd)
 {
 	char	**copy;
@@ -83,35 +66,13 @@ void	no_pipe(t_ast *temp_copy, t_ast *orig, t_ast *save_node)
 {
 	if (temp_copy->left)
 	{
-		if (temp_copy->left->token->dq == 1 && ft_count_words(temp_copy->left->token->str) > 1)
-		{
-			printf("entrou120\n");
+		if (temp_copy->left->token->dq == 1
+			&& ft_count_words(temp_copy->left->token->str) > 1)
 			orig->token->dq = 1;
-		}
 		orig->token->cmd = built_cmd(save_node->left);
 	}
 	if (temp_copy->right->token->type > 3 && temp_copy->right->right)
-	{
-		if (orig->token->cmd)
-		{
-			orig->token->cmd = join_array(orig->token->cmd, temp_copy->right->right->token->str);
-			temp_copy = temp_copy->right->right->right;
-			while (temp_copy)
-			{
-				orig->token->cmd = join_array(orig->token->cmd, temp_copy->token->str);
-				temp_copy = temp_copy->right;
-			}
-		}
-		else
-		{
-			if (orig->right->right->token->dq == 1 && ft_count_words(temp_copy->right->right->token->str) > 1)
-			{
-				printf("entrou\n");	
-				orig->token->dq = 1;
-			}
-			orig->token->cmd = built_cmd(temp_copy->right->right);
-		}
-	}
+		no_pipe_util(orig, temp_copy);
 }
 
 void	find_commands(t_ast *orig, t_ast *temp_copy, int flag)
@@ -124,24 +85,7 @@ void	find_commands(t_ast *orig, t_ast *temp_copy, int flag)
 	else if (temp_copy->right->token->type > 3
 		&& temp_copy->right->right)
 	{
-		if (temp_copy->left && temp_copy->left->right)
-		{
-			if (orig->left->right->token->dq == 1)
-				orig->left->right->token->dq = 1;
-			orig->token->cmd = built_cmd(save_node->left->right);
-		}
-		if (orig->token->cmd)
-		{
-			if (orig->right->right->token->dq == 1)
-				orig->right->right->token->dq = 1;
-			orig->token->cmd = built_cmd(temp_copy->right->right);
-		}
-		else
-		{
-			if (orig->right->right->token->dq == 1)
-				orig->right->right->token->dq = 1;
-			orig->token->cmd = built_cmd(temp_copy->right->right);
-		}
+		complete_last_redir(temp_copy, orig, save_node);
 	}
 	else if (temp_copy->left && temp_copy->left->right)
 		orig->token->cmd = built_cmd(temp_copy->left->right);

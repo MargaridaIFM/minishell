@@ -56,7 +56,7 @@ void	ft_echo(char **cmd)
 
 	flag = 0;
 	if (cmd[1])
-	{		
+	{
 		i = skip(cmd, &flag);
 		while (cmd[i])
 		{

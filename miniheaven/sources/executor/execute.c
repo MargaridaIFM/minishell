@@ -14,38 +14,6 @@
 
 //wextitstatus - pesquisar e falar com a melhor parceira do mundo 
 
-// char    **built_cmd(t_ast *ast)
-// {
-//     char    **cmd_array;
-//     int     count;
-//     int     i;
-//     t_ast *temp;
-
-// 	temp = ast;
-//     count = 0;
-//     while (temp && (temp->token->type == WORD || temp->token->type == STR)) {
-//         count++;
-//         temp = temp->right;
-//     }
-//     cmd_array = malloc((count + 1) * sizeof(char *));
-//     if (!cmd_array)
-//         return (NULL);
-//     i = 0;
-//     while (ast && (ast->token->type == WORD || ast->token->type == STR)) {
-//         cmd_array[i] = ft_strdup(ast->token->str);
-//         if (!cmd_array[i]) {
-//             while (i > 0)
-//                 free(cmd_array[--i]);
-//             free(cmd_array);
-//             return (NULL);
-//         }
-//         ast = ast->right;
-//         i++;
-//     }
-//     cmd_array[i] = NULL;
-//     return (cmd_array);
-// }
-
 void	execute_ast(t_minishell *minishell, t_ast *ast, int flag)
 {
 	char	**cmd;
@@ -53,28 +21,8 @@ void	execute_ast(t_minishell *minishell, t_ast *ast, int flag)
 	cmd = NULL;
 	if (ast->token->type <= 3)
 	{
-		cmd = collect_commands_redirs(minishell, ast);
-		//printf("cmd %s\n", cmd[0]);
-		if (cmd == NULL)
-		{
-			rebuild_fileno(minishell);
-			close_redir(minishell);
-			if (minishell->_pipe_ == 1)
-			{
-				//free(cmd);
-				free_exit(minishell, "");
-			}
-			free_all(minishell, "");
-			return ;
-		}
-		if (flag == -1)
-			ft_execute(minishell, cmd);
-		else
-			ft_execute_pipe(minishell, cmd);
-		rebuild_fileno(minishell);
-		close_redir(minishell);
+		execute_redir(minishell, ast, flag);
 		return ;
-		
 	}
 	if (ast->token->type == WORD || ast->token->type == STR)
 	{
@@ -142,22 +90,8 @@ void	ft_execute(t_minishell *minishell, char **cmd)
 
 	if (redirect_read(minishell) == -1)
 		free_exit(minishell, "Something went wrong with dup2\n");
-	if (my_getenv(minishell, "PATH") == NULL && access(cmd[0], X_OK) != 0)
-	{
-		ft_putstr_fd(cmd[0], 2);
-		ft_putstr_fd(": command not found\n", 2);
-		g_signal = 127;
-		minishell->_str_ = 0;
-		return (free_array(cmd));
-	}
-	if (minishell->_str_ == 1)
-	{
-		ft_putstr_fd(cmd[0], 2);
-		ft_putstr_fd(": command not found\n", 2);
-		g_signal = 127;
-		minishell->_str_ = 0;
-		return (free_array(cmd));
-	}
+	if (check_execute(minishell, cmd) == 1)
+		return ;
 	if (find_builtin(minishell, cmd) == 1)
 	{
 		minishell->exit_status = WEXITSTATUS(minishell->exit_status);
@@ -165,7 +99,7 @@ void	ft_execute(t_minishell *minishell, char **cmd)
 	}
 	child = fork();
 	if (child == 0)
-		execute_cmd(minishell, cmd, cmd[0]);
+		execute_cmd(minishell, cmd);
 	else
 		waitpid(child, &minishell->exit_status, 0);
 	minishell->exit_status = WEXITSTATUS(minishell->exit_status);

@@ -50,14 +50,13 @@ static void	clear_var(t_minishell *minishell, int start)
 	minishell->envp[start] = NULL;
 }
 
-int check_local(char *env, char *var)
+int	check_local(char *env, char *var)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (env[i] && env[i] != '=')
 		i++;
-	//printf("resultado %d\n", ft_strncmp(var, env, i - 1));
 	if (ft_strncmp(var, env, i - 1) == 0)
 		return (1);
 	return (0);
