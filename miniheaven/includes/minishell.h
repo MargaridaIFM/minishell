@@ -288,6 +288,9 @@ void	no_pipe_util(t_ast *orig, t_ast *temp_copy);
 void	complete_last_redir(t_ast *temp_copy, t_ast *orig, t_ast *save_node);
 int	check_execute(t_minishell *minishell, char **cmd);
 void execute_redir(t_minishell *minishell, t_ast *ast, int flag);
-int	count_total_strings(t_ast *ast);
+int	count_total_strings(t_minishell *minishell, t_ast *ast);
 char **process_ast_commands(t_ast *ast, int *count, char **cmd);
+void	print_errors(char *s1, char *s2, char *s3);
+char	*failed_to_open(t_minishell *minishell);
+
 #endif

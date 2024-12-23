@@ -44,7 +44,7 @@ void	ft_env(t_minishell *minishell, char **cmd)
 	}
 	if (my_getenv(minishell, "PATH") == NULL)
 	{
-		printf("bash: env: No such file or directory\n");
+		print_errors("bash: env: No such file or directory\n", NULL, NULL);
 		g_signal = 127;
 		return ;
 	}

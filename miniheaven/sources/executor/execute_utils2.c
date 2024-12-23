@@ -6,7 +6,7 @@
 /*   By: mistery576 <mistery576@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 00:50:55 by mistery576        #+#    #+#             */
-/*   Updated: 2024/12/23 00:34:10 by mistery576       ###   ########.fr       */
+/*   Updated: 2024/12/23 15:37:35 by mistery576       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ char	**process_ast_commands_redir(t_minishell *minishell,
 	t_ast	*temp;
 	char	**result;
 	int		index;
-	
+
 	temp = ast;
 	result = allocate_result_array(total_strings);
 	if (!result)
@@ -66,10 +66,9 @@ char	**process_ast_commands_redir(t_minishell *minishell,
 		if (temp->token->cmd
 			&& process_command(minishell, temp, result, &index) == -1)
 		{
-			free(result);
+			//free(result);
 			return (NULL);
 		}
-		open_file(minishell, temp);
 		temp = temp->right;
 	}
 	result[index] = NULL;
@@ -82,23 +81,16 @@ char	**collect_commands_redirs(t_minishell *minishell, t_ast *ast)
 	char	**result;
 	int		total_strings;
 
-	total_strings = count_total_strings(ast);
-	if (total_strings != 0)
+	result = NULL;
+	total_strings = count_total_strings(minishell, ast);
+	if (total_strings > 0)
 	{
 		result = process_ast_commands_redir(minishell, ast, total_strings);
 		if (!result)
 			return (NULL);
 		return (result);
 	}
-	else
-	{
-		while (ast->token->type <= 3)
-		{
-			open_file(minishell, ast);
-			ast = ast->right;
-		}
-		return (NULL);
-	}
+	return (NULL);
 }
 
 char	**process_ast_commands(t_ast *ast, int *count, char **cmd)
@@ -106,15 +98,12 @@ char	**process_ast_commands(t_ast *ast, int *count, char **cmd)
 	char	**new_cmd;
 	int		i;
 
-	i = 0;
+	i = -1;
 	new_cmd = malloc(sizeof(char *) * (*count + 2));
 	if (!new_cmd)
 		return (NULL);
-	while (i < *count)
-	{
+	while (++i < *count)
 		new_cmd[i] = cmd[i];
-		i++;
-	}
 	if (ft_strlen(ast->token->str) == 0)
 		new_cmd[i] = ft_strdup("\"\"");
 	else

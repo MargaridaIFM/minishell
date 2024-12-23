@@ -18,7 +18,7 @@ int	open_file_util(t_minishell *minishell, t_ast *ast, char *file)
 	{
 		if (access(file, F_OK) != 0)
 		{
-			printf("bash: %s: No such file or directory\n", file);
+			print_errors("bash: ", file, ": No such file or directory\n");
 			return (-1);
 		}
 		if (minishell->infile != -1)

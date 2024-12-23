@@ -93,7 +93,7 @@ void	process_input(t_minishell *minishell)
 			return ;
 		minishell->tokens = NULL;
 		set_redirs(minishell, minishell->ast);
-		print_ast(minishell->ast, 0);
+		//print_ast(minishell->ast, 0);
 		process_util(minishell, ast);
 	}
 	else

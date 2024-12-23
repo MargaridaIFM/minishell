@@ -46,6 +46,11 @@ void	execute_ast(t_minishell *minishell, t_ast *ast, int flag)
 void	error_execute(t_minishell *minishell,
 		char **split_cmd, char *cmd_path)
 {
+	if (g_signal == 1)
+	{
+		free_array(split_cmd);
+		free_exit(minishell, "");
+	}
 	g_signal = 127;
 	ft_putstr_fd(split_cmd[0], 2);
 	ft_putstr_fd(": command not found\n", 2);

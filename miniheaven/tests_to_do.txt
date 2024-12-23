@@ -138,3 +138,4 @@ $$
 echo < infile 1 < infile 2
 echo $b     / b="hello       world"
 echo hello < infile ls < infile < infile world
+< khsadkh ls | wc \ < infile echo < sauidyai

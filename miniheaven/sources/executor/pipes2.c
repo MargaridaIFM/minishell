@@ -35,9 +35,9 @@ void	do_one_pipe(t_minishell *minishell, t_ast *ast)
 	right_fork = fork();
 	if (right_fork == 0)
 	{
+		close(minishell->fd[1]);
 		dup2(minishell->fd[0], STDIN_FILENO);
 		close(minishell->fd[0]);
-		close(minishell->fd[1]);
 		execute_ast(minishell, ast->right, -1);
 		free_exit(minishell, "");
 	}
@@ -48,4 +48,5 @@ void	do_one_pipe(t_minishell *minishell, t_ast *ast)
 	dup2(minishell->temp_stdin, STDIN_FILENO);
 	close(minishell->temp_stdin);
 	minishell->_pipe_ = 0;
+	minishell->temp_stdin = -1;
 }
