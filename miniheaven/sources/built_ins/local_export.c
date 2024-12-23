@@ -57,7 +57,6 @@ void	clear_local(t_minishell *minishell, char *var, int x)
 	int		j;
 
 	i = 0;
-	printf("entrou 2\n");
 	while (minishell->local[i])
 	{
 		if (ft_strncmp(minishell->local[i], var, x) == 0)
@@ -81,7 +80,6 @@ int	add_local(t_minishell *minishell, char *var)
 	int	i;
 
 	i = 0;
-	printf("entrou\n");
 	while (minishell->local[i])
 		i++;
 	minishell->local = update_local(minishell, var, i);

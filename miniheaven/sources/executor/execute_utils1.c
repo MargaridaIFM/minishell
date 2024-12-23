@@ -18,13 +18,13 @@ int	count_total_strings(t_ast *ast)
 	int		total;
 	int		i;
 
-	i = 0;
 	total = 0;
 	temp = ast;
 	while (temp->token->type <= 3)
 	{
 		if (temp->token->cmd)
 		{
+			i = 0;
 			while (temp->token->cmd[i])
 			{
 				total++;
@@ -33,6 +33,7 @@ int	count_total_strings(t_ast *ast)
 		}
 		temp = temp->right;
 	}
+	printf("total %d\n", total);
 	return (total);
 }
 

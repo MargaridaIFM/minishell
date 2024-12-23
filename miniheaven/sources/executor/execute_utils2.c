@@ -6,7 +6,7 @@
 /*   By: mistery576 <mistery576@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 00:50:55 by mistery576        #+#    #+#             */
-/*   Updated: 2024/12/21 02:39:15 by mistery576       ###   ########.fr       */
+/*   Updated: 2024/12/23 00:34:10 by mistery576       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,23 +52,25 @@ int	process_command(t_minishell *minishell, t_ast *ast,
 char	**process_ast_commands_redir(t_minishell *minishell,
 			t_ast *ast, int total_strings)
 {
+	t_ast	*temp;
 	char	**result;
 	int		index;
-
+	
+	temp = ast;
 	result = allocate_result_array(total_strings);
 	if (!result)
 		return (NULL);
 	index = 0;
-	while (ast)
+	while (temp)
 	{
-		if (ast->token->cmd
-			&& process_command(minishell, ast, result, &index) == -1)
+		if (temp->token->cmd
+			&& process_command(minishell, temp, result, &index) == -1)
 		{
 			free(result);
 			return (NULL);
 		}
-		open_file(minishell, ast);
-		ast = ast->right;
+		open_file(minishell, temp);
+		temp = temp->right;
 	}
 	result[index] = NULL;
 	return (result);
@@ -104,6 +106,7 @@ char	**process_ast_commands(t_ast *ast, int *count, char **cmd)
 	char	**new_cmd;
 	int		i;
 
+	i = 0;
 	new_cmd = malloc(sizeof(char *) * (*count + 2));
 	if (!new_cmd)
 		return (NULL);
@@ -112,7 +115,10 @@ char	**process_ast_commands(t_ast *ast, int *count, char **cmd)
 		new_cmd[i] = cmd[i];
 		i++;
 	}
-	new_cmd[i] = ft_strdup(ast->token->str);
+	if (ft_strlen(ast->token->str) == 0)
+		new_cmd[i] = ft_strdup("\"\"");
+	else
+		new_cmd[i] = ft_strdup(ast->token->str);
 	if (!new_cmd[i])
 	{
 		free(new_cmd);
