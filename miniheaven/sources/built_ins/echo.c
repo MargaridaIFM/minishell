@@ -17,7 +17,7 @@ static int	find_char(char *str, char c)
 	int	i;
 
 	i = 0;
-	if (!str[i])
+	if (!str || !str[i])
 		return (0);
 	while (str[i] && str[i] == c)
 		i++;
@@ -38,7 +38,7 @@ static int	skip(char **cmd, int *flag)
 	i = 1;
 	if (ft_strlen(cmd[i]) >= 2)
 	{
-		while (find_char(cmd[i] + 1, 'n') == 1)
+		while (ft_strlen(cmd[i]) > 0 && find_char(cmd[i] + 1, 'n') == 1)
 		{
 			*flag = 1;
 			i++;

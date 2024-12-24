@@ -6,7 +6,7 @@
 /*   By: mistery576 <mistery576@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 00:50:55 by mistery576        #+#    #+#             */
-/*   Updated: 2024/12/23 23:55:40 by mistery576       ###   ########.fr       */
+/*   Updated: 2024/12/24 15:47:01 by mistery576       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,7 @@ char	**process_ast_commands(t_ast *ast, int *count, char **cmd)
 	while (++i < *count)
 		new_cmd[i] = cmd[i];
 	if (ft_strlen(ast->token->str) == 0)
-		new_cmd[i] = ft_strdup("\"\"");
+		new_cmd[i] = ft_strdup("");
 	else
 		new_cmd[i] = ft_strdup(ast->token->str);
 	if (!new_cmd[i])
