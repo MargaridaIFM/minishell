@@ -33,12 +33,7 @@ void	execute_ast(t_minishell *minishell, t_ast *ast, int flag)
 			ft_execute_pipe(minishell, cmd);
 	}
 	if (ast->token->type == PIPE)
-	{
-		if (ast->right->token->type != PIPE)
-			do_one_pipe(minishell, ast);
-		else
 			do_pipeline(minishell, ast);
-	}
 	rebuild_fileno(minishell);
 	close_redir(minishell);
 }

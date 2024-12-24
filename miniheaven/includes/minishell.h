@@ -253,9 +253,9 @@ char    	**collect_commands(t_minishell *minishell, t_ast *ast);
 // PIPEX //
 void		do_pipeline(t_minishell *minishell, t_ast *ast);
 void		pipe_fork(t_minishell *minishell, t_ast *ast);
-void		fork_and_pipe(t_minishell *minishell, t_ast *ast, int *child);
+pid_t		fork_and_pipe(t_minishell *minishell, t_ast *ast);
 void		redir_pipe(t_minishell *minishell, int child);
-void		wait_pipes(t_minishell *minishell);
+void wait_pipes(t_minishell *minishell, pid_t *pids, int num_commands);
 void		ft_execute_pipe(t_minishell *minishell, char **cmd);
 
 //	REDIR  //
