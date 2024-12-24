@@ -57,11 +57,6 @@ void	free_exit(t_minishell *minishell, char *str)
 	free_array(minishell->envp);
 	close_pipe(minishell->temp_stdin);
 	close_pipe(minishell->temp_stdout);
-	// if (minishell->_pipe_ == 1)
-	// {
-	// 	close(minishell->fd[0]);
-	// 	close(minishell->fd[1]);
-	// }
 	close_pipe(minishell->fd[1]);
 	close_pipe(minishell->fd[0]);
 	free_pointer(minishell->cmd);

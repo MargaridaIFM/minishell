@@ -89,6 +89,7 @@ typedef struct s_minishell
 	int			first;
 	int			fd[2];
 	int			exit_status;
+	int			prev_fd;
 	int			temp_stdin;
 	int			temp_stdout;
 	int			infile;
