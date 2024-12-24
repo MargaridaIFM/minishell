@@ -6,7 +6,7 @@
 /*   By: mistery576 <mistery576@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 00:50:55 by mistery576        #+#    #+#             */
-/*   Updated: 2024/12/23 15:37:35 by mistery576       ###   ########.fr       */
+/*   Updated: 2024/12/23 23:55:40 by mistery576       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,8 @@ int	process_command(t_minishell *minishell, t_ast *ast,
 	int	i;
 
 	i = 0;
-	if (ast->token->dq == 1 && minishell->_str_ == 0)
+	if (ast->token->dq == 1 && minishell->_str_ == 0
+		&& ft_count_words(ast->token->cmd[0]) > 1)
 		minishell->_str_ = 1;
 	else
 		minishell->_str_ = 2;
@@ -65,10 +66,7 @@ char	**process_ast_commands_redir(t_minishell *minishell,
 	{
 		if (temp->token->cmd
 			&& process_command(minishell, temp, result, &index) == -1)
-		{
-			//free(result);
 			return (NULL);
-		}
 		temp = temp->right;
 	}
 	result[index] = NULL;

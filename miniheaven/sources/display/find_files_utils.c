@@ -86,7 +86,9 @@ void	no_pipe_util(t_ast *orig, t_ast *temp_copy)
 	{
 		if (orig->right->right->token->dq == 1
 			&& ft_count_words(temp_copy->right->right->token->str) > 1)
+		{
 			orig->token->dq = 1;
+		}
 		orig->token->cmd = built_cmd(temp_copy->right->right);
 	}
 }
@@ -102,6 +104,8 @@ void	complete_last_redir(t_ast *temp_copy, t_ast *orig, t_ast *save_node)
 	if (orig->token->cmd && temp_copy->right->right)
 	{
 		temp_copy = temp_copy->right->right;
+		if (temp_copy->token->dq == 1)
+			orig->token->dq = 1;
 		while (temp_copy)
 		{
 			orig->token->cmd
@@ -111,8 +115,8 @@ void	complete_last_redir(t_ast *temp_copy, t_ast *orig, t_ast *save_node)
 	}
 	else
 	{
-		if (orig->right->right->token->dq == 1)
-			orig->right->right->token->dq = 1;
+		if (temp_copy->right->right->token->dq == 1)
+			orig->token->dq = 1;
 		orig->token->cmd = built_cmd(temp_copy->right->right);
 	}
 }

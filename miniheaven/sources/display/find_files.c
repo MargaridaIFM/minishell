@@ -88,7 +88,11 @@ void	find_commands(t_ast *orig, t_ast *temp_copy, int flag)
 		complete_last_redir(temp_copy, orig, save_node);
 	}
 	else if (temp_copy->left && temp_copy->left->right)
+	{
+		if (temp_copy->left->right->token->dq == 1)
+			orig->token->dq = 1;
 		orig->token->cmd = built_cmd(temp_copy->left->right);
+	}
 }
 
 void	find_files(t_ast *orig, t_ast *temp_copy, t_minishell *minishell)

@@ -12,24 +12,26 @@
 
 #include "../includes/minishell.h"
 
-char **add_string_to_array(char **array, char *new_string)
+char	**add_string_to_array(char **array, char *new_string)
 {
-    int i = 0;
+	char	**new_array;
+	int		i;
 
-    while (array && array[i] != NULL)
-        i++;
-    char **new_array = realloc(array, sizeof(char *) * (i + 2));
-    if (!new_array)
-    {
-        perror("Erro ao realocar memória");
-        return NULL;
-    }
-    new_array[i] = strdup(new_string);
-    if (!new_array[i])
-    {
-        perror("Erro ao duplicar string");
-        return NULL;
-    }
-    new_array[i + 1] = NULL;
-    return new_array;
+	i = 0;
+	while (array && array[i] != NULL)
+		i++;
+	new_array = realloc(array, sizeof(char *) * (i + 2));
+	if (!new_array)
+	{
+		ft_putendl_fd("Failed to allocate memory", 2);
+		return (NULL);
+	}
+	new_array[i] = strdup(new_string);
+	if (!new_array[i])
+	{
+		ft_putendl_fd("Failed to duplicate string", 2);
+		return (NULL);
+	}
+	new_array[i + 1] = NULL;
+	return (new_array);
 }

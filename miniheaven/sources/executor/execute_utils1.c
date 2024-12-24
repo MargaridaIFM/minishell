@@ -55,17 +55,19 @@ char	**collect_commands(t_minishell *minishell, t_ast *ast)
 {
 	char	**cmd ;
 	int		count;
+	int		first;
 
+	first = 0;
 	cmd = NULL;
 	count = 0;
-	if (ast->token->dq == 1 && ft_count_words(ast->token->str) > 1)
-	{
-		minishell->_str_ = 1;
-	}
 	while (ast)
 	{
+		if (first == 0 && ast->token->dq == 1
+			&& ft_count_words(ast->token->str) > 1)
+			minishell->_str_ = 1;
 		cmd = process_ast_commands(ast, &count, cmd);
 		ast = ast->right;
+		first = 1;
 	}
 	if (!cmd)
 		return (NULL);
@@ -77,9 +79,8 @@ void	execute_redir(t_minishell *minishell, t_ast *ast, int flag)
 	char	**cmd;
 
 	cmd = collect_commands_redirs(minishell, ast);
-	printf("Infile %d stdin %d\n", minishell->infile, minishell->temp_stdin);
 	if (cmd == NULL)
-	{;
+	{
 		rebuild_fileno(minishell);
 		close_redir(minishell);
 		if (minishell->_pipe_ == 1)

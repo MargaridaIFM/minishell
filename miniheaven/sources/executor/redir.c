@@ -56,6 +56,7 @@ int	open_file(t_minishell *minishell, t_ast *ast)
 		close(minishell->heredoc->fd[0]);
 		free(minishell->heredoc->delimiter);
 		temp_here = minishell->heredoc->next;
+		free(minishell->heredoc);
 		minishell->heredoc = temp_here;
 	}
 	return (0);

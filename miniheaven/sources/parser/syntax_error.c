@@ -57,6 +57,7 @@ bool	check_syntax_redir(t_token *temp)
 {
 	if (!temp->next || temp->next->type != WORD)
 	{
+		// Este printf nao tem de imprimir no erro ... e os de cima
 		printf("Syntax error near unexpected token\n");
 		return (false);
 	}
