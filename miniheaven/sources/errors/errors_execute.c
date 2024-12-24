@@ -6,7 +6,7 @@
 /*   By: mistery576 <mistery576@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 18:30:23 by mistery576        #+#    #+#             */
-/*   Updated: 2024/12/23 23:54:28 by mistery576       ###   ########.fr       */
+/*   Updated: 2024/12/24 16:28:17 by mistery576       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,9 @@ char	*failed_to_open(t_minishell *minishell)
 {
 	g_signal = 1;
 	if (minishell->_pipe_ == 1)
+	{
+		close(minishell->fd[0]);
 		free_exit(minishell, "");
+	}
 	return (NULL);
 }

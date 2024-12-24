@@ -81,14 +81,13 @@ void	do_pipeline(t_minishell *minishell, t_ast *ast)
 {
 	pid_t	*pids;
 	int		i;
-	int		commands;
 
 	i = 0;
 	minishell->prev_fd = STDIN_FILENO;
 	minishell->commands = 0;
 	minishell->_pipe_ = 1;
-	commands = count_pipes(ast);
-	pids = malloc(sizeof(pid_t) * commands);
+	minishell->commands = count_pipes(ast);
+	pids = malloc(sizeof(pid_t) * minishell->commands);
 	while (ast->token->type == PIPE)
 	{
 		create_pipeline_process(minishell, ast, pids, &i);
