@@ -92,6 +92,11 @@ void	ft_cd(char **split_cmd, t_minishell *minishell)
 		change_old_path(minishell, temp_pwd);
 		change_pwd(minishell, new_pwd);
 	}
+	else
+	{
+		g_signal = 1;
+		print_errors("bash: cd: ", split_cmd[1], ": No such file or directory\n");
+	}
 	if (split_cmd[1])
 		free(new_pwd);
 }

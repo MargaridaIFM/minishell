@@ -57,7 +57,6 @@ void	create_pipeline_process(t_minishell *minishell,
 	if (minishell->prev_fd != STDIN_FILENO)
 		close(minishell->prev_fd);
 	minishell->prev_fd = minishell->fd[0];
-	minishell->commands++;
 	(*i)++;
 }
 
@@ -96,5 +95,6 @@ void	do_pipeline(t_minishell *minishell, t_ast *ast)
 	handle_last_command(minishell, ast, pids, i);
 	wait_pipes(minishell, pids, minishell->commands);
 	free(pids);
+	minishell->commands = 0;
 	minishell->_pipe_ = 0;
 }
