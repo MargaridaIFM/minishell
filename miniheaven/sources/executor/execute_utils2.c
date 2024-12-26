@@ -6,12 +6,17 @@
 /*   By: mistery576 <mistery576@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 00:50:55 by mistery576        #+#    #+#             */
-/*   Updated: 2024/12/24 15:47:01 by mistery576       ###   ########.fr       */
+/*   Updated: 2024/12/26 22:23:24 by mistery576       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
+/**
+ * @brief Allocates memory for a char **
+ * @param int total_strings
+ * @return char **
+ */
 char	**allocate_result_array(int total_strings)
 {
 	char	**result;
@@ -22,6 +27,11 @@ char	**allocate_result_array(int total_strings)
 	return (result);
 }
 
+/**
+ * @brief Util for process_ast_commands_redir
+ * @param t_minishell *minishell, t_ast *ast, char **result, int *index
+ * @return int
+ */
 int	process_command(t_minishell *minishell, t_ast *ast,
 		char **result, int *index)
 {
@@ -50,6 +60,11 @@ int	process_command(t_minishell *minishell, t_ast *ast,
 	return (0);
 }
 
+/**
+ * @brief Util for collect_commands
+ * @param t_minishell *minishell, t_ast *ast, int total_strings
+ * @return char **
+ */
 char	**process_ast_commands_redir(t_minishell *minishell,
 			t_ast *ast, int total_strings)
 {
@@ -73,7 +88,11 @@ char	**process_ast_commands_redir(t_minishell *minishell,
 	return (result);
 }
 
-//Função principal para concatenar arrays de strings de ast->cmd
+/**
+ * @brief Collects the commands and files to redirect of the node
+ * @param t_minishell *minishell, t_ast *ast
+ * @return char **
+ */
 char	**collect_commands_redirs(t_minishell *minishell, t_ast *ast)
 {
 	char	**result;
@@ -91,6 +110,11 @@ char	**collect_commands_redirs(t_minishell *minishell, t_ast *ast)
 	return (NULL);
 }
 
+/**
+ * @brief Process the commands of the ast
+ * @param t_ast *ast, int *count, char **cmd
+ * @return char **
+ */
 char	**process_ast_commands(t_ast *ast, int *count, char **cmd)
 {
 	char	**new_cmd;

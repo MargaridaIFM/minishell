@@ -12,6 +12,11 @@
 
 #include "../includes/minishell.h"
 
+/**
+ * @brief Rebuilds STDIN_FILENO and STDOUT_FILENO
+ * @param t_minishell *minishell.
+ * @return (int);
+ */
 int	rebuild_fileno(t_minishell *minishell)
 {
 	if (minishell->infile != -1)
@@ -29,6 +34,11 @@ int	rebuild_fileno(t_minishell *minishell)
 	return (0);
 }
 
+/**
+ * @brief Redirects the read, if exists infile or outfile
+ * @param t_minishell *minishell.
+ * @return (void);
+ */
 void	close_redir(t_minishell *minishell)
 {
 	if (minishell->infile != -1)
@@ -43,6 +53,11 @@ void	close_redir(t_minishell *minishell)
 	}
 }
 
+/**
+ * @brief Executes a command and exits the fork
+ * @param t_minishell *minishell, char **cmd
+ * @return (void);
+ */
 void	ft_execute_pipe(t_minishell *minishell, char **cmd)
 {
 	char	*cmd_path;
@@ -67,6 +82,11 @@ void	ft_execute_pipe(t_minishell *minishell, char **cmd)
 		error_execute(minishell, cmd, cmd_path);
 }
 
+/**
+ * @brief Checks if the command is a directory
+ * @param char *str
+ * @return (int);
+ */
 int	check_dir(char *str)
 {
 	int	i;
@@ -81,6 +101,11 @@ int	check_dir(char *str)
 	return (0);
 }
 
+/**
+ * @brief Executes a command
+ * @param t_minishell *minishell, char **split_cmd
+ * @return (void);
+ */
 void	execute_cmd(t_minishell *minishell, char **split_cmd)
 {
 	char	*cmd_path;

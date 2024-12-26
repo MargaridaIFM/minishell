@@ -12,6 +12,11 @@
 
 #include "../includes/minishell.h"
 
+/**
+ * @brief Utils for open_file function
+ * @param t_minishell *minishell, t_ast *ast, char *file
+ * @return (int)
+ */
 int	open_file_util(t_minishell *minishell, t_ast *ast, char *file)
 {
 	if (ast->token->type == REDIR_IN)
@@ -39,6 +44,12 @@ int	open_file_util(t_minishell *minishell, t_ast *ast, char *file)
 	return (0);
 }
 
+/**
+ * @brief Set the file descriptor for the redirection 
+ * in infile or outfile var in minishell struct
+ * @param t_minishell *minishell, t_ast *ast, char *file
+ * @return (int)
+ */
 int	open_file(t_minishell *minishell, t_ast *ast)
 {
 	char		*file;
@@ -62,6 +73,11 @@ int	open_file(t_minishell *minishell, t_ast *ast)
 	return (0);
 }
 
+/**
+ * @brief Redirect the input and output file descriptors
+ * @param t_minishell *minishell
+ * @return (int)
+ */
 int	redirect_read(t_minishell *minishell)
 {
 	if (minishell->infile != -1)
@@ -82,6 +98,11 @@ int	redirect_read(t_minishell *minishell)
 	return (0);
 }
 
+/**
+ * @brief Redir the 
+ * @param t_minishell *minishell, t_ast *ast, int falg
+ * @return (void)
+ */
 void	redir_in(t_minishell *minishell, t_ast *ast, int flag)
 {
 	t_ast	*node_cmd;
@@ -105,6 +126,11 @@ void	redir_in(t_minishell *minishell, t_ast *ast, int flag)
 	}
 }
 
+/**
+ * @brief Opens the output file
+ * @param t_minishell *minishell, t_ast *ast, int flag
+ * @return (void)
+ */
 void	redir_out(t_minishell *minishell, t_ast *ast, int flag)
 {
 	t_ast	*node_cmd;

@@ -12,8 +12,11 @@
 
 #include "../../includes/minishell.h"
 
-//wextitstatus - pesquisar e falar com a melhor parceira do mundo 
-
+/**
+ * @brief Execute the ast, if it is redirection, pipe, or word.
+ * @param t_minishell *minishell, t_ast *ast, int flag
+ * @return (void);
+ */
 void	execute_ast(t_minishell *minishell, t_ast *ast, int flag)
 {
 	char	**cmd;
@@ -38,23 +41,11 @@ void	execute_ast(t_minishell *minishell, t_ast *ast, int flag)
 	close_redir(minishell);
 }
 
-void	error_execute(t_minishell *minishell,
-		char **split_cmd, char *cmd_path)
-{
-	if (g_signal == 1)
-	{
-		free_array(split_cmd);
-		free_exit(minishell, "");
-	}
-	g_signal = 127;
-	ft_putstr_fd(split_cmd[0], 2);
-	ft_putstr_fd(": command not found\n", 2);
-	if (cmd_path != NULL)
-		free(cmd_path);
-	free_array(split_cmd);
-	free_exit(minishell, "");
-}
-
+/**
+ * @brief Checks if it is built_in
+ * @param t_minishell *minishell, char **dp
+ * @return (int);
+ */
 int	find_builtin(t_minishell *minishell, char **dp)
 {
 	if (ft_strcmp(dp[0], "cd") == 0)
@@ -78,10 +69,8 @@ int	find_builtin(t_minishell *minishell, char **dp)
 }
 
 /**
- * @brief Vai executar o comando recebido 
- * pelo (split_cmd). Ele encontra primeiro o path,
- * na variavel minishell->envp, (ex /bin/ls), significa que executa o comando ls.
- * @param t_minishell *minishell, char **split_cmd
+ * @brief Executes the cmd
+ * @param t_minishell *minishell, char **cmd
  * @return (void);
  */
 void	ft_execute(t_minishell *minishell, char **cmd)

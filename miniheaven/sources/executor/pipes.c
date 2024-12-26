@@ -12,6 +12,11 @@
 
 #include "../includes/minishell.h"
 
+/**
+ * @brief Wait for all the pipes to finish
+ * @param t_minishell *minishell, pid_t *pids, int num_commands
+ * @return (void)
+ */
 void	wait_pipes(t_minishell *minishell, pid_t *pids, int num_commands)
 {
 	int	i;
@@ -24,6 +29,11 @@ void	wait_pipes(t_minishell *minishell, pid_t *pids, int num_commands)
 	}
 }
 
+/**
+ * @brief Count the number of pipes in the ast
+ * @param t_ast *ast
+ * @return (int)
+ */
 int	count_pipes(t_ast *ast)
 {
 	t_ast	*temp;
@@ -39,6 +49,11 @@ int	count_pipes(t_ast *ast)
 	return (commands);
 }
 
+/**
+ * @brief Create a pipeline process
+ * @param t_minishell *minishell, t_ast *ast, pid_t *pids, int *i
+ * @return (void)
+ */
 void	create_pipeline_process(t_minishell *minishell,
 	t_ast *ast, pid_t *pids, int *i)
 {
@@ -60,6 +75,11 @@ void	create_pipeline_process(t_minishell *minishell,
 	(*i)++;
 }
 
+/**
+ * @brief Handle the last command in the pipeline
+ * @param t_minishell *minishell, t_ast *ast, pid_t *pids, int i
+ * @return (void)
+ */
 void	handle_last_command(t_minishell *minishell,
 	t_ast *ast, pid_t *pids, int i)
 {
@@ -76,6 +96,11 @@ void	handle_last_command(t_minishell *minishell,
 		close(minishell->prev_fd);
 }
 
+/**
+ * @brief Execute a pipeline
+ * @param t_minishell *minishell, t_ast *ast
+ * @return (void)
+ */
 void	do_pipeline(t_minishell *minishell, t_ast *ast)
 {
 	pid_t	*pids;

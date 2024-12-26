@@ -13,7 +13,8 @@
 #include "../../includes/minishell.h"
 
 /**
- * @brief "I will split my PWD by '/', remove the last directory, and then reconstruct the PATH and return it"
+ * @brief "I will split my PWD by '/', remove the last 
+ * directory, and then reconstruct the PATH and return it"
  * @param t_minishell *minishell.
  * @return (char *);
  */

@@ -6,7 +6,7 @@
 /*   By: mistery576 <mistery576@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 18:30:23 by mistery576        #+#    #+#             */
-/*   Updated: 2024/12/26 20:13:06 by mistery576       ###   ########.fr       */
+/*   Updated: 2024/12/26 23:14:39 by mistery576       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,6 @@ int	check_execute(t_minishell *minishell, char **cmd)
 	}
 	return (0);
 }
-
 
 /**
  * @brief Prints errors

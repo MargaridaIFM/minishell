@@ -76,3 +76,25 @@ void	free_pointer(void *ptr)
 		ptr = NULL;
 	}
 }
+
+/**
+ * @brief If some file fails to open.
+ * @param t_minishell *minishell, char **split_cmd, char *cmd_path
+ * @return void
+ */
+void	error_execute(t_minishell *minishell,
+		char **split_cmd, char *cmd_path)
+{
+	if (g_signal == 1)
+	{
+		free_array(split_cmd);
+		free_exit(minishell, "");
+	}
+	g_signal = 127;
+	ft_putstr_fd(split_cmd[0], 2);
+	ft_putstr_fd(": command not found\n", 2);
+	if (cmd_path != NULL)
+		free(cmd_path);
+	free_array(split_cmd);
+	free_exit(minishell, "");
+}

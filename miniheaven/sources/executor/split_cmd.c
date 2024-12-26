@@ -6,13 +6,19 @@
 /*   By: mistery576 <mistery576@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 23:23:41 by mistery576        #+#    #+#             */
-/*   Updated: 2024/12/21 00:12:09 by mistery576       ###   ########.fr       */
+/*   Updated: 2024/12/26 23:13:52 by mistery576       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-char	**allocate_result_space(char **result, int *result_size, int new_size)
+/**
+ * @brief Utils for process_tokens
+ * @param char **result, int *result_size, int new_size
+ * @return char **
+ */
+static char	**allocate_result_space(char **result,
+	int *result_size, int new_size)
 {
 	result = ft_realloc(result, (*result_size) * sizeof(char *),
 			new_size * sizeof(char *));
@@ -22,6 +28,11 @@ char	**allocate_result_space(char **result, int *result_size, int new_size)
 	return (result);
 }
 
+/**
+ * @brief Utils for ft_split_cmd
+ * @param char **tokens, char ***result, int *result_count, int *result_size
+ * @return (void)
+ */
 void	process_tokens(char **tokens, char ***result,
 			int *result_count, int *result_size) {
 	int	j;
@@ -46,6 +57,11 @@ void	process_tokens(char **tokens, char ***result,
 	free(tokens);
 }
 
+/**
+ * @brief Utils for ft_split_cmd
+ * @param char ***result, int *result_count, int *result_size
+ * @return (void)
+ */
 void	finalize_result(char ***result, int *result_count, int *result_size)
 {
 	if (*result_count >= *result_size)
@@ -54,8 +70,11 @@ void	finalize_result(char ***result, int *result_count, int *result_size)
 	(*result)[*result_count] = NULL;
 }
 
-/*Vai dar split do comando, caso o comando esteja
-no mesmo no, exeplo $a  a=ls -la*/
+/**
+ * @brief Split the command into tokens, $a 
+ * @param char **cmd, int cmd_count
+ * @return char **
+ */
 char	**ft_split_cmd(char **cmd, int cmd_count)
 {
 	char	**result;

@@ -12,6 +12,11 @@
 
 #include "../includes/minishell.h"
 
+/**
+ * @brief Count the total number of commands, in the node
+ * @param t_minishell *minishell, t_ast *ast
+ * @return int
+ */
 int	count_total_strings(t_minishell *minishell, t_ast *ast)
 {
 	t_ast	*temp;
@@ -41,6 +46,11 @@ int	count_total_strings(t_minishell *minishell, t_ast *ast)
 	return (total);
 }
 
+/**
+ * @brief Counts an array and returns the number of elements
+ * @param char **arr
+ * @return int
+ */
 int	count_array(char **arr)
 {
 	int	i;
@@ -51,6 +61,11 @@ int	count_array(char **arr)
 	return (i);
 }
 
+/**
+ * @brief Collects the commads from the AST
+ * @param t_ast *ast, int *count, char **cmd
+ * @return char**
+ */
 char	**collect_commands(t_minishell *minishell, t_ast *ast)
 {
 	char	**cmd ;
@@ -74,6 +89,11 @@ char	**collect_commands(t_minishell *minishell, t_ast *ast)
 	return (cmd);
 }
 
+/**
+ * @brief Collects the commands and execute them
+ * @param t_minishell *minishell, t_ast *ast, int flag
+ * @return void
+ */
 void	execute_redir(t_minishell *minishell, t_ast *ast, int flag)
 {
 	char	**cmd;
