@@ -42,7 +42,7 @@ static char	*go_back(t_minishell *minishell)
 }
 
 /**
- * @brief Vou entrar diretamente no novo path, seja um path relativo ou absoluto
+ * @brief Will enter in the new_path folder
  * @param t_minishell *minishell, char *new_path.
  * @return (char *full_path);
  */
@@ -68,7 +68,8 @@ static char	*go_to_path(t_minishell *minishell, char *new_path)
 }
 
 /**
- * @brief Vou entrar no novo path, e atualizar o PWD e o OLDPWD
+ * @brief I will enter in the new_path folder, and 
+ * change the value of the OLDPWD and PWD
  * @param char **split_cmd, t_minishell *minishell.
  * @return (void);
  */
@@ -99,7 +100,3 @@ void	ft_cd(char **split_cmd, t_minishell *minishell)
 	if (split_cmd[1])
 		free(new_pwd);
 }
-
-// Primeiro trocar o OLDPWD, caso o Path seja possivel
-// Segundo, mudar o valor do PWD
-// Terceiro abrir o diretorio, com o valor de PWD

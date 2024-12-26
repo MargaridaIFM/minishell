@@ -12,6 +12,11 @@
 
 #include "./../includes/minishell.h"
 
+/**
+ * @brief Frees the array
+ * @param char **array
+ * @return (void);
+ */
 void	free_array(char **array)
 {
 	int	idx;
@@ -28,6 +33,11 @@ void	free_array(char **array)
 	}
 }
 
+/**
+ * @brief Frees the tokens
+ * @param t_minishell *minishell
+ * @return (void);
+ */
 void	free_tokens(t_minishell *minishell)
 {
 	t_token	*current;
@@ -52,6 +62,11 @@ void	free_tokens(t_minishell *minishell)
 	minishell->tokens = NULL;
 }
 
+/**
+ * @brief Frees the expand
+ * @param t_expand *expander
+ * @return (void);
+ */
 void	free_expand(t_expand *expander)
 {
 	if (expander != NULL)
@@ -69,6 +84,11 @@ void	free_expand(t_expand *expander)
 	}
 }
 
+/**
+ * @brief Frees the ast
+ * @param t_ast *ast
+ * @return (void);
+ */
 void	free_ast(t_ast *ast)
 {
 	if (ast == NULL)
@@ -88,6 +108,11 @@ void	free_ast(t_ast *ast)
 	free(ast);
 }
 
+/**
+ * @brief Frees the heredoc
+ * @param t_heredoc *heredoc
+ * @return (void);
+ */
 void	free_heredoc(t_heredoc *heredoc)
 {
 	t_heredoc	*temp;

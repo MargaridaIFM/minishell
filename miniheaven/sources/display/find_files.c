@@ -12,6 +12,11 @@
 
 #include "../includes/minishell.h"
 
+/**
+ * @brief Copies the command array
+ * @param char **cmd
+ * @return (char **);
+ */
 char	**copy_cmd(char **cmd)
 {
 	char	**copy;
@@ -33,6 +38,11 @@ char	**copy_cmd(char **cmd)
 	return (copy);
 }
 
+/**
+ * @brief Copies the ast
+ * @param t_ast *original
+ * @return (t_ast *);
+ */
 t_ast	*copy_ast(t_ast *original)
 {
 	t_ast	*copy;
@@ -62,6 +72,11 @@ t_ast	*copy_ast(t_ast *original)
 	return (copy);
 }
 
+/**
+ * @brief Find commands in no pipe case case
+ * @param t_ast *temp_copy, t_ast *orig, t_ast *save_node
+ * @return (void);
+ */
 void	no_pipe(t_ast *temp_copy, t_ast *orig, t_ast *save_node)
 {
 	if (temp_copy->left)
@@ -75,6 +90,11 @@ void	no_pipe(t_ast *temp_copy, t_ast *orig, t_ast *save_node)
 		no_pipe_util(orig, temp_copy);
 }
 
+/**
+ * @brief Find commands in the ast
+ * @param t_ast *orig, t_ast *temp_copy, int flag
+ * @return (void);
+ */
 void	find_commands(t_ast *orig, t_ast *temp_copy, int flag)
 {
 	t_ast	*save_node;
@@ -95,6 +115,11 @@ void	find_commands(t_ast *orig, t_ast *temp_copy, int flag)
 	}
 }
 
+/**
+ * @brief Find files and commands in the ast
+ * @param t_ast *orig, t_ast *temp_copy, t_minishell *minishell
+ * @return (void);
+ */
 void	find_files(t_ast *orig, t_ast *temp_copy, t_minishell *minishell)
 {
 	while (temp_copy && orig)

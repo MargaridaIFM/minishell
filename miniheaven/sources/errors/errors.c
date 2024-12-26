@@ -12,6 +12,11 @@
 
 #include "../includes/minishell.h"
 
+/**
+ * @brief  Utils for free all and free_exit
+ * @param t_minishell *minishell
+ * @return (void);
+ */
 static void	free_utils(t_minishell *minishell)
 {
 	if (minishell->ast)
@@ -40,6 +45,11 @@ static void	free_utils(t_minishell *minishell)
 	minishell->_str_ = 0;
 }
 
+/**
+ * @brief Frees everything, withouth exiting the program
+ * @param t_minishell *minishell, char *str
+ * @return (void);
+ */
 void	free_all(t_minishell *minishell, char *str)
 {
 	free_utils(minishell);
@@ -48,6 +58,11 @@ void	free_all(t_minishell *minishell, char *str)
 		ft_putstr_fd(str, 2);
 }
 
+/**
+ * @brief Frees evertyhing and exits the program
+ * @param t_minishell *minishell, char *str
+ * @return (void);
+ */
 void	free_exit(t_minishell *minishell, char *str)
 {
 	free_array(minishell->local);
@@ -66,6 +81,11 @@ void	free_exit(t_minishell *minishell, char *str)
 	exit(g_signal);
 }
 
+/**
+ * @brief Closes all fd
+ * @param void
+ * @return (void);
+ */
 void	fd_clean(void)
 {
 	int	i;
@@ -78,6 +98,11 @@ void	fd_clean(void)
 	}
 }
 
+/**
+ * @brief Frees the cmd and the path
+ * @param t_ast *left_side
+ * @return (void);
+ */
 void	free_cmd_path(t_ast *left_side)
 {
 	while (left_side->token->type <= 3)

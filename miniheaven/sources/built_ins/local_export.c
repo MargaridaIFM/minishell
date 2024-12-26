@@ -12,6 +12,11 @@
 
 #include "../includes/minishell.h"
 
+/**
+ * @brief Verifys if the var has a '='
+ * @param char *var
+ * @return (int);
+ */
 int	find_equal(char *var)
 {
 	int	i;
@@ -26,7 +31,12 @@ int	find_equal(char *var)
 	return (-1);
 }
 
-char	**update_local(t_minishell *minishell, char *var, int len)
+/**
+ * @brief Updates the local array
+ * @param t_minishell *minishell, char *var, int len
+ * @return (char **);
+ */
+static char	**update_local(t_minishell *minishell, char *var, int len)
 {
 	char	**dup_arr;
 	int		i;
@@ -51,6 +61,11 @@ char	**update_local(t_minishell *minishell, char *var, int len)
 	return (dup_arr);
 }
 
+/**
+ * @brief Clears the local array, if the var is already in it
+ * @param t_minishell *minishell, char *var, int x
+ * @return (void);
+ */
 void	clear_local(t_minishell *minishell, char *var, int x)
 {
 	int		i;
@@ -75,6 +90,11 @@ void	clear_local(t_minishell *minishell, char *var, int x)
 	}
 }
 
+/**
+ * @brief Adds a new var to the local array
+ * @param t_minishell *minishell, char *var
+ * @return (int);
+ */
 int	add_local(t_minishell *minishell, char *var)
 {
 	int	i;
@@ -86,6 +106,11 @@ int	add_local(t_minishell *minishell, char *var)
 	return (0);
 }
 
+/**
+ * @brief Checks if the var is already in the local array
+ * @param t_minishell *minishell, char *var
+ * @return (int);
+ */
 int	check_local_env(t_minishell *minishell, char *var)
 {
 	int	i;

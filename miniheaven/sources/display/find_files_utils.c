@@ -12,6 +12,11 @@
 
 #include "../includes/minishell.h"
 
+/**
+ * @brief Copies the array of commands
+ * @param t_ast *ast, int count
+ * @return (char **);
+ */
 char	**copy_array(t_ast *ast, int count)
 {
 	char	**cmd_array;
@@ -38,6 +43,11 @@ char	**copy_array(t_ast *ast, int count)
 	return (cmd_array);
 }
 
+/**
+ * @brief Builds the command array
+ * @param t_ast *ast
+ * @return (char **);
+ */
 char	**built_cmd(t_ast *ast)
 {
 	t_ast	*temp;
@@ -55,6 +65,11 @@ char	**built_cmd(t_ast *ast)
 	return (cmd_array);
 }
 
+/**
+ * @brief Set the redirections, to the symbols
+ * @param t_minishell *minishell, t_ast *ast
+ * @return (void);
+ */
 void	set_redirs(t_minishell *minishell, t_ast *ast)
 {
 	t_ast	*copy;
@@ -70,6 +85,11 @@ void	set_redirs(t_minishell *minishell, t_ast *ast)
 	free_ast(copy);
 }
 
+/**
+ * @brief Utils for the no pipe case in set_redirs
+ * @param t_ast *orig, t_ast *temp_copy
+ * @return (void);
+ */
 void	no_pipe_util(t_ast *orig, t_ast *temp_copy)
 {
 	if (orig->token->cmd)

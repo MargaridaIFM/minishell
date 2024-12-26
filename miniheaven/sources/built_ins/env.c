@@ -12,6 +12,11 @@
 
 #include "../../includes/minishell.h"
 
+/**
+ * @brief Prints all envps
+ * @param t_minishell *minishell
+ * @return (void);
+*/
 static void	print_env(t_minishell *minishell)
 {
 	int	i;
@@ -25,8 +30,8 @@ static void	print_env(t_minishell *minishell)
 }
 
 /**
- * @brief Imprime todas os envps
- * @param char *cmd, char **envp
+ * @brief Executes the env command
+ * @param t_minishell *minishell, char **cmd
  * @return (void);
  */
 void	ft_env(t_minishell *minishell, char **cmd)

@@ -13,9 +13,9 @@
 #include "../../includes/minishell.h"
 
 /**
- * @brief Compara a (char *var) com (char *env) antes do '='
+ * @brief Compares var and env before the '='
  * @param char *var, char *env
- * @return (void);
+ * @return (int);
  */
 static int	compare_vars(char *var, char *env)
 {
@@ -34,7 +34,7 @@ static int	compare_vars(char *var, char *env)
 }
 
 /**
- * @brief Limpa a envp no endereco start
+ * @brief Clears the local var from the start position
  * @param t_minishell *minishell, int start
  * @return (void);
  */
@@ -50,6 +50,11 @@ static void	clear_var(t_minishell *minishell, int start)
 	minishell->envp[start] = NULL;
 }
 
+/**
+ * @brief Checks if the local exists in the local array
+ * @param char *env, char *var
+ * @return (int);
+ */
 int	check_local(char *env, char *var)
 {
 	int	i;
@@ -63,8 +68,8 @@ int	check_local(char *env, char *var)
 }
 
 /**
- * @brief Limpa as vairaveis recebidas no split_cmd
- * @param t_minishell *minishell
+ * @brief Unsets the vars passed as arguments
+ * @param char **cmd, t_minishell *minishell
  * @return (void);
  */
 void	ft_unset(char **cmd, t_minishell *minishell)

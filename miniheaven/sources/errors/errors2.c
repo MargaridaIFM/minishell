@@ -52,12 +52,22 @@
 	exit(g_signal);
 } */
 
+/**
+ * @brief Closse the fd
+ * @param int fd
+ * @return void
+ */
 void	close_pipe(int fd)
 {
 	if (fd >= 0)
 		close(fd);
 }
 
+/**
+ * @brief Free the pointer
+ * @param void *ptr
+ * @return void
+ */
 void	free_pointer(void *ptr)
 {
 	if (ptr)

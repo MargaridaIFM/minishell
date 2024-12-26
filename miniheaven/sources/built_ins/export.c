@@ -13,8 +13,8 @@
 #include "../../includes/minishell.h"
 
 /**
- * @brief Da sort na variavel envp, e retorna uma copia
- * @param char **envp
+ * @brief Sorts envp, and returns it
+ * @param t_minishell *minishell, char **envp
  * @return (char **);
  */
 static char	**sort_envp(t_minishell *minishell, char **envp)
@@ -47,8 +47,7 @@ static char	**sort_envp(t_minishell *minishell, char **envp)
 }
 
 /**
- * @brief Imprime a variavel envp, mas 
- * por ordem e com aspas entre o valor de cada variavel
+ * @brief Prints envp, by order
  * @param t_minishell *minishell, char **envp
  * @return (void);
  */
@@ -78,7 +77,7 @@ static void	print_export(t_minishell *minishell, char **envp)
 }
 
 /**
- * @brief Adiciona a (char *var), a variavel envp
+ * @brief Adds var to envp
  * @param t_minishell *minishell, char *var
  * @return (void);
  */
@@ -107,8 +106,7 @@ void	add_var(t_minishell *minishell, char *var)
 }
 
 /**
- * @brief Vai vericiar se a (char *var), 
- * ja existe, caso exista, vai dar update do valor
+ * @brief Checks if the value already exists in envp
  * @param char *var, t_minishell *minishell
  * @return (int);
  */
@@ -140,12 +138,8 @@ int	check_var(char *var, t_minishell *minishell)
 }
 
 /**
- * @brief Da export de uma variavel, 
- * com ou sem valor, 
- * caso nao passemos nenhum valor,
- * vai imprimir a variavel 
- * envp, por ordem alfabetica
- * @param char **split_cmd, t_minishell *minishell
+ * @brief Exports the var to envp or "local"
+ * @param t_minishell *minishell, char **cmd
  * @return (void);
  */
 void	ft_export(t_minishell *minishell, char **cmd)

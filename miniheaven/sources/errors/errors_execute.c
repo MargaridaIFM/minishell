@@ -6,12 +6,17 @@
 /*   By: mistery576 <mistery576@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 18:30:23 by mistery576        #+#    #+#             */
-/*   Updated: 2024/12/24 16:28:17 by mistery576       ###   ########.fr       */
+/*   Updated: 2024/12/26 20:13:06 by mistery576       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
+/**
+ * @brief Checks if the command is executable
+ * @param t_minishell *minishell, char **cmd
+ * @return (int);
+ */
 int	check_execute(t_minishell *minishell, char **cmd)
 {
 	if (my_getenv(minishell, "PATH") == NULL && access(cmd[0], X_OK) != 0)
@@ -33,6 +38,12 @@ int	check_execute(t_minishell *minishell, char **cmd)
 	return (0);
 }
 
+
+/**
+ * @brief Prints errors
+ * @param char *s1, char *s2, char *s3
+ * @return (void);
+ */
 void	print_errors(char *s1, char *s2, char *s3)
 {
 	if (s1)
@@ -43,6 +54,11 @@ void	print_errors(char *s1, char *s2, char *s3)
 		ft_putstr_fd(s3, 2);
 }
 
+/**
+ * @brief Exits the program and updates the exit status
+ * @param t_minishell *minishell
+ * @return (char *);
+ */
 char	*failed_to_open(t_minishell *minishell)
 {
 	g_signal = 1;
