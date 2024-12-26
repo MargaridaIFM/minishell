@@ -13,9 +13,7 @@
 #include "../../includes/minishell.h"
 
 /**
- * @brief Vou dividir o meu PWD pelas '/', vou tirar o ultimo 
- * diretorio, e em seguida
- * vou montar novamente o PATH e returna-lo
+ * @brief "I will split my PWD by '/', remove the last directory, and then reconstruct the PATH and return it"
  * @param t_minishell *minishell.
  * @return (char *);
  */
@@ -95,7 +93,8 @@ void	ft_cd(char **split_cmd, t_minishell *minishell)
 	else
 	{
 		g_signal = 1;
-		print_errors("bash: cd: ", split_cmd[1], ": No such file or directory\n");
+		print_errors("bash: cd: ", split_cmd[1],
+			": No such file or directory\n");
 	}
 	if (split_cmd[1])
 		free(new_pwd);
