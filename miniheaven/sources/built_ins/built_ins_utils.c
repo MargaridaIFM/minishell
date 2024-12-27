@@ -81,7 +81,7 @@ static char	*find_path_util(char *full_path, char **split_cmd, char **split_dir)
 	int	i;
 
 	i = 0;
-	while (split_dir[i] != NULL)
+	while (split_cmd && split_dir[i] != NULL)
 	{
 		full_path = ft_strjoin(split_dir[i], "/");
 		full_path = ft_strjoin_gnl(full_path, split_cmd[0]);
@@ -117,7 +117,7 @@ char	*find_path(t_minishell *minishell, char *cmd)
 	split_env = ft_split(path_envp, ':');
 	split_cmd = ft_split(cmd, ' ');
 	full_path = NULL;
-	if (access(cmd, X_OK) == 0)
+	if (cmd && access(cmd, X_OK) == 0)
 		return (cmd);
 	else
 		full_path = find_path_util(full_path, split_cmd, split_env);

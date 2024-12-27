@@ -47,7 +47,7 @@ SRC				=	$(addprefix $(SRC_DIR), minishell.c minishell_utils.c) \
 					$(addprefix $(SRC_DIR)$(SIGNALS_DIR), signal.c signal2.c) \
 					$(addprefix $(SRC_DIR)$(ERROR_DIR), errors.c errors1.c errors2.c debug_functions.c errors_execute.c) \
 					$(addprefix $(SRC_DIR)$(DISPLAY_DIR), display.c find_files.c find_files_utils.c) \
-					$(addprefix $(SRC_DIR)$(BUILT_INS_DIR), pwd.c) \
+					$(addprefix $(SRC_DIR)$(BUILT_INS_DIR), pwd.c exit.c) \
 					$(addprefix $(SRC_DIR)$(BUILT_INS_DIR), env.c) \
 					$(addprefix $(SRC_DIR)$(BUILT_INS_DIR), export.c local_export.c) \
 					$(addprefix $(SRC_DIR)$(BUILT_INS_DIR), built_ins_utils.c) \

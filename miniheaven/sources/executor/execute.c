@@ -61,10 +61,7 @@ int	find_builtin(t_minishell *minishell, char **dp)
 	else if (ft_strcmp(dp[0], "pwd") == 0)
 		return (ft_pwd(), 1);
 	else if (ft_strcmp(dp[0], "exit") == 0)
-	{
-		free_array(dp);
-		free_exit(minishell, "");
-	}
+		return (ft_exit(minishell, dp), 1);
 	return (0);
 }
 
