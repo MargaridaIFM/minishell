@@ -20,13 +20,17 @@
 static int	find_char(char *str, char c)
 {
 	int	i;
+	int	flag;
 
 	i = 0;
 	if (!str || !str[i])
 		return (0);
 	while (str[i] && str[i] == c)
+	{
+		flag = 1;
 		i++;
-	if (!str[i])
+	}
+	if (!str[i] && flag)
 		return (1);
 	return (0);
 }

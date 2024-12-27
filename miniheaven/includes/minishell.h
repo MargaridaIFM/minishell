@@ -290,4 +290,6 @@ void	free_cmd_path(t_ast *left_side);
 void	check_is_str(t_minishell *minishell);
 void	find_files(t_ast *orig, t_ast *temp_copy, t_minishell *minishell);
 
+char **join_arrays(char **array_first, char *array);
+
 #endif

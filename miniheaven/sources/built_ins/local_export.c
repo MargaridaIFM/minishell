@@ -114,18 +114,18 @@ int	add_local(t_minishell *minishell, char *var)
 int	check_local_env(t_minishell *minishell, char *var)
 {
 	int	i;
-	int	x;
+	//int	x;
 
 	i = 0;
-	while (minishell->envp[i])
-	{
-		x = 0;
-		while (minishell->envp[i][x] && minishell->envp[i][x] != '=')
-			x++;
-		if (ft_strncmp(minishell->envp[i], var, x) == 0)
-			return (1);
-		i++;
-	}
+	// while (minishell->envp[i])
+	// {
+	// 	x = 0;
+	// 	while (minishell->envp[i][x] && minishell->envp[i][x] != '=')
+	// 		x++;
+	// 	if (ft_strncmp(minishell->envp[i], var, x) == 0)
+	// 		return (1);
+	// 	i++;
+	// }
 	i = 0;
 	while (minishell->local[i])
 	{
