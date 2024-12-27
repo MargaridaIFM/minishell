@@ -63,7 +63,7 @@ static void	create_pipeline_process(t_minishell *minishell,
 	{
 		dup2(minishell->prev_fd, STDIN_FILENO);
 		dup2(minishell->fd[1], STDOUT_FILENO);
-		close(minishell->fd[0]);
+		//close(minishell->fd[0]);
 		close(minishell->fd[1]);
 		free(pids);
 		execute_ast(minishell, ast->left, 1);

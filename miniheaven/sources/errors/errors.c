@@ -75,6 +75,8 @@ void	free_exit(t_minishell *minishell, char *str)
 	close_pipe(minishell->fd[1]);
 	close_pipe(minishell->fd[0]);
 	free_pointer(minishell->cmd);
+	if (minishell->prev_fd != STDIN_FILENO)
+		close(minishell->prev_fd);
 	close_pipe(minishell->infile);
 	free_utils(minishell);
 	fd_clean();
