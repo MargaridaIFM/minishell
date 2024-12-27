@@ -43,17 +43,16 @@ static int	create_env(t_minishell *minishell, char *envp[], int envp_counter)
 	}
 	if (envp_counter < 3)
 	{
-
 		i = 3;
 	}
 	return (i);
 }
 
-static void mandatory_env(t_minishell *minishell)
+static void	mandatory_env(t_minishell *minishell)
 {
-	char *pwd;
-	char *shlvl;
-	char *oldpwd;
+	char	*pwd;
+	char	*shlvl;
+	char	*oldpwd;
 
 	if (my_getenv(minishell, "PWD") == NULL)
 	{
