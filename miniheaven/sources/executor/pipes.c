@@ -17,7 +17,7 @@
  * @param t_minishell *minishell, pid_t *pids, int num_commands
  * @return (void)
  */
-void	wait_pipes(t_minishell *minishell, pid_t *pids, int num_commands)
+static void	wait_pipes(t_minishell *minishell, pid_t *pids, int num_commands)
 {
 	int	i;
 
@@ -34,7 +34,7 @@ void	wait_pipes(t_minishell *minishell, pid_t *pids, int num_commands)
  * @param t_ast *ast
  * @return (int)
  */
-int	count_pipes(t_ast *ast)
+static int	count_pipes(t_ast *ast)
 {
 	t_ast	*temp;
 	int		commands;
@@ -54,7 +54,7 @@ int	count_pipes(t_ast *ast)
  * @param t_minishell *minishell, t_ast *ast, pid_t *pids, int *i
  * @return (void)
  */
-void	create_pipeline_process(t_minishell *minishell,
+static void	create_pipeline_process(t_minishell *minishell,
 	t_ast *ast, pid_t *pids, int *i)
 {
 	pipe(minishell->fd);
@@ -80,7 +80,7 @@ void	create_pipeline_process(t_minishell *minishell,
  * @param t_minishell *minishell, t_ast *ast, pid_t *pids, int i
  * @return (void)
  */
-void	handle_last_command(t_minishell *minishell,
+static void	handle_last_command(t_minishell *minishell,
 	t_ast *ast, pid_t *pids, int i)
 {
 	pids[i] = fork();

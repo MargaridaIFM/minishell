@@ -17,7 +17,7 @@
  * @param char *path
  * @return (char *);
  */
-char	*remove_equal(char	*path)
+static char	*remove_equal(char	*path)
 {
 	int	i;
 

@@ -6,7 +6,7 @@
 /*   By: mistery576 <mistery576@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 23:23:41 by mistery576        #+#    #+#             */
-/*   Updated: 2024/12/26 23:13:52 by mistery576       ###   ########.fr       */
+/*   Updated: 2024/12/27 01:36:07 by mistery576       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ static char	**allocate_result_space(char **result,
  * @param char **tokens, char ***result, int *result_count, int *result_size
  * @return (void)
  */
-void	process_tokens(char **tokens, char ***result,
+static void	process_tokens(char **tokens, char ***result,
 			int *result_count, int *result_size) {
 	int	j;
 	int	new_size;
@@ -62,7 +62,7 @@ void	process_tokens(char **tokens, char ***result,
  * @param char ***result, int *result_count, int *result_size
  * @return (void)
  */
-void	finalize_result(char ***result, int *result_count, int *result_size)
+static void	finalize_result(char ***result, int *result_count, int *result_size)
 {
 	if (*result_count >= *result_size)
 		*result = allocate_result_space(*result, result_size,

@@ -17,7 +17,7 @@
  * @param char **cmd
  * @return (char **);
  */
-char	**copy_cmd(char **cmd)
+static char	**copy_cmd(char **cmd)
 {
 	char	**copy;
 	int		i;
@@ -95,7 +95,7 @@ void	no_pipe(t_ast *temp_copy, t_ast *orig, t_ast *save_node)
  * @param t_ast *orig, t_ast *temp_copy, int flag
  * @return (void);
  */
-void	find_commands(t_ast *orig, t_ast *temp_copy, int flag)
+static void	find_commands(t_ast *orig, t_ast *temp_copy, int flag)
 {
 	t_ast	*save_node;
 

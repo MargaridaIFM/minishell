@@ -55,7 +55,7 @@ static void	clear_var(t_minishell *minishell, int start)
  * @param char *env, char *var
  * @return (int);
  */
-int	check_local(char *env, char *var)
+static int	check_local(char *env, char *var)
 {
 	int	i;
 

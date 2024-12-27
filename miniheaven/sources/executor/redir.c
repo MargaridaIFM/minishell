@@ -17,7 +17,7 @@
  * @param t_minishell *minishell, t_ast *ast, char *file
  * @return (int)
  */
-int	open_file_util(t_minishell *minishell, t_ast *ast, char *file)
+static int	open_file_util(t_minishell *minishell, t_ast *ast, char *file)
 {
 	if (ast->token->type == REDIR_IN)
 	{
@@ -96,52 +96,4 @@ int	redirect_read(t_minishell *minishell)
 		close(minishell->outfile);
 	}
 	return (0);
-}
-
-/**
- * @brief Redir the 
- * @param t_minishell *minishell, t_ast *ast, int falg
- * @return (void)
- */
-void	redir_in(t_minishell *minishell, t_ast *ast, int flag)
-{
-	t_ast	*node_cmd;
-
-	node_cmd = ast;
-	if (open_file(minishell, ast) == 0)
-	{
-		if (ast->right->token->type == REDIR_OUT)
-		{
-			while (ast->right->token->type == REDIR_OUT)
-			{
-				if (minishell->outfile != -1)
-					close(minishell->outfile);
-				ast = ast->right;
-				open_file(minishell, ast);
-			}
-			execute_ast(minishell, node_cmd->right->left->right, flag);
-		}
-		else
-			execute_ast(minishell, ast->right->right, flag);
-	}
-}
-
-/**
- * @brief Opens the output file
- * @param t_minishell *minishell, t_ast *ast, int flag
- * @return (void)
- */
-void	redir_out(t_minishell *minishell, t_ast *ast, int flag)
-{
-	t_ast	*node_cmd;
-
-	node_cmd = ast->left;
-	while (ast->token->type == REDIR_OUT)
-	{
-		if (minishell->outfile != -1)
-			close(minishell->outfile);
-		open_file(minishell, ast);
-		ast = ast->right;
-	}
-	execute_ast(minishell, node_cmd, flag);
 }

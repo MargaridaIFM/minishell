@@ -6,7 +6,7 @@
 /*   By: mistery576 <mistery576@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 00:50:55 by mistery576        #+#    #+#             */
-/*   Updated: 2024/12/26 22:23:24 by mistery576       ###   ########.fr       */
+/*   Updated: 2024/12/27 01:29:56 by mistery576       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
  * @param int total_strings
  * @return char **
  */
-char	**allocate_result_array(int total_strings)
+static char	**allocate_result_array(int total_strings)
 {
 	char	**result;
 
@@ -32,7 +32,7 @@ char	**allocate_result_array(int total_strings)
  * @param t_minishell *minishell, t_ast *ast, char **result, int *index
  * @return int
  */
-int	process_command(t_minishell *minishell, t_ast *ast,
+static int	process_command(t_minishell *minishell, t_ast *ast,
 		char **result, int *index)
 {
 	int	i;
@@ -65,7 +65,7 @@ int	process_command(t_minishell *minishell, t_ast *ast,
  * @param t_minishell *minishell, t_ast *ast, int total_strings
  * @return char **
  */
-char	**process_ast_commands_redir(t_minishell *minishell,
+static char	**process_ast_commands_redir(t_minishell *minishell,
 			t_ast *ast, int total_strings)
 {
 	t_ast	*temp;

@@ -17,7 +17,7 @@
  * @param t_ast *ast, int count
  * @return (char **);
  */
-char	**copy_array(t_ast *ast, int count)
+static char	**copy_array(t_ast *ast, int count)
 {
 	char	**cmd_array;
 	int		i;

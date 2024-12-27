@@ -81,7 +81,7 @@ static void	print_export(t_minishell *minishell, char **envp)
  * @param t_minishell *minishell, char *var
  * @return (void);
  */
-void	add_var(t_minishell *minishell, char *var)
+static void	add_var(t_minishell *minishell, char *var)
 {
 	int		i;
 	char	**copy_envp;
@@ -110,7 +110,7 @@ void	add_var(t_minishell *minishell, char *var)
  * @param char *var, t_minishell *minishell
  * @return (int);
  */
-int	check_var(char *var, t_minishell *minishell)
+static int	check_var(char *var, t_minishell *minishell)
 {
 	int	i;
 	int	x;

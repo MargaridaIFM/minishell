@@ -87,7 +87,7 @@ void	ft_execute_pipe(t_minishell *minishell, char **cmd)
  * @param char *str
  * @return (int);
  */
-int	check_dir(char *str)
+static int	check_dir(char *str)
 {
 	int	i;
 
