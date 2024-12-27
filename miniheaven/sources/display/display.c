@@ -14,13 +14,13 @@
 
 void	display_prompt(t_minishell *minishell)
 {
+	if (!minishell->display)
+		minishell->display = readline("[minishell]$ ");
 	if (g_signal != 0)
 	{
 		minishell->exit_status = g_signal;
 		g_signal = 0;
 	}
-	if (!minishell->display)
-		minishell->display = readline("[minishell]$ ");
 	if (!minishell->display)
 		free_exit(minishell, "");
 	if (!*minishell->display)
@@ -30,7 +30,8 @@ void	display_prompt(t_minishell *minishell)
 	}
 	add_history(minishell->display);
 	process_input(minishell);
-	free_all(minishell, "");
+	if (g_signal != 130)
+		free_all(minishell, "");
 }
 
 void	process_util(t_minishell *minishell, t_ast *ast)
@@ -42,7 +43,7 @@ void	process_util(t_minishell *minishell, t_ast *ast)
 	}
 	if (g_signal)
 	{
-		free_ast(minishell->ast);
+		free_all(minishell, "");
 		minishell->ast = NULL;
 	}
 	else
