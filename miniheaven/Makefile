@@ -45,9 +45,9 @@ LFT_PATH		=	$(addprefix $(LIBS_DIR), libft/)
 
 SRC				=	$(addprefix $(SRC_DIR), minishell.c minishell_utils.c) \
 					$(addprefix $(SRC_DIR)$(SIGNALS_DIR), signal.c signal2.c) \
-					$(addprefix $(SRC_DIR)$(ERROR_DIR), errors.c errors1.c errors2.c debug_functions.c) \
 					$(addprefix $(SRC_DIR)$(DISPLAY_DIR), display.c find_files.c find_files_utils.c arrays.c) \
-					$(addprefix $(SRC_DIR)$(BUILT_INS_DIR), pwd.c) \
+					$(addprefix $(SRC_DIR)$(ERROR_DIR), errors.c errors1.c errors2.c debug_functions.c errors_execute.c) \
+					$(addprefix $(SRC_DIR)$(BUILT_INS_DIR), pwd.c exit.c) \
 					$(addprefix $(SRC_DIR)$(BUILT_INS_DIR), env.c) \
 					$(addprefix $(SRC_DIR)$(BUILT_INS_DIR), export.c local_export.c) \
 					$(addprefix $(SRC_DIR)$(BUILT_INS_DIR), built_ins_utils.c) \
@@ -55,9 +55,9 @@ SRC				=	$(addprefix $(SRC_DIR), minishell.c minishell_utils.c) \
 					$(addprefix $(SRC_DIR)$(BUILT_INS_DIR), echo.c) \
 					$(addprefix $(SRC_DIR)$(BUILT_INS_DIR), cd.c) \
 					$(addprefix $(SRC_DIR)$(BUILT_INS_DIR), cd_utils.c) \
-					$(addprefix $(SRC_DIR)$(EXECUTOR_DIR), execute.c heredoc.c heredoc_utils.c) \
-					$(addprefix $(SRC_DIR)$(EXECUTOR_DIR), pipes.c pipes2.c redir.c execute_utils.c execute_utils1.c) \
-					$(addprefix $(SRC_DIR)$(EXECUTOR_DIR), my_getenv.c) \
+					$(addprefix $(SRC_DIR)$(EXECUTOR_DIR), execute.c heredoc.c heredoc_utils.c split_cmd.c) \
+					$(addprefix $(SRC_DIR)$(EXECUTOR_DIR), pipes.c redir.c execute_utils.c execute_utils1.c execute_utils2.c) \
+					$(addprefix $(SRC_DIR)$(EXECUTOR_DIR), my_getenv.c array_utils.c) \
 					$(addprefix $(SRC_DIR)$(PARSER_DIR), tokenization.c tokenization_utils.c expander.c syntax_error.c ast.c ast2.c split_tokens.c remove_quotes.c) \
 					$(addprefix $(SRC_DIR)$(PARSER_DIR), expander_vars.c replace_var_in_str.c split_tokens2.c)
 				#	$(addprefix $(SRC_DIR), malloc.c) \

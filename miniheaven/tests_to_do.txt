@@ -74,15 +74,15 @@ Simple execution ✅
 ls
 ls -a
 echo hello
-echo -n hello
+echo -n hello 
 echo -nn hello
 pwd
 export a="ls -la" b=ls c='echo "hello    world"' / export
 
 EXPANDER a="ls -la" b=ls c='echo "hello    world" ✅
-$a 
+$a ?
 "$a" -> Nao executa 
-$c 
+$c ("hello world") 
 "$c"
 "ls -la"
 "ls"
@@ -103,9 +103,9 @@ cat < infile > outfile
 
 PIPES ✅
 
-cat | ls
-echo hello | wc
-ls | wc
+cat | ls 
+echo hello | wc 
+ls | wc 
 echo hello | pwd
 
 cat | ls | wc
@@ -127,9 +127,15 @@ ls | echo hello < infile < infile > outfile > outfile
 < infile grep 42 | echo hello | < infile wc < infile > outfile
 < infile < infile ls | cat | wc > outfile
 
-here_doc
+HERE_DOC 
 ls << eof
 ls << eof << eof2 << eof3
 
-
 ❌
+
+< infile < infile < infile "echo hello" ✅
+$$ ✅
+echo < infile 1 < infile 2 --> Erro pode estar na criacao do comando
+echo $b     / b="hello       world"
+echo hello < infile ls < infile < infile world
+< khsadkh ls | wc \ < infile echo < sauidyai

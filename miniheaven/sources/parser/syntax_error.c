@@ -42,12 +42,12 @@ bool	check_syntax_pipe(t_token *temp, t_token *last_token)
 {
 	if (!last_token || last_token->type != WORD)
 	{
-		printf("Syntax error near unexpected token `|'\n");
+		ft_putendl_fd("Syntax error near unexpected token `|'", 2);
 		return (false);
 	}
 	if (!temp->next || temp->next->type == PIPE)
 	{
-		printf("Syntax error near unexpected token `|'\n");
+		ft_putendl_fd("Syntax error near unexpected token `|'", 2);
 		return (false);
 	}
 	return (true);
@@ -57,7 +57,7 @@ bool	check_syntax_redir(t_token *temp)
 {
 	if (!temp->next || temp->next->type != WORD)
 	{
-		printf("Syntax error near unexpected token\n");
+		ft_putendl_fd("Syntax error near unexpected token", 2);
 		return (false);
 	}
 	return (true);

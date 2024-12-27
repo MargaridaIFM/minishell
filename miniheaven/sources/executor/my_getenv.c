@@ -13,13 +13,11 @@
 #include "../../includes/minishell.h"
 
 /**
- * @brief Recebe o valor da variavel 
- * completa (ex: "PWD=/home/miafonso") e retorna apenas
- * o que esta antes do igual, ou seja o nome da variavel ("PWD");
+ * @brief Returns the var name before the '='
  * @param char *path
- * @return (char *before'=');
+ * @return (char *);
  */
-char	*remove_equal(char	*path)
+static char	*remove_equal(char	*path)
 {
 	int	i;
 
@@ -29,9 +27,7 @@ char	*remove_equal(char	*path)
 	return (ft_substr(path, 0, i));
 }
 /**
- * @brief Replica a funcao getenv(char *env_name)
- * , so que permite receber o valor completo
- * da variavel, e mexe diretamente com o minishell->envp
+ * @brief Copy the getenv() function
  * @param t_minishell *minishell, char *path
  * @return (char *before'=');
  */

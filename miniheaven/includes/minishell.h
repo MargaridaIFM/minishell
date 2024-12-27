@@ -89,6 +89,7 @@ typedef struct s_minishell
 	int			first;
 	int			fd[2];
 	int			exit_status;
+	int			prev_fd;
 	int			temp_stdin;
 	int			temp_stdout;
 	int			infile;
@@ -121,8 +122,13 @@ void		free_heredoc(t_heredoc *heredoc);
 void		close_pipe(int fd);
 void		free_pointer(void *ptr);
 
+//errors execute
+void		print_errors(char *s1, char *s2, char *s3);
+int			check_execute(t_minishell *minishell, char **cmd);
+char		*failed_to_open(t_minishell *minishell);
+
 // MINISHELL UTILS //
-char **add_string_to_array(char **array, char *new_string);
+char		**add_string_to_array(char **array, char *new_string);
 
 // Display Prompt
 void		display_prompt(t_minishell *minishell);
@@ -191,7 +197,6 @@ char		*expand_heredoc(t_minishell *minishell, char *line);
 void		get_var_name(t_expand *expander, int *i, char *line);
 void		rm_here_quotes(t_minishell *minishell, t_heredoc *heredoc, int *idx,
 				char quote);
-//void		reset_heredoc(t_heredoc *heredoc);
 
 // debug functions
 void		print_token(t_minishell *data);
@@ -217,14 +222,12 @@ void		ft_echo(char **cmd);
 void		ft_env(t_minishell *minishell, char **cmd);
 
 // EXPORT//
-void		add_var(t_minishell *minishell, char *var);
 void		ft_export(t_minishell *minishell, char **cmd);
 int			find_equal(char *var);
 int			add_local(t_minishell *minishell, char *var);
 int			bigger_var_name(char *original, char *step_ahead);
-int			check_var(char *var, t_minishell *minishell);
 void		clear_local(t_minishell *minishell, char *var, int x);
-int 		check_local_env(t_minishell *minishell, char *var);
+int			check_local_env(t_minishell *minishell, char *var);
 
 // PWD //
 void		ft_pwd(void);
@@ -232,30 +235,36 @@ void		ft_pwd(void);
 // UNSET //
 void		ft_unset(char **cmd, t_minishell *minishell);
 
+// EXIT //
+void		ft_exit(t_minishell *minishell, char **dp);
+
 // Built_ins_utils //
 char		**dup_envp(t_minishell *minishell, char **envp); /*Usado no export*/
 char		*find_path(t_minishell *minishell, char *cmd); /*Usado no env*/
 
 // EXECUTOR //
 void		execute_ast(t_minishell *minishell, t_ast *ast, int flag);
-char		*remove_equal(char *path);
 char		*my_getenv(t_minishell *minishell, char *path);
 int			find_builtin(t_minishell *minishell, char **dp);
-void		error_execute(t_minishell *minishell, char **split_cmd, char *cmd_path);
+void		error_execute(t_minishell *minishell, char **split_cmd,
+				char *cmd_path);
 void		ft_execute(t_minishell *minishell, char **split_cmd);
-void		execute_cmd(t_minishell *minishell, char **split_cmd, char *cmd);
+void		execute_cmd(t_minishell *minishell, char **split_cmd);
 char		**built_cmd(t_ast *ast);
 
 //	EXECUTOR_UTILS  //
 char		**collect_commands_redirs(t_minishell *minishell, t_ast *ast);
-char    	**collect_commands(t_minishell *minishell, t_ast *ast);
+char		**collect_commands(t_minishell *minishell, t_ast *ast);
+int			count_total_strings(t_minishell *minishell, t_ast *ast);
+int			count_array(char **arr);
+void		execute_redir(t_minishell *minishell, t_ast *ast, int flag);
+char		**process_ast_commands(t_ast *ast, int *count, char **cmd);
 
 // PIPEX //
 void		do_pipeline(t_minishell *minishell, t_ast *ast);
 void		pipe_fork(t_minishell *minishell, t_ast *ast);
-void		fork_and_pipe(t_minishell *minishell, t_ast *ast, int *child);
+pid_t		fork_and_pipe(t_minishell *minishell, t_ast *ast);
 void		redir_pipe(t_minishell *minishell, int child);
-void		wait_pipes(t_minishell *minishell);
 void		ft_execute_pipe(t_minishell *minishell, char **cmd);
 
 //	REDIR  //
@@ -266,21 +275,23 @@ int			rebuild_fileno(t_minishell *minishell);
 
 //	ASSOCIATE REDIR	//
 void		set_redirs(t_minishell *minishell, t_ast *ast);
-void		redir_in(t_minishell *minishell, t_ast *ast, int flag);
-void		redir_out(t_minishell *minishell, t_ast *ast, int flag);
 
 //	FIND FILES	//
-char **copy_array(t_ast *ast, int count);
+void		no_pipe_util(t_ast *orig, t_ast *temp_copy);
+void		complete_last_redir(t_ast *temp_copy, t_ast *orig,
+				t_ast *save_node);
+t_ast		*copy_ast(t_ast *original);
 
+//	SPLIT_CMD	//
+char		**ft_split_cmd(char **cmd, int cmd_count);
 
-void	free_cmd_path(t_ast *left_side);
+//	ARRAY_UTILS	//
+char		**join_array(char **array_first, char *array);
 
-void	check_is_str(t_minishell *minishell);
-void		do_one_pipe(t_minishell *minishell, t_ast *ast);
-int count_array(char **arr);
-t_ast	*copy_ast(t_ast *original);
-void	find_files(t_ast *orig, t_ast *temp_copy, t_minishell *minishell);
+void		free_cmd_path(t_ast *left_side);
+void		check_is_str(t_minishell *minishell);
+void		find_files(t_ast *orig, t_ast *temp_copy, t_minishell *minishell);
 
-char **join_arrays(char **array_first, char *array);
+char		**join_arrays(char **array_first, char *array);
 
 #endif

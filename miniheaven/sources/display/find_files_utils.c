@@ -12,7 +12,12 @@
 
 #include "../includes/minishell.h"
 
-char	**copy_array(t_ast *ast, int count)
+/**
+ * @brief Copies the array of commands
+ * @param t_ast *ast, int count
+ * @return (char **);
+ */
+static char	**copy_array(t_ast *ast, int count)
 {
 	char	**cmd_array;
 	int		i;
@@ -38,6 +43,11 @@ char	**copy_array(t_ast *ast, int count)
 	return (cmd_array);
 }
 
+/**
+ * @brief Builds the command array
+ * @param t_ast *ast
+ * @return (char **);
+ */
 char	**built_cmd(t_ast *ast)
 {
 	t_ast	*temp;
@@ -55,6 +65,11 @@ char	**built_cmd(t_ast *ast)
 	return (cmd_array);
 }
 
+/**
+ * @brief Set the redirections, to the symbols
+ * @param t_minishell *minishell, t_ast *ast
+ * @return (void);
+ */
 void	set_redirs(t_minishell *minishell, t_ast *ast)
 {
 	t_ast	*copy;
@@ -68,4 +83,60 @@ void	set_redirs(t_minishell *minishell, t_ast *ast)
 	temp_copy = copy;
 	find_files(orig, temp_copy, minishell);
 	free_ast(copy);
+}
+
+/**
+ * @brief Utils for the no pipe case in set_redirs
+ * @param t_ast *orig, t_ast *temp_copy
+ * @return (void);
+ */
+void	no_pipe_util(t_ast *orig, t_ast *temp_copy)
+{
+	if (orig->token->cmd)
+	{
+		temp_copy = temp_copy->right->right;
+		while (temp_copy)
+		{
+			orig->token->cmd
+				= join_array(orig->token->cmd, temp_copy->token->str);
+			temp_copy = temp_copy->right;
+		}
+	}
+	else
+	{
+		if (orig->right->right->token->dq == 1
+			&& ft_count_words(temp_copy->right->right->token->str) > 1)
+		{
+			orig->token->dq = 1;
+		}
+		orig->token->cmd = built_cmd(temp_copy->right->right);
+	}
+}
+
+void	complete_last_redir(t_ast *temp_copy, t_ast *orig, t_ast *save_node)
+{
+	if (temp_copy->left && temp_copy->left->right)
+	{
+		if (orig->left->right->token->dq == 1)
+			orig->left->right->token->dq = 1;
+		orig->token->cmd = built_cmd(save_node->left->right);
+	}
+	if (orig->token->cmd && temp_copy->right->right)
+	{
+		temp_copy = temp_copy->right->right;
+		if (temp_copy->token->dq == 1)
+			orig->token->dq = 1;
+		while (temp_copy)
+		{
+			orig->token->cmd
+				= join_array(orig->token->cmd, temp_copy->token->str);
+			temp_copy = temp_copy->right;
+		}
+	}
+	else
+	{
+		if (temp_copy->right->right->token->dq == 1)
+			orig->token->dq = 1;
+		orig->token->cmd = built_cmd(temp_copy->right->right);
+	}
 }
