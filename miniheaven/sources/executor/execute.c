@@ -54,9 +54,19 @@ void	execute_ast(t_minishell *minishell, t_ast *ast, int flag)
 	if (ast->token->type <= 3)
 	{
 		cmd = collect_commands_redirs(minishell, ast);
-	}
-	if (cmd != NULL)
-	{
+		//printf("cmd %s\n", cmd[0]);
+		if (cmd == NULL)
+		{
+			rebuild_fileno(minishell);
+			close_redir(minishell);
+			if (minishell->_pipe_ == 1)
+			{
+				//free(cmd);
+				free_exit(minishell, "");
+			}
+			free_all(minishell, "");
+			return ;
+		}
 		if (flag == -1)
 			ft_execute(minishell, cmd);
 		else
@@ -64,8 +74,9 @@ void	execute_ast(t_minishell *minishell, t_ast *ast, int flag)
 		rebuild_fileno(minishell);
 		close_redir(minishell);
 		return ;
+		
 	}
-	if (ast->token->type == WORD)
+	if (ast->token->type == WORD || ast->token->type == STR)
 	{
 		cmd = collect_commands(minishell, ast);
 		if (flag == -1)
@@ -111,6 +122,7 @@ int	find_builtin(t_minishell *minishell, char **dp)
 		return (ft_pwd(), 1);
 	else if (ft_strcmp(dp[0], "exit") == 0)
 	{
+		g_signal = ft_atoi(dp[1]);
 		free_array(dp);
 		free_exit(minishell, "");
 	}
@@ -130,10 +142,18 @@ void	ft_execute(t_minishell *minishell, char **cmd)
 
 	if (redirect_read(minishell) == -1)
 		free_exit(minishell, "Something went wrong with dup2\n");
-	if (my_getenv(minishell, "PATH") == NULL || minishell->_str_ == 1)
+	if (my_getenv(minishell, "PATH") == NULL && access(cmd[0], X_OK) != 0)
 	{
 		printf("%s: command not found\n", cmd[0]);
 		g_signal = 127;
+		minishell->_str_ = 0;
+		return (free_array(cmd));
+	}
+	if (minishell->_str_ == 1)
+	{
+		printf("%s: command not found\n", cmd[0]);
+		g_signal = 127;
+		minishell->_str_ = 0;
 		return (free_array(cmd));
 	}
 	if (find_builtin(minishell, cmd) == 1)
