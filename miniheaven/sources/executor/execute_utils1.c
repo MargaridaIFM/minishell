@@ -12,149 +12,107 @@
 
 #include "../includes/minishell.h"
 
-int contar_total_strings(t_ast *ast) 
+/**
+ * @brief Count the total number of commands, in the node
+ * @param t_minishell *minishell, t_ast *ast
+ * @return int
+ */
+int	count_total_strings(t_minishell *minishell, t_ast *ast)
 {
-    t_ast *temp;
-    int total;
+	t_ast	*temp;
+	int		total;
+	int		i;
 
-    total = 0;
-    temp = ast;
-    while (temp->token->type <= 3) 
-    {
-        if (temp->token->cmd) 
-        {
-            for (int i = 0; temp->token->cmd[i]; i++)
-            {
-                total++;
-            }
-        }
-        temp = temp->right; // Avança para o próximo nó
-    }
-    return total;
+	total = 0;
+	temp = ast;
+	while (temp->token->type <= 3)
+	{
+		if (temp->token->cmd)
+		{
+			i = 0;
+			while (temp->token->cmd[i])
+			{
+				total++;
+				i++;
+			}
+		}
+		if (open_file(minishell, temp) == -1)
+		{
+			failed_to_open(minishell);
+			return (-1);
+		}
+		temp = temp->right;
+	}
+	return (total);
 }
 
-int count_array(char **arr)
+/**
+ * @brief Counts an array and returns the number of elements
+ * @param char **arr
+ * @return int
+ */
+int	count_array(char **arr)
 {
-    int i;
+	int	i;
 
-    i = 0;
-    while(arr[i])
-       i++;
-	printf("said\n");
-    return i;
+	i = 0;
+	while (arr[i])
+		i++;
+	return (i);
 }
 
-// Função principal para concatenar arrays de strings de ast->cmd
-char **collect_commands_redirs(t_minishell *minishell, t_ast *ast) 
+/**
+ * @brief Collects the commads from the AST
+ * @param t_ast *ast, int *count, char **cmd
+ * @return char**
+ */
+char	**collect_commands(t_minishell *minishell, t_ast *ast)
 {
-    (void)minishell;
-    int total_strings = contar_total_strings(ast);
-    if (total_strings != 0)
-    {
-        char **resultado = malloc((total_strings + 1) * sizeof(char *)); // Aloca espaço para o resultado
-        if (!resultado)
-            return NULL;
-        int index = 0;
-        if (ast->token->dq == 1 && ft_count_words(ast->token->str) > 1)
-        {
-            minishell->_str_ = 1;
-        }
-        while (ast) 
-        {
-            if (ast->token->cmd)
-            {
-                for (int i = 0; ast->token->cmd[i]; i++) {
-                    resultado[index] = strdup(ast->token->cmd[i]); // Copia cada string do array atual
-                    if (!resultado[index]) {
-                        // Libera memória em caso de falha
-                        while (index > 0)
-                            free(resultado[--index]);
-                        free(resultado);
-                        return NULL;
-                    }
-                    index++;
-                }
-            }
-            open_file(minishell, ast);
-            ast = ast->right; // Avança para o próximo nó
-        }
-        resultado[index] = NULL; // Finaliza o array com NULL
-        return resultado;
-    }
-    else 
-    {
-        while (ast->token->type <= 3)
-        {
-            open_file(minishell, ast);
-            ast = ast->right;
-        }
-        return NULL;
-    }
+	char	**cmd ;
+	int		count;
+	int		first;
+
+	first = 0;
+	cmd = NULL;
+	count = 0;
+	while (ast)
+	{
+		if (first == 0 && ast->token->dq == 1
+			&& ft_count_words(ast->token->str) > 1)
+			minishell->_str_ = 1;
+		cmd = process_ast_commands(ast, &count, cmd);
+		ast = ast->right;
+		first = 1;
+	}
+	if (!cmd)
+		return (NULL);
+	return (cmd);
 }
 
-// char	**collect_commands_redirs(t_ast *ast, t_minishell *minishell)
-// {
-// 	char	**cmd;
-// 	char	**temp;
-// 	int		count;
-
-// 	cmd = NULL;
-// 	count = 0;
-// 	while (ast && ast->token->type <= 3)
-// 	{
-// 		if (ast->token->cmd)
-// 		{
-// 			temp = cmd;
-// 			cmd = malloc(sizeof(char *) * (count + 2));
-// 			if (!cmd)
-// 				return (NULL);
-// 			for (int i = 0; i < count; i++)
-// 				cmd[i] = temp[i];
-// 			cmd[count] = ft_strdup(ast->token->cmd);
-// 			if (!cmd[count])
-// 				return (NULL);
-// 			count++;
-// 			cmd[count] = NULL;
-// 			if (temp)
-// 				free(temp);
-// 		}
-// 		open_file(minishell, ast);
-// 		ast = ast->right;
-// 	}
-// 	printf("cmd 0 %s  cmd 1 %s\n", cmd[0], cmd[1]);
-// 	return (cmd);
-// }
-
-char    **collect_commands(t_minishell *minishell, t_ast *ast)
+/**
+ * @brief Collects the commands and execute them
+ * @param t_minishell *minishell, t_ast *ast, int flag
+ * @return void
+ */
+void	execute_redir(t_minishell *minishell, t_ast *ast, int flag)
 {
-    char	**cmd;
-    char	**temp;
-    int		count;
+	char	**cmd;
 
-    cmd = NULL;
-    count = 0;
-    (void)minishell;
-    if (ast->token->dq == 1 && ft_count_words(ast->token->str) > 1)
-    {
-        printf("entrou\n");
-        minishell->_str_ = 1;
-    }
-    while (ast)
-    {
-        temp = cmd;
-        cmd = malloc(sizeof(char *) * (count + 2));
-        if (!cmd)
-            return (NULL);
-        for (int i = 0; i < count; i++)
-            cmd[i] = temp[i];
-        cmd[count] = ft_strdup(ast->token->str);
-        if (!cmd[count])
-            return (NULL);
-        count++;
-        cmd[count] = NULL;
-        if (temp)
-            free(temp);
-        ast = ast->right;
-    }
-    return (cmd);
+	cmd = collect_commands_redirs(minishell, ast);
+	if (cmd == NULL)
+	{
+		rebuild_fileno(minishell);
+		close_redir(minishell);
+		if (minishell->_pipe_ == 1)
+			free_exit(minishell, "");
+		free_all(minishell, "");
+		return ;
+	}
+	if (flag == -1)
+		ft_execute(minishell, cmd);
+	else if (minishell->_pipe_ == 1)
+		ft_execute_pipe(minishell, cmd);
+	rebuild_fileno(minishell);
+	close_redir(minishell);
+	return ;
 }

@@ -12,27 +12,26 @@
 
 #include "../includes/minishell.h"
 
-int	open_file(t_minishell *minishell, t_ast *ast)
+/**
+ * @brief Utils for open_file function
+ * @param t_minishell *minishell, t_ast *ast, char *file
+ * @return (int)
+ */
+static int	open_file_util(t_minishell *minishell, t_ast *ast, char *file)
 {
-	char		*file;
-	t_heredoc	*temp_here;
-
-	temp_here = minishell->heredoc;
 	if (ast->token->type == REDIR_IN)
 	{
-		file = ast->token->path;
 		if (access(file, F_OK) != 0)
 		{
-			printf("bash: %s: No such file or directory\n", file);
+			print_errors("bash: ", file, ": No such file or directory\n");
 			return (-1);
 		}
 		if (minishell->infile != -1)
 			close(minishell->infile);
 		minishell->infile = open(file, O_RDONLY, 0644);
 	}
-	else if (ast->token->type == REDIR_OUT || ast->token->type == REDIR_APPEND)
+	if (ast->token->type == REDIR_OUT || ast->token->type == REDIR_APPEND)
 	{
-		file = ast->token->path;
 		if (minishell->outfile != -1)
 			close(minishell->outfile);
 		if (ast->token->type == REDIR_OUT)
@@ -42,6 +41,24 @@ int	open_file(t_minishell *minishell, t_ast *ast)
 			minishell->outfile = open(file, O_WRONLY | O_CREAT | O_APPEND,
 					0644);
 	}
+	return (0);
+}
+
+/**
+ * @brief Set the file descriptor for the redirection 
+ * in infile or outfile var in minishell struct
+ * @param t_minishell *minishell, t_ast *ast, char *file
+ * @return (int)
+ */
+int	open_file(t_minishell *minishell, t_ast *ast)
+{
+	char		*file;
+	t_heredoc	*temp_here;
+
+	temp_here = minishell->heredoc;
+	file = ast->token->path;
+	if (open_file_util(minishell, ast, file) == -1)
+		return (-1);
 	else if (ast->token->type == REDIR_HEREDOC)
 	{
 		if (minishell->infile != -1)
@@ -56,6 +73,11 @@ int	open_file(t_minishell *minishell, t_ast *ast)
 	return (0);
 }
 
+/**
+ * @brief Redirect the input and output file descriptors
+ * @param t_minishell *minishell
+ * @return (int)
+ */
 int	redirect_read(t_minishell *minishell)
 {
 	if (minishell->infile != -1)
@@ -72,61 +94,6 @@ int	redirect_read(t_minishell *minishell)
 		if (dup2(minishell->outfile, STDOUT_FILENO) == -1)
 			return (-1);
 		close(minishell->outfile);
-	}
-	return (0);
-}
-
-void	redir_in(t_minishell *minishell, t_ast *ast, int flag)
-{
-	t_ast	*node_cmd;
-
-	node_cmd = ast;
-	if (open_file(minishell, ast) == 0)
-	{
-		if (ast->right->token->type == REDIR_OUT)
-		{
-			while (ast->right->token->type == REDIR_OUT)
-			{
-				if (minishell->outfile != -1)
-					close(minishell->outfile);
-				ast = ast->right;
-				open_file(minishell, ast);
-			}
-			execute_ast(minishell, node_cmd->right->left->right, flag);
-		}
-		else
-			execute_ast(minishell, ast->right->right, flag);
-	}
-}
-
-void	redir_out(t_minishell *minishell, t_ast *ast, int flag)
-{
-	t_ast	*node_cmd;
-
-	node_cmd = ast->left;
-	while (ast->token->type == REDIR_OUT)
-	{
-		if (minishell->outfile != -1)
-			close(minishell->outfile);
-		open_file(minishell, ast);
-		ast = ast->right;
-	}
-	execute_ast(minishell, node_cmd, flag);
-}
-
-int	rebuild_fileno(t_minishell *minishell)
-{
-	if (minishell->infile != -1)
-	{
-		if (dup2(minishell->temp_stdin, STDIN_FILENO) == -1)
-			return (-1);
-		close(minishell->temp_stdin);
-	}
-	if (minishell->outfile != -1)
-	{
-		if (dup2(minishell->temp_stdout, STDOUT_FILENO) == -1)
-			return (-1);
-		close(minishell->temp_stdout);
 	}
 	return (0);
 }

@@ -12,7 +12,12 @@
 
 #include "../../includes/minishell.h"
 
-void	copy_content(t_minishell *minishell, char **envp,
+/**
+ * @brief Copy the content from envp, to envp_dup 
+ * @param minishell, char **envp, char **envp_dup, int envp_counter;
+ * @return (void);
+ */
+static void	copy_content(t_minishell *minishell, char **envp,
 		char **envp_dup, int envp_counter)
 {
 	int	i;
@@ -35,9 +40,8 @@ void	copy_content(t_minishell *minishell, char **envp,
 }
 
 /**
- * @brief Usado na funcao export(), vai duplicar 
- * o envp, organizar, e retornar esse array.
- * @param char **envp;
+ * @brief Used to dup the envp, and returns the duped_env
+ * @param minishell, char **envp;
  * @return (char **);
  */
 char	**dup_envp(t_minishell *minishell, char **envp)
@@ -68,8 +72,7 @@ char	**dup_envp(t_minishell *minishell, char **envp)
 }
 
 /**
- * @brief Vai procurar no **split_dir, o **split_cmd, e ver se existe o 
- * comando e se da para executar.
+ * @brief Util function
  * @param char *full_path, char **split_cmd, char **dir
  * @return (char **full_path);
  */
@@ -97,7 +100,7 @@ static char	*find_path_util(char *full_path, char **split_cmd, char **split_dir)
 }
 
 /**
- * @brief Vai encontrar o PATH do comando do terminal.
+ * @brief Finds the split_cmd path
  * @param char *cmd.
  * @return (char **full_path);
  */
@@ -121,6 +124,11 @@ char	*find_path(t_minishell *minishell, char *cmd)
 	return (full_path);
 }
 
+/**
+ * @brief Checks ir the original is bigger or lower then the step_ahead
+ * @param char *original, char *step_ahead.
+ * @return (int);
+ */
 int	bigger_var_name(char *original, char *step_ahead)
 {
 	int	i;

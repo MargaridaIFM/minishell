@@ -13,8 +13,8 @@
 #include "../../includes/minishell.h"
 
 /**
- * @brief Imprime a variavel PWD
- * @param t_minishell *minishell
+ * @brief Prints the current working directory
+ * @param void
  * @return (void);
  */
 void	ft_pwd(void)

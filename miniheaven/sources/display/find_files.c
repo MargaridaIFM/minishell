@@ -12,24 +12,12 @@
 
 #include "../includes/minishell.h"
 
-// t_token	*copy_token_list(const t_token *token)
-// {
-// 	t_token	*copy;
-
-// 	if (!token)
-// 		return (NULL);
-// 	copy = malloc(sizeof(t_token));
-// 	if (!copy)
-// 		return (NULL);
-// 	copy->type = token->type;
-// 	copy->str = ft_strdup(token->str);
-// 	copy->path = ft_strdup(token->path);
-// 	copy->cmd = ft_strdup(token->cmd);
-// 	copy->next = copy_token_list(token->next);
-// 	return (copy);
-// }
-
-char	**copy_cmd(char **cmd)
+/**
+ * @brief Copies the command array
+ * @param char **cmd
+ * @return (char **);
+ */
+static char	**copy_cmd(char **cmd)
 {
 	char	**copy;
 	int		i;
@@ -50,6 +38,11 @@ char	**copy_cmd(char **cmd)
 	return (copy);
 }
 
+/**
+ * @brief Copies the ast
+ * @param t_ast *original
+ * @return (t_ast *);
+ */
 t_ast	*copy_ast(t_ast *original)
 {
 	t_ast	*copy;
@@ -68,6 +61,7 @@ t_ast	*copy_ast(t_ast *original)
 			return (NULL);
 		}
 		copy->token->type = original->token->type;
+		copy->token->dq = original->token->dq;
 		copy->token->str = ft_strdup(original->token->str);
 		copy->token->path = ft_strdup(original->token->path);
 		copy->token->cmd = copy_cmd(original->token->cmd);
@@ -78,15 +72,30 @@ t_ast	*copy_ast(t_ast *original)
 	return (copy);
 }
 
+/**
+ * @brief Find commands in no pipe case case
+ * @param t_ast *temp_copy, t_ast *orig, t_ast *save_node
+ * @return (void);
+ */
 void	no_pipe(t_ast *temp_copy, t_ast *orig, t_ast *save_node)
 {
 	if (temp_copy->left)
+	{
+		if (temp_copy->left->token->dq == 1
+			&& ft_count_words(temp_copy->left->token->str) > 1)
+			orig->token->dq = 1;
 		orig->token->cmd = built_cmd(save_node->left);
-	if (temp_copy->right->token->type > 3 && temp_copy->right->right->token)
-		orig->token->cmd = join_arrays(orig->token->cmd, temp_copy->right->right->token->str);
+	}
+	if (temp_copy->right->token->type > 3 && temp_copy->right->right)
+		no_pipe_util(orig, temp_copy);
 }
 
-void	find_commands(t_ast *orig, t_ast *temp_copy, int flag)
+/**
+ * @brief Find commands in the ast
+ * @param t_ast *orig, t_ast *temp_copy, int flag
+ * @return (void);
+ */
+static void	find_commands(t_ast *orig, t_ast *temp_copy, int flag)
 {
 	t_ast	*save_node;
 
@@ -96,19 +105,21 @@ void	find_commands(t_ast *orig, t_ast *temp_copy, int flag)
 	else if (temp_copy->right->token->type > 3
 		&& temp_copy->right->right)
 	{
-		if (temp_copy->left && temp_copy->left->right)
-			orig->token->cmd = built_cmd(save_node->left->right);
-		if (orig->token->cmd)
-		{
-			orig->token->cmd = built_cmd(temp_copy->right->right);
-		}
-		else
-			orig->token->cmd = built_cmd(temp_copy->right->right);
+		complete_last_redir(temp_copy, orig, save_node);
 	}
 	else if (temp_copy->left && temp_copy->left->right)
+	{
+		if (temp_copy->left->right->token->dq == 1)
+			orig->token->dq = 1;
 		orig->token->cmd = built_cmd(temp_copy->left->right);
+	}
 }
 
+/**
+ * @brief Find files and commands in the ast
+ * @param t_ast *orig, t_ast *temp_copy, t_minishell *minishell
+ * @return (void);
+ */
 void	find_files(t_ast *orig, t_ast *temp_copy, t_minishell *minishell)
 {
 	while (temp_copy && orig)

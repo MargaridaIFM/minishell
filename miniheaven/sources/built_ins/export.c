@@ -13,8 +13,8 @@
 #include "../../includes/minishell.h"
 
 /**
- * @brief Da sort na variavel envp, e retorna uma copia
- * @param char **envp
+ * @brief Sorts envp, and returns it
+ * @param t_minishell *minishell, char **envp
  * @return (char **);
  */
 static char	**sort_envp(t_minishell *minishell, char **envp)
@@ -47,8 +47,7 @@ static char	**sort_envp(t_minishell *minishell, char **envp)
 }
 
 /**
- * @brief Imprime a variavel envp, mas 
- * por ordem e com aspas entre o valor de cada variavel
+ * @brief Prints envp, by order
  * @param t_minishell *minishell, char **envp
  * @return (void);
  */
@@ -78,11 +77,11 @@ static void	print_export(t_minishell *minishell, char **envp)
 }
 
 /**
- * @brief Adiciona a (char *var), a variavel envp
+ * @brief Adds var to envp
  * @param t_minishell *minishell, char *var
  * @return (void);
  */
-void	add_var(t_minishell *minishell, char *var)
+static void	add_var(t_minishell *minishell, char *var)
 {
 	int		i;
 	char	**copy_envp;
@@ -107,12 +106,11 @@ void	add_var(t_minishell *minishell, char *var)
 }
 
 /**
- * @brief Vai vericiar se a (char *var), 
- * ja existe, caso exista, vai dar update do valor
+ * @brief Checks if the value already exists in envp
  * @param char *var, t_minishell *minishell
  * @return (int);
  */
-int	check_var(char *var, t_minishell *minishell)
+static int	check_var(char *var, t_minishell *minishell)
 {
 	int	i;
 	int	x;
@@ -120,7 +118,7 @@ int	check_var(char *var, t_minishell *minishell)
 	i = 0;
 	if (ft_isalpha(var[i]) == 0)
 	{
-		printf("bash: export: `%s': not a valid identifier\n", var);
+		print_errors("bash: export: \'", var, "\': not a valid identifier\n");
 		return (-1);
 	}
 	while (minishell->envp[++i])
@@ -140,12 +138,8 @@ int	check_var(char *var, t_minishell *minishell)
 }
 
 /**
- * @brief Da export de uma variavel, 
- * com ou sem valor, 
- * caso nao passemos nenhum valor,
- * vai imprimir a variavel 
- * envp, por ordem alfabetica
- * @param char **split_cmd, t_minishell *minishell
+ * @brief Exports the var to envp or "local"
+ * @param t_minishell *minishell, char **cmd
  * @return (void);
  */
 void	ft_export(t_minishell *minishell, char **cmd)
@@ -160,10 +154,11 @@ void	ft_export(t_minishell *minishell, char **cmd)
 		while (cmd[i])
 		{
 			if (find_equal(cmd[i]) == -1
-				&& check_local_env(minishell, cmd[i]) == 0)
+				&& check_local_env(minishell, cmd[i]) == 0
+				&& ft_isalpha(cmd[i][0]) == 1)
 				add_local(minishell, cmd[i]);
-			else if (find_equal(cmd[i]) == 0
-				&& check_var(cmd[i], minishell) == 0)
+			else if (check_var(cmd[i], minishell) == 0
+				&& find_equal(cmd[i]) == 0)
 				add_var(minishell, cmd[i]);
 			i++;
 		}

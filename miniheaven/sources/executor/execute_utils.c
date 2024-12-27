@@ -12,6 +12,33 @@
 
 #include "../includes/minishell.h"
 
+/**
+ * @brief Rebuilds STDIN_FILENO and STDOUT_FILENO
+ * @param t_minishell *minishell.
+ * @return (int);
+ */
+int	rebuild_fileno(t_minishell *minishell)
+{
+	if (minishell->infile != -1)
+	{
+		if (dup2(minishell->temp_stdin, STDIN_FILENO) == -1)
+			return (-1);
+		close(minishell->temp_stdin);
+	}
+	if (minishell->outfile != -1)
+	{
+		if (dup2(minishell->temp_stdout, STDOUT_FILENO) == -1)
+			return (-1);
+		close(minishell->temp_stdout);
+	}
+	return (0);
+}
+
+/**
+ * @brief Redirects the read, if exists infile or outfile
+ * @param t_minishell *minishell.
+ * @return (void);
+ */
 void	close_redir(t_minishell *minishell)
 {
 	if (minishell->infile != -1)
@@ -26,23 +53,23 @@ void	close_redir(t_minishell *minishell)
 	}
 }
 
+/**
+ * @brief Executes a command and exits the fork
+ * @param t_minishell *minishell, char **cmd
+ * @return (void);
+ */
 void	ft_execute_pipe(t_minishell *minishell, char **cmd)
 {
 	char	*cmd_path;
 
 	redirect_read(minishell);
-	if (my_getenv(minishell, "PATH") == NULL)
-	{
-		printf("%s: command not found\n", cmd[0]);
-		error_execute(minishell, cmd, NULL);
-	}
+	if (check_execute(minishell, cmd) == 1)
+		free_exit(minishell, "");
 	if (find_builtin(minishell, cmd) == 1)
 	{
 		free_array(cmd);
 		free_exit(minishell, "");
 	}
-	if (ft_strncmp("cat", cmd[0], 3) == 0)
-		close(minishell->fd[0]);
 	if (access(cmd[0], X_OK) == 0)
 	{
 		if (execve(cmd[0], cmd, minishell->envp) == -1)
@@ -55,64 +82,32 @@ void	ft_execute_pipe(t_minishell *minishell, char **cmd)
 		error_execute(minishell, cmd, cmd_path);
 }
 
-char **ft_split_cmd(char **cmd, int cmd_count) {
-    char **result;
-    int result_count;
-    int result_size;
-	char **tokens;
-
-	result = NULL;
-	result_count = 0;
-	result_size = 0;
-    for (int i = 0; i < cmd_count; i++) {
-        tokens = ft_split(cmd[i], ' ');
-        if (!tokens) 
-			continue;
-        for (int j = 0; tokens[j] != NULL; j++) {
-            if (result_count >= result_size) {
-                int new_size = result_size == 0 ? 4 : result_size * 2;
-                result = ft_realloc(result, result_size * sizeof(char *), new_size * sizeof(char *));
-                if (!result)
-				{
-                    perror("Error reallocating memory");
-                    exit(EXIT_FAILURE);
-                }
-                result_size = new_size;
-            }
-            result[result_count] = tokens[j];
-            result_count++;
-		}
-        free(tokens);
-    }
-    if (result_count >= result_size) {
-        result = ft_realloc(result, result_size * sizeof(char *), (result_count + 1) * sizeof(char *));
-        if (!result) {
-            perror("Error reallocating memory");
-            exit(EXIT_FAILURE);
-        }
-    }
-    result[result_count] = NULL;
-	free_array(cmd);
-    return result;
-}
-
-int		check_dir(char *str)
+/**
+ * @brief Checks if the command is a directory
+ * @param char *str
+ * @return (int);
+ */
+static int	check_dir(char *str)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (str[i])
 	{
 		if (str[i] == '/')
-			return 1;
+			return (1);
 		i++;
 	}
-	return 0;
+	return (0);
 }
 
-void	execute_cmd(t_minishell *minishell, char **split_cmd, char *cmd)
+/**
+ * @brief Executes a command
+ * @param t_minishell *minishell, char **split_cmd
+ * @return (void);
+ */
+void	execute_cmd(t_minishell *minishell, char **split_cmd)
 {
-	(void)cmd;
 	char	*cmd_path;
 	int		count;
 

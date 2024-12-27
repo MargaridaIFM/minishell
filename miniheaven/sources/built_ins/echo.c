@@ -12,13 +12,19 @@
 
 #include "../../includes/minishell.h"
 
+/**
+ * @brief Reads str to the end, until is equal to c.
+ * @param char *str, char c.
+ * @return (int);
+ */
 static int	find_char(char *str, char c)
 {
 	int	i;
 	int	flag;
 
 	i = 0;
-	flag = 0;
+	if (!str || !str[i])
+		return (0);
 	while (str[i] && str[i] == c)
 	{
 		flag = 1;
@@ -30,7 +36,7 @@ static int	find_char(char *str, char c)
 }
 
 /**
- * @brief Vou dar skip no 'echo' e no '-n', caso tenha o '-n', ativar a flag.
+ * @brief Skips the flags of the echo command.
  * @param char *str, int *flag.
  * @return (int);
  */
@@ -39,10 +45,13 @@ static int	skip(char **cmd, int *flag)
 	int	i;
 
 	i = 1;
-	while (cmd[i] && find_char(cmd[i] + 1, 'n') == 1)
+	if (ft_strlen(cmd[i]) >= 2)
 	{
-		*flag = 1;
-		i++;
+		while (ft_strlen(cmd[i]) > 0 && find_char(cmd[i] + 1, 'n') == 1)
+		{
+			*flag = 1;
+			i++;
+		}
 	}
 	if (*flag == 1)
 		return (i);
@@ -50,7 +59,7 @@ static int	skip(char **cmd, int *flag)
 }
 
 /**
- * @brief Vai imprimir a 'str' que recebe
+ * @brief Prints the string passed as argument.
  * @param char *str
  * @return (void);
  */

@@ -38,6 +38,24 @@ t_heredoc	*add_heredoc_node(t_minishell *minishell)
 	return (new_node);
 }
 
+char	*process_variable_replacement(char *line, int *i,
+			t_minishell *minishell)
+{
+	char	*new_str;
+	int		offset;
+
+	offset = 0;
+	new_str = NULL;
+	(*i)++;
+	get_var_name(minishell->expander, i, line);
+	minishell->expander->var_content = extrat_var_content(minishell);
+	offset = *i - ft_strlen(minishell->expander->var_name) - 1;
+	new_str = replace_var_in_str(line, minishell, &offset);
+	free(line);
+	free_expand(minishell->expander);
+	return (new_str);
+}
+
 char	*expand_heredoc(t_minishell *minishell, char *line)
 {
 	int		i;
@@ -56,14 +74,9 @@ char	*expand_heredoc(t_minishell *minishell, char *line)
 	{
 		if (line[i] == '$')
 		{
-			i++;
-			get_var_name(minishell->expander, &i, line);
-			minishell->expander->var_content = extrat_var_content(minishell);
-			i = i - ft_strlen(minishell->expander->var_name) - 1;
-			new_str = replace_var_in_str(line, minishell, &i);
-			free(line);
+			new_str = process_variable_replacement
+				(line, &i, minishell);
 			line = new_str;
-			free_expand(minishell->expander);
 		}
 		i++;
 	}
@@ -118,12 +131,3 @@ void	rm_here_quotes(t_minishell *minishell, t_heredoc *heredoc, int *idx,
 	heredoc->delimiter = new_str;
 	*(idx) = new_idx - 1;
 }
-
-// void	reset_heredoc(t_heredoc *heredoc)
-// {
-// 	heredoc->delimiter = NULL;
-// 	heredoc->line = NULL;
-// 	heredoc->fd[0] = -1;
-// 	heredoc->fd[1] = -1;
-// 	heredoc->quotes = 0;
-// }

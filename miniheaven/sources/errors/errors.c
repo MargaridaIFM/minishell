@@ -12,6 +12,11 @@
 
 #include "../includes/minishell.h"
 
+/**
+ * @brief  Utils for free all and free_exit
+ * @param t_minishell *minishell
+ * @return (void);
+ */
 static void	free_utils(t_minishell *minishell)
 {
 	if (minishell->ast)
@@ -37,15 +42,27 @@ static void	free_utils(t_minishell *minishell)
 		free(minishell->expander);
 		minishell->expander = NULL;
 	}
+	minishell->_str_ = 0;
 }
 
+/**
+ * @brief Frees everything, withouth exiting the program
+ * @param t_minishell *minishell, char *str
+ * @return (void);
+ */
 void	free_all(t_minishell *minishell, char *str)
 {
 	free_utils(minishell);
+	minishell->_str_ = 0;
 	if (str && str[0] != '\0')
 		ft_putstr_fd(str, 2);
 }
 
+/**
+ * @brief Frees evertyhing and exits the program
+ * @param t_minishell *minishell, char *str
+ * @return (void);
+ */
 void	free_exit(t_minishell *minishell, char *str)
 {
 	free_array(minishell->local);
@@ -55,26 +72,20 @@ void	free_exit(t_minishell *minishell, char *str)
 	free_array(minishell->envp);
 	close_pipe(minishell->temp_stdin);
 	close_pipe(minishell->temp_stdout);
-	if (minishell->_pipe_ == 1)
-	{
-		close(0);
-		close(1);
-		close(minishell->fd[0]);
-		close(minishell->fd[1]);
-	}
 	close_pipe(minishell->fd[1]);
 	close_pipe(minishell->fd[0]);
 	free_pointer(minishell->cmd);
 	close_pipe(minishell->infile);
-	if (minishell->temp_stdin != -1)
-		close(0);
-	if (minishell->temp_stdout != -1)
-		close(1);
 	free_utils(minishell);
 	fd_clean();
 	exit(g_signal);
 }
 
+/**
+ * @brief Closes all fd
+ * @param void
+ * @return (void);
+ */
 void	fd_clean(void)
 {
 	int	i;
@@ -87,6 +98,11 @@ void	fd_clean(void)
 	}
 }
 
+/**
+ * @brief Frees the cmd and the path
+ * @param t_ast *left_side
+ * @return (void);
+ */
 void	free_cmd_path(t_ast *left_side)
 {
 	while (left_side->token->type <= 3)
