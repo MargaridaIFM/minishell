@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exit.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mfrancis <mfrancis@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/12/27 12:59:21 by mfrancis          #+#    #+#             */
+/*   Updated: 2024/12/27 12:59:21 by mfrancis         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/minishell.h"
 
 static int	check_number(char *str)
@@ -21,7 +33,7 @@ static int	check_number(char *str)
 
 static int	get_exit_code(char *str)
 {
-	int code;
+	int	code;
 
 	code = ft_atoi(str);
 	if (check_number(str) == 1)
@@ -29,9 +41,8 @@ static int	get_exit_code(char *str)
 	return (code);
 }
 
-void   ft_exit(t_minishell *minishell, char **dp)
+void	ft_exit(t_minishell *minishell, char **dp)
 {
-
 	if (count_array(dp) > 2)
 	{
 		ft_putstr_fd("bash: exit: too many arguments\n", 2);
