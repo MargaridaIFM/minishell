@@ -92,6 +92,8 @@ static int	check_dir(char *str)
 	int	i;
 
 	i = 0;
+	if (!str)
+		return (0);
 	while (str[i])
 	{
 		if (str[i] == '/')
@@ -113,7 +115,7 @@ void	execute_cmd(t_minishell *minishell, char **split_cmd)
 
 	count = count_array(split_cmd);
 	split_cmd = ft_split_cmd(split_cmd, count);
-	if (access(split_cmd[0], X_OK) == 0)
+	if (split_cmd[0] && access(split_cmd[0], X_OK) == 0)
 		execve(split_cmd[0], split_cmd, minishell->envp);
 	if (check_dir(split_cmd[0]) == 1)
 	{

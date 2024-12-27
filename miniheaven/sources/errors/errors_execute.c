@@ -6,7 +6,7 @@
 /*   By: mistery576 <mistery576@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 18:30:23 by mistery576        #+#    #+#             */
-/*   Updated: 2024/12/26 23:14:39 by mistery576       ###   ########.fr       */
+/*   Updated: 2024/12/27 10:49:20 by mistery576       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
  */
 int	check_execute(t_minishell *minishell, char **cmd)
 {
-	if (my_getenv(minishell, "PATH") == NULL && access(cmd[0], X_OK) != 0)
+	if (!cmd[0] || (my_getenv(minishell, "PATH") == NULL && access(cmd[0], X_OK) != 0))
 	{
 		ft_putstr_fd(cmd[0], 2);
 		ft_putstr_fd(": command not found\n", 2);

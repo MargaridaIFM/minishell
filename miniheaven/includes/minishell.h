@@ -235,6 +235,9 @@ void		ft_pwd(void);
 // UNSET //
 void		ft_unset(char **cmd, t_minishell *minishell);
 
+// EXIT //
+void   ft_exit(t_minishell *minishell, char **dp);
+
 // Built_ins_utils //
 char		**dup_envp(t_minishell *minishell, char **envp); /*Usado no export*/
 char		*find_path(t_minishell *minishell, char *cmd); /*Usado no env*/
