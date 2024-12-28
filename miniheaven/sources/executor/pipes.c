@@ -87,7 +87,6 @@ static void	handle_last_command(t_minishell *minishell,
 	if (pids[i] == 0)
 	{
 		dup2(minishell->prev_fd, STDIN_FILENO);
-		//close(minishell->prev_fd);
 		free(pids);
 		execute_ast(minishell, ast, 1);
 		exit(EXIT_SUCCESS);

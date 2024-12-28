@@ -28,30 +28,9 @@ static char	**copy_array(t_ast *ast, int count)
 	i = 0;
 	while (ast && (ast->token->type == WORD || ast->token->type == STR))
 	{
-		if (ast->token->expander == 1)
-		{
-			char **split_cmd = ft_split(ast->token->str, ' ');
-			for (int j = 0; split_cmd[j]; j++)
-			{
-				cmd_array[i] = ft_strdup(split_cmd[j]);
-				i++;
-			}
-			free_array(split_cmd);
-			ast = ast->right;
-		}
-		else
-		{
-			cmd_array[i] = ft_strdup(ast->token->str);
-			if (!cmd_array[i])
-			{
-				while (i > 0)
-					free(cmd_array[--i]);
-				free(cmd_array);
-				return (NULL);
-			}
-			ast = ast->right;
-			i++;
-		}
+		if (!copy_token_to_array(ast, cmd_array, &i))
+			return (NULL);
+		ast = ast->right;
 	}
 	cmd_array[i] = NULL;
 	return (cmd_array);
@@ -67,6 +46,7 @@ char	**built_cmd(t_ast *ast)
 	t_ast	*temp;
 	char	**cmd_array;
 	int		count;
+	char	**split_cmd;
 
 	count = 0;
 	temp = ast;
@@ -74,10 +54,9 @@ char	**built_cmd(t_ast *ast)
 	{
 		if (temp->token->expander == 1)
 		{
-			char **split_cmd = ft_split(temp->token->str, ' ');
+			split_cmd = ft_split(temp->token->str, ' ');
 			count += count_array(split_cmd);
 			free_array(split_cmd);
-			printf("EXPANDER\n");
 		}
 		else
 			count++;

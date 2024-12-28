@@ -47,7 +47,9 @@ static int	skip(char **cmd, int *flag)
 	i = 1;
 	if (ft_strlen(cmd[i]) >= 2)
 	{
-		while (ft_strlen(cmd[i]) > 0 && cmd[i][0] == '-' && find_char(cmd[i] + 1, 'n') == 1)
+		while (ft_strlen(cmd[i]) > 0
+			&& cmd[i][0] == '-'
+			&& find_char(cmd[i] + 1, 'n') == 1)
 		{
 			*flag = 1;
 			i++;

@@ -103,20 +103,6 @@ static int	check_dir(char *str)
 	return (0);
 }
 
-char **replace_null_with_empty(char **str)
-{
-    int i = 0;
-    while (str[i] != NULL)
-    {
-        if (str[i] == NULL)
-        {
-            str[i] = ft_strdup("");
-        }
-        i++;
-    }
-    return str;
-}
-
 /**
  * @brief Executes a command
  * @param t_minishell *minishell, char **split_cmd
@@ -125,11 +111,8 @@ char **replace_null_with_empty(char **str)
 void	execute_cmd(t_minishell *minishell, char **split_cmd)
 {
 	char	*cmd_path;
-	//int		count;
 
-	//count = count_array(split_cmd);
 	split_cmd = replace_null_with_empty(split_cmd);
-	//split_cmd = ft_split_cmd(split_cmd, count);
 	if (split_cmd[0] && access(split_cmd[0], X_OK) == 0)
 		execve(split_cmd[0], split_cmd, minishell->envp);
 	if (check_dir(split_cmd[0]) == 1)

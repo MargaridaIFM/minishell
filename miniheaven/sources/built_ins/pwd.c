@@ -17,10 +17,10 @@
  * @param void
  * @return (void);
  */
-void	ft_pwd()
+void	ft_pwd(void)
 {
 	char	*pwd;
-	
+
 	pwd = getcwd(NULL, 0);
 	if (pwd != NULL)
 	{

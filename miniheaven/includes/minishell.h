@@ -292,7 +292,9 @@ char		**join_array(char **array_first, char *array);
 void		free_cmd_path(t_ast *left_side);
 void		check_is_str(t_minishell *minishell);
 void		find_files(t_ast *orig, t_ast *temp_copy, t_minishell *minishell);
-
+char		**concat_arrays(char **arr1, char **arr2);
+char		**replace_null_with_empty(char **str);
+int			copy_token_to_array(t_ast *ast, char **cmd_array, int *i);
 char		**join_arrays(char **array_first, char *array);
 
 #endif
