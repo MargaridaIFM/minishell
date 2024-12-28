@@ -49,7 +49,15 @@ void	execute_ast(t_minishell *minishell, t_ast *ast, int flag)
 int	find_builtin(t_minishell *minishell, char **dp)
 {
 	if (ft_strcmp(dp[0], "cd") == 0)
+	{
+		if (count_array(dp) > 2)
+		{
+			ft_putstr_fd("cd: too many arguments\n", 2);
+			minishell->exit_status = 1;
+			return (1);
+		}
 		return (ft_cd(dp, minishell), 1);
+	}
 	else if (ft_strcmp(dp[0], "echo") == 0)
 		return (ft_echo(dp), 1);
 	else if (ft_strcmp(dp[0], "env") == 0)
