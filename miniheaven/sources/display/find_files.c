@@ -62,6 +62,7 @@ t_ast	*copy_ast(t_ast *original)
 		}
 		copy->token->type = original->token->type;
 		copy->token->dq = original->token->dq;
+		copy->token->expander = original->token->expander;
 		copy->token->str = ft_strdup(original->token->str);
 		copy->token->path = ft_strdup(original->token->path);
 		copy->token->cmd = copy_cmd(original->token->cmd);

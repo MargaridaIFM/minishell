@@ -128,8 +128,8 @@ void	execute_cmd(t_minishell *minishell, char **split_cmd)
 	//int		count;
 
 	//count = count_array(split_cmd);
-	//split_cmd = ft_split_cmd(split_cmd, count);
 	split_cmd = replace_null_with_empty(split_cmd);
+	//split_cmd = ft_split_cmd(split_cmd, count);
 	if (split_cmd[0] && access(split_cmd[0], X_OK) == 0)
 		execve(split_cmd[0], split_cmd, minishell->envp);
 	if (check_dir(split_cmd[0]) == 1)

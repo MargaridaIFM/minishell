@@ -61,6 +61,35 @@ int	count_array(char **arr)
 	return (i);
 }
 
+char **concat_arrays(char **arr1, char **arr2)
+{
+    int len1 = 0;
+    int len2 = 0;
+    while (arr1 && arr1[len1])
+        len1++;
+    while (arr2 && arr2[len2])
+        len2++;
+
+    char **result = malloc((len1 + len2 + 1) * sizeof(char *));
+    int i;
+    for (i = 0; i < len1; i++)
+        result[i] = arr1[i];
+    for (int j = 0; j < len2; j++, i++)
+        result[i] = arr2[j];
+    result[i] = NULL;
+
+    free(arr1);
+    free(arr2);
+    return result;
+}
+
+// Function to split a string by spaces and concatenate to cmd
+char **split_cmd(char **cmd, const char *str)
+{
+    char **split_str = ft_split(str, ' ');
+    return concat_arrays(cmd, split_str);
+}
+
 /**
  * @brief Collects the commads from the AST
  * @param t_ast *ast, int *count, char **cmd
@@ -80,7 +109,13 @@ char	**collect_commands(t_minishell *minishell, t_ast *ast)
 		if (first == 0 && ast->token->dq == 1
 			&& ft_count_words(ast->token->str) > 1)
 			minishell->_str_ = 1;
-		cmd = process_ast_commands(ast, &count, cmd);
+		if (ast->token->expander == 1 && ast->token->dq == 0)
+		{
+			count += ft_count_words(ast->token->str);
+			cmd = split_cmd(cmd, ast->token->str);
+		}
+		else 
+			cmd = process_ast_commands(ast, &count, cmd);
 		ast = ast->right;
 		first = 1;
 	}

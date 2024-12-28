@@ -65,6 +65,7 @@ typedef struct s_token
 	char			*str;
 	char			*path;
 	char			**cmd;
+	int				expander;
 	int				dq;
 }	t_token;
 

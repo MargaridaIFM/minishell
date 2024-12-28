@@ -87,6 +87,10 @@ $c ("hello world")
 "ls -la"
 "ls"
 "cat | ls"
+echo $a
+echo $c
+echo $a "$a"
+echo $c "$c"
 
 Redireções ✅
 
