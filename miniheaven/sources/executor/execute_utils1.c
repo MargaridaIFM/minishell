@@ -56,7 +56,7 @@ int	count_array(char **arr)
 	int	i;
 
 	i = 0;
-	while (arr[i])
+	while (arr && arr[i])
 		i++;
 	return (i);
 }
