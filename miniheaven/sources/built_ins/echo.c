@@ -17,7 +17,7 @@
  * @param char *str, char c.
  * @return (int);
  */
-static int	find_char(char *str, char c)
+int	find_char(char *str, char c)
 {
 	int	i;
 	int	flag;

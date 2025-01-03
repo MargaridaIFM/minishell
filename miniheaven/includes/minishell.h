@@ -218,6 +218,7 @@ void		ft_cd(char **split_cmd, t_minishell *minishell);
 
 // ECHO //
 void		ft_echo(char **cmd);
+int			find_char(char *str, char c);
 
 // ENV //
 void		ft_env(t_minishell *minishell, char **cmd);
