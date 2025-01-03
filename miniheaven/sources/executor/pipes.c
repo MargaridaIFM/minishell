@@ -25,6 +25,7 @@ static void	wait_pipes(t_minishell *minishell, pid_t *pids, int num_commands)
 	while (i < num_commands)
 	{
 		waitpid(pids[i], &minishell->exit_status, 0);
+		minishell->exit_status = WEXITSTATUS(minishell->exit_status);
 		i++;
 	}
 }

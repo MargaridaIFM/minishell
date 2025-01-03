@@ -118,6 +118,7 @@ static int	check_var(char *var, t_minishell *minishell)
 	i = 0;
 	if (ft_isalpha(var[i]) == 0)
 	{
+		g_signal = 1;
 		print_errors("bash: export: \'", var, "\': not a valid identifier\n");
 		return (-1);
 	}
