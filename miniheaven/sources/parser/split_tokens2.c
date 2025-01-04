@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include "./../includes/minishell.h"
-
+// apagar ?
 t_token	*create_node(void)
 {
 	t_token	*node;
@@ -45,7 +45,7 @@ int	ft_count_words(char const *s)
 	}
 	return (counter);
 }
-
+// apagar
 void	add_token_between(t_minishell *minishell, t_token *current, char *str)
 {
 	t_token	*new_node;

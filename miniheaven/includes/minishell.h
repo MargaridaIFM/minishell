@@ -99,11 +99,21 @@ typedef struct s_minishell
 	int			nbr_heredoc;
 }	t_minishell;
 
+// Inits
+void		initialization(char *envp[], t_minishell *minishell);
+
+// Display Prompt
+void		display_prompt(t_minishell *minishell);
+
 // signals
 void		setup_signals(void);
 void		stop_signals(void);
 void		setup_signals_here(void);
 void		setup_signals_executer(void);
+
+
+
+
 
 // errors
 void		free_exit(t_minishell *minishell, char *str);
@@ -126,13 +136,6 @@ void		free_pointer(void *ptr);
 void		print_errors(char *s1, char *s2, char *s3);
 int			check_execute(t_minishell *minishell, char **cmd);
 char		*failed_to_open(t_minishell *minishell);
-
-// MINISHELL UTILS //
-char		**add_string_to_array(char **array, char *new_string);
-
-// Display Prompt
-void		display_prompt(t_minishell *minishell);
-void		process_input(t_minishell *minishell);
 
 // tokanization
 void		tokenization(t_minishell *minishell);

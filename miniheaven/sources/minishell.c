@@ -14,92 +14,18 @@
 
 int	g_signal;
 
-static void	update_lvl(t_minishell *minishell, char *envp, int start)
-{
-	char	*new_lvl;
-	int		lvl;
-
-	minishell->envp[start] = NULL;
-	lvl = ft_atoi(envp + 6) + 1;
-	new_lvl = ft_itoa(lvl);
-	minishell->envp[start] = ft_strjoin("SHLVL=", new_lvl);
-	free(new_lvl);
-}
-
-static int	create_env(t_minishell *minishell, char *envp[], int envp_counter)
-{
-	int	i;
-
-	i = 0;
-	while (i < envp_counter)
-	{
-		if (ft_strncmp(envp[i], "SHLVL=", 6) == 0)
-			update_lvl(minishell, envp[i], i);
-		else
-			minishell->envp[i] = ft_strdup(envp[i]);
-		if (!minishell->envp[i])
-			free_exit(minishell, "Error - Memory envp fail\n");
-		i++;
-	}
-	if (envp_counter < 3)
-	{
-		i = 3;
-	}
-	return (i);
-}
-
-static void	mandatory_env(t_minishell *minishell)
-{
-	char	*pwd;
-	char	*shlvl;
-	char	*oldpwd;
-
-	if (my_getenv(minishell, "PWD") == NULL)
-	{
-		pwd = ft_strjoin("PWD=", getcwd(NULL, 0));
-		minishell->envp = add_string_to_array(minishell->envp, pwd);
-		free(pwd);
-	}
-	if (my_getenv(minishell, "OLDPWD") == NULL)
-	{
-		oldpwd = ft_strdup("OLDPWD");
-		minishell->envp = add_string_to_array(minishell->envp, oldpwd);
-		free(oldpwd);
-	}
-	if (my_getenv(minishell, "SHLVL") == NULL)
-	{
-		shlvl = ft_strdup("SHLVL=1");
-		minishell->envp = add_string_to_array(minishell->envp, shlvl);
-		free(shlvl);
-	}
-}
-
-static void	initialization(char *envp[], t_minishell *minishell)
-{
-	int	envp_counter;
-	int	i;
-
-	envp_counter = 0;
-	i = 0;
-	ft_bzero(minishell, sizeof(t_minishell));
-	minishell->local = malloc(sizeof(char *) * 1);
-	minishell->local[0] = NULL;
-	minishell->_str_ = 0;
-	minishell->_pipe_ = 0;
-	minishell->temp_stdin = -1;
-	minishell->temp_stdout = -1;
-	minishell->infile = -1;
-	minishell->outfile = -1;
-	minishell->tokens = NULL;
-	while (envp[envp_counter])
-		envp_counter++;
-	minishell->envp = malloc(sizeof(char *) * (envp_counter + 1));
-	if (!minishell->envp)
-		free_exit(minishell, "Error - Memory allocation fail\n");
-	i = create_env(minishell, envp, envp_counter);
-	mandatory_env(minishell);
-	minishell->envp[i] = NULL;
-}
+/**
+ * @brief Entry point for the minishell program.
+ * 
+ * Initializes the shell environment, sets up signal handling, 
+ * and enters a loop to display the shell prompt and process commands.
+ * 
+ * @param argc The argument count. Must be 1 for the program to proceed.
+ * @param argv The argument vector. Unused in this implementation.
+ * @param envp The environment variables passed to the shell.
+ * 
+ * @return 0 upon successful execution. or exits the program.
+ */
 
 int	main(int argc, char *argv[], char *envp[])
 {
@@ -123,11 +49,10 @@ int	main(int argc, char *argv[], char *envp[])
 				[/] structs
 				[x] envp
 				[x] SHLVL
-			[/] setup_signals
+			[/] setup_signals - interective signals
 				[x]  crtl D
 				[x]  crtl \
 				[x]  crtl C
-				[] consider child process;
 			[?] display_prompt - rl_redisplay minishell$
 				[x] ver leaks - suprimir - supression file - .supp
 			[] ler input  - readline ?
