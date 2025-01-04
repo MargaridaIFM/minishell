@@ -19,7 +19,12 @@
  */
 static int	open_file_util(t_minishell *minishell, t_ast *ast, char *file)
 {
-	if (ast->token->type == REDIR_IN)
+	if (ft_strlen(file) == 0)
+	{
+		print_errors("bash: ", "ambiguous redirect\n", NULL);
+		return (-1);
+	}
+	else if (ast->token->type == REDIR_IN)
 	{
 		if (access(file, F_OK != 0 && access(file, R_OK)) != 0)
 		{
@@ -30,13 +35,13 @@ static int	open_file_util(t_minishell *minishell, t_ast *ast, char *file)
 			close(minishell->infile);
 		minishell->infile = open(file, O_RDONLY, 0644);
 	}
-	if (ast->token->type == REDIR_OUT || ast->token->type == REDIR_APPEND)
+	else if (ast->token->type == REDIR_OUT || ast->token->type == REDIR_APPEND)
 	{
 		if (minishell->outfile != -1)
 			close(minishell->outfile);
 		if (ast->token->type == REDIR_OUT)
 			minishell->outfile = open(file, O_WRONLY | O_CREAT | O_TRUNC,
-					0644);
+				0644);
 		else
 			minishell->outfile = open(file, O_WRONLY | O_CREAT | O_APPEND,
 					0644);
