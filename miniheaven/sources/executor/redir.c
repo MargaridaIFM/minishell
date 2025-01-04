@@ -21,7 +21,7 @@ static int	open_file_util(t_minishell *minishell, t_ast *ast, char *file)
 {
 	if (ast->token->type == REDIR_IN)
 	{
-		if (access(file, F_OK) != 0)
+		if (access(file, F_OK != 0 && access(file, R_OK)) != 0)
 		{
 			print_errors("bash: ", file, ": No such file or directory\n");
 			return (-1);

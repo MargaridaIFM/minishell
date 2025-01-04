@@ -64,7 +64,7 @@ char	*failed_to_open(t_minishell *minishell)
 	g_signal = 1;
 	if (minishell->_pipe_ == 1)
 	{
-		close(minishell->fd[0]);
+		//close(minishell->fd[0]);
 		free_exit(minishell, "");
 	}
 	return (NULL);

@@ -30,6 +30,11 @@ void	execute_ast(t_minishell *minishell, t_ast *ast, int flag)
 	if (ast->token->type == WORD || ast->token->type == STR)
 	{
 		cmd = collect_commands(minishell, ast);
+		if  (!cmd)
+		{
+			g_signal = 0;
+			return ;
+		}
 		if (flag == -1)
 			ft_execute(minishell, cmd);
 		else

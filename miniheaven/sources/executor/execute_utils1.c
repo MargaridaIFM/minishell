@@ -91,8 +91,11 @@ char	**collect_commands(t_minishell *minishell, t_ast *ast)
 			minishell->_str_ = 1;
 		if (ast->token->expander == 1 && ast->token->dq == 0)
 		{
-			count += ft_count_words(ast->token->str);
-			cmd = split_cmd(cmd, ast->token->str);
+			if (ft_strlen(ast->token->str) > 0)
+			{
+				count += ft_count_words(ast->token->str);
+				cmd = split_cmd(cmd, ast->token->str);
+			}
 		}
 		else
 			cmd = process_ast_commands(ast, &count, cmd);

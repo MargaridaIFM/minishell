@@ -45,8 +45,9 @@ void	ft_exit(t_minishell *minishell, char **dp)
 {
 	if (count_array(dp) > 2)
 	{
+		printf("exit\n");
 		ft_putstr_fd("bash: exit: too many arguments\n", 2);
-		g_signal = 1;
+		g_signal = 2;
 		return ;
 	}
 	if (dp[1])

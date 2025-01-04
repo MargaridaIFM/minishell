@@ -32,6 +32,8 @@ int	ft_count_words(char const *s)
 
 	counter = 0;
 	idx = 0;
+	if (!s)
+		return (counter);
 	while (s[idx] && is_delimiter(s[idx]))
 		idx++;
 	while (s[idx])
