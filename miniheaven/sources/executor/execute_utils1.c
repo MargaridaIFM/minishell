@@ -126,6 +126,7 @@ void	execute_redir(t_minishell *minishell, t_ast *ast, int flag)
 		free_all(minishell, "");
 		return ;
 	}
+	printf("entrou\n");
 	if (flag == -1)
 		ft_execute(minishell, cmd);
 	else if (minishell->_pipe_ == 1)
