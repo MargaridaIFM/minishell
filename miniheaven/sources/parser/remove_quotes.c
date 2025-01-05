@@ -12,6 +12,17 @@
 
 #include "./../includes/minishell.h"
 
+/**
+ * @brief Removes single quotes from a token's string.
+ * Updates the token and adjusts the index to account for the removal.
+ * 
+ * @param token The token whose string will be modified.
+ * @param minishell Pointer to the `t_minishell`.
+ * @param idx Pointer to the current index in the token string.
+ * 
+ * @note This function allocates memory for a new string and frees the old.
+ * If memory allocation fails, the program exits with an error message.
+ */
 void	rm_single_quotes(t_token *token, t_minishell *minishell, int *idx)
 {
 	int		start;
@@ -37,6 +48,17 @@ void	rm_single_quotes(t_token *token, t_minishell *minishell, int *idx)
 	free(token->str);
 	token->str = new_str;
 }
+/**
+ * @brief Removes a double quote from a token's string.
+ * Updates the token and adjusts the index to account for the removal.
+ * 
+ * @param token The token whose string will be modified.
+ * @param minishell Pointer to the `t_minishell`
+ * @param idx Pointer to the current index in the token string.
+ * 
+ * @note This function allocates memory for a new string and frees the old.
+ * If memory allocation fails, the program exits with an error message.
+ */
 
 void	rm_double_quote(t_token *token, t_minishell *minishell, int *idx)
 {

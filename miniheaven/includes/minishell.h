@@ -111,32 +111,6 @@ void		stop_signals(void);
 void		setup_signals_here(void);
 void		setup_signals_executer(void);
 
-
-
-
-
-// errors
-void		free_exit(t_minishell *minishell, char *str);
-void		free_all(t_minishell *minishell, char *str);
-void		fd_clean(void);
-void		free_cmd_path(t_ast *left_side);
-
-//errors1
-void		free_array(char **array);
-void		free_tokens(t_minishell *minishell);
-void		free_expand(t_expand *expander);
-void		free_ast(t_ast *ast);
-void		free_heredoc(t_heredoc *heredoc);
-
-//errors2
-void		close_pipe(int fd);
-void		free_pointer(void *ptr);
-
-//errors execute
-void		print_errors(char *s1, char *s2, char *s3);
-int			check_execute(t_minishell *minishell, char **cmd);
-char		*failed_to_open(t_minishell *minishell);
-
 // tokanization
 void		tokenization(t_minishell *minishell);
 int			check_quotes(char quote, t_minishell *minishell, int *idx);
@@ -160,29 +134,42 @@ void		expander(t_minishell *minishell);
 void		reset_expand(t_expand *expander);
 char		*add_char(int c, char *str);
 char		*extrat_var_content(t_minishell *minishell);
-char		*replace_var_in_str(char *str, t_minishell *minishell, int *idx);
+
+// expander vars
 void		expand_vars(t_minishell *minishell, t_token *token);
 
-// split_token
-void		split_tokens(t_minishell *minishell, t_token **current);
-void		add_token_between(t_minishell *minishell, t_token *tokens,
-				char *str);
+// replace_var_in_str
+char		*replace_var_in_str(char *str, t_minishell *minishell, int *idx);
+
+// parser_utils
 int			ft_count_words(char const *s);
 int			is_delimiter(char c);
-int			find_last_delimiter(char *str);
 
 // remove_quotes
 void		rm_single_quotes(t_token *token, t_minishell *minishell, int *idx);
 void		rm_double_quote(t_token *token, t_minishell *minishell, int *idx);
 
 // ast
+t_ast		*create_ast(t_token *tokens);
 t_tk_tp		check_redir(t_token *tokens);
 int			check_symbol(t_token *tokens, t_tk_tp symbol);
-t_ast		*create_ast(t_token *tokens);
-t_ast		*split_tokens_ast(t_token **tokens, t_tk_tp symbol);
 t_ast		*add_right(t_token **tokens);
-t_ast		*split_tokens_ast(t_token **tokens, t_tk_tp symbol);
 t_ast		*new_ast_node(t_token *tokens);
+
+// ast1
+t_ast		*split_tokens_ast(t_token **tokens, t_tk_tp symbol);
+
+//	find_files
+t_ast		*copy_ast(t_ast *original);
+void		no_pipe(t_ast *temp_copy, t_ast *orig, t_ast *save_node);
+void		find_files(t_ast *orig, t_ast *temp_copy, t_minishell *minishell);
+
+// find_files_utils
+char		**built_cmd(t_ast *ast);
+void		set_redirs(t_minishell *minishell, t_ast *ast);
+void		no_pipe_util(t_ast *orig, t_ast *temp_copy);
+void		complete_last_redir(t_ast *temp_copy, t_ast *orig,
+				t_ast *save_node);
 
 // heredoc
 void		process_ast_heredoc(t_minishell *minishell, t_ast *ast,
@@ -200,14 +187,6 @@ char		*expand_heredoc(t_minishell *minishell, char *line);
 void		get_var_name(t_expand *expander, int *i, char *line);
 void		rm_here_quotes(t_minishell *minishell, t_heredoc *heredoc, int *idx,
 				char quote);
-
-// debug functions
-void		print_token(t_minishell *data);
-void		print_token2(t_token *data);
-// char	*test (char *str);
-void		print_ast(t_ast *ast, int level);
-char		*token_type_to_str(t_tk_tp type);
-void		print_heredoc(t_minishell *data);
 
 // Built_ins //
 // CD_UTILS //
@@ -276,15 +255,6 @@ int			redirect_read(t_minishell *minishell);
 void		close_redir(t_minishell *minishell);
 int			rebuild_fileno(t_minishell *minishell);
 
-//	ASSOCIATE REDIR	//
-void		set_redirs(t_minishell *minishell, t_ast *ast);
-
-//	FIND FILES	//
-void		no_pipe_util(t_ast *orig, t_ast *temp_copy);
-void		complete_last_redir(t_ast *temp_copy, t_ast *orig,
-				t_ast *save_node);
-t_ast		*copy_ast(t_ast *original);
-
 //	SPLIT_CMD	//
 char		**ft_split_cmd(char **cmd, int cmd_count);
 
@@ -292,9 +262,41 @@ char		**ft_split_cmd(char **cmd, int cmd_count);
 char		**join_array(char **array_first, char *array);
 
 void		free_cmd_path(t_ast *left_side);
-void		check_is_str(t_minishell *minishell);
 void		find_files(t_ast *orig, t_ast *temp_copy, t_minishell *minishell);
 
-char		**join_arrays(char **array_first, char *array);
+// errors
+void		free_exit(t_minishell *minishell, char *str);
+void		free_all(t_minishell *minishell, char *str);
+void		fd_clean(void);
+void		free_cmd_path(t_ast *left_side);
 
+//errors1
+void		free_array(char **array);
+void		free_tokens(t_minishell *minishell);
+void		free_expand(t_expand *expander);
+void		free_ast(t_ast *ast);
+void		free_heredoc(t_heredoc *heredoc);
+
+//errors2
+void		close_pipe(int fd);
+void		free_pointer(void *ptr);
+
+//errors execute
+void		print_errors(char *s1, char *s2, char *s3);
+int			check_execute(t_minishell *minishell, char **cmd);
+char		*failed_to_open(t_minishell *minishell);
+
+// split_token
+// void		split_tokens(t_minishell *minishell, t_token **current);
+// void		add_token_between(t_minishell *minishell, t_token *tokens,
+// 				char *str);
+
+// int			find_last_delimiter(char *str);
+// debug functions
+// void		print_token(t_minishell *data);
+// void		print_token2(t_token *data);
+// char	*test (char *str);
+// void		print_ast(t_ast *ast, int level);
+// char		*token_type_to_str(t_tk_tp type);
+// void		print_heredoc(t_minishell *data);
 #endif

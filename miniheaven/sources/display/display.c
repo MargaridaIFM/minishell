@@ -61,7 +61,7 @@ static void	process_util(t_minishell *minishell, t_ast *ast)
  * @return Void. This function does not return anything but modifies the flag.
  */
 
-stactic void	check_is_str(t_minishell *minishell)
+static void	check_is_str(t_minishell *minishell)
 {
 	t_token	*temp;
 	int		flag;

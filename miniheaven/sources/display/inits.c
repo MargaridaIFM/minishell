@@ -6,9 +6,11 @@
 /*   By: mfrancis <mfrancis@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/04 12:56:42 by mfrancis          #+#    #+#             */
-/*   Updated: 2025/01/04 14:12:30 by mfrancis         ###   ########.fr       */
+/*   Updated: 2025/01/05 20:59:56 by mfrancis         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include "../../includes/minishell.h"
 
 static void	update_lvl(t_minishell *minishell, char *envp, int start)
 {
@@ -43,6 +45,7 @@ static int	create_env(t_minishell *minishell, char *envp[], int envp_counter)
 	}
 	return (i);
 }
+
 static char	**add_string_to_array(char **array, char *new_string)
 {
 	char	**new_array;
@@ -66,6 +69,7 @@ static char	**add_string_to_array(char **array, char *new_string)
 	new_array[i + 1] = NULL;
 	return (new_array);
 }
+
 static void	mandatory_env(t_minishell *minishell)
 {
 	char	*pwd;

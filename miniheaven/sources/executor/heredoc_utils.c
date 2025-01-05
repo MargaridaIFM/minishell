@@ -12,6 +12,14 @@
 
 #include "../includes/minishell.h"
 
+/**
+ * @brief Adds a new heredoc node to the linked list in the minishell structure.
+ * Allocates memory for a new `t_heredoc` node and initializes its fields. 
+ * 
+ * @param minishell Pointer to the `t_minishell` structure.
+ * 
+ * @return Pointer to the newly created `t_heredoc` node.
+ */
 t_heredoc	*add_heredoc_node(t_minishell *minishell)
 {
 	t_heredoc	*new_node;
@@ -38,6 +46,15 @@ t_heredoc	*add_heredoc_node(t_minishell *minishell)
 	return (new_node);
 }
 
+/**
+ * @brief Handles variable replacement in a heredoc line.
+ * 
+ * @param line The current line being processed.
+ * @param i Pointer to the current index of the line.
+ * @param minishell Pointer to the `t_minishell` structure.
+ * 
+ * @return The newly constructed string with the variable replaced.
+ */
 char	*process_variable_replacement(char *line, int *i,
 			t_minishell *minishell)
 {
@@ -56,6 +73,17 @@ char	*process_variable_replacement(char *line, int *i,
 	return (new_str);
 }
 
+/**
+ * @brief Expands environment variables in a heredoc line.
+ * 
+ * Iterates through a heredoc line and expands any variables by 
+ * replacing them with their corresponding values.
+ * 
+ * @param minishell Pointer to the `t_minishell` structure.
+ * @param line The line to expand.
+ * 
+ * @return The expanded line.
+ */
 char	*expand_heredoc(t_minishell *minishell, char *line)
 {
 	int		i;
@@ -83,6 +111,15 @@ char	*expand_heredoc(t_minishell *minishell, char *line)
 	return (new_str);
 }
 
+/**
+ * @brief Extracts the variable name from a line for variable expansion.
+ * 
+ * @param expander Pointer to the `t_expand` structure.
+ * @param i Pointer to the current index in the line.
+ * @param line The line being processed.
+ * 
+ * @return Void. Updates the `var_name` field in the expander.
+ */
 void	get_var_name(t_expand *expander, int *i, char *line)
 {
 	if (line[*i] == '?')
@@ -105,6 +142,19 @@ void	get_var_name(t_expand *expander, int *i, char *line)
 	}
 }
 
+/**
+ * @brief Removes quotes from a heredoc delimiter.
+ * 
+ * Processes a heredoc delimiter to remove single or double  quotes.
+ * Allocates a new string without the quotes and updates the delimiter.
+ * 
+ * @param minishell Pointer to the `t_minishell` struct.
+ * @param heredoc Pointer to the `t_heredoc` struct.
+ * @param idx Pointer to the current index in the delimiter.
+ * @param quote The type of quote to remove (`'` or `"`).
+ * 
+ * @return Void. Updates the `delimiter` field in the heredoc struct.
+ */
 void	rm_here_quotes(t_minishell *minishell, t_heredoc *heredoc, int *idx,
 		char quote)
 {
