@@ -105,6 +105,8 @@ void	initialization(char *envp[], t_minishell *minishell)
 	i = 0;
 	ft_bzero(minishell, sizeof(t_minishell));
 	minishell->local = malloc(sizeof(char *) * 1);
+	if (!minishell->local)
+		free_exit(minishell, "Error - Memory allocation fail\n");
 	minishell->local[0] = NULL;
 	minishell->_str_ = 0;
 	minishell->_pipe_ = 0;

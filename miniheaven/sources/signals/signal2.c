@@ -54,7 +54,7 @@ void	setup_signals_executer(void)
 	sig_int.sa_handler = exec_handler;
 	sig_quit.sa_handler = exec_handler;
 	sig_int.sa_flags = SA_RESTART;
-	sig_quit.sa_flags = 0;
+	sig_quit.sa_flags = SA_RESTART;
 	sigaction(SIGINT, &sig_int, NULL);
 	sigaction(SIGQUIT, &sig_quit, NULL);
 }

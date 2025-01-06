@@ -60,8 +60,7 @@ SRC				=	$(addprefix $(SRC_DIR), minishell.c) \
 					$(addprefix $(SRC_DIR)$(EXECUTOR_DIR), my_getenv.c array_utils.c array_utils2.c) \
 					$(addprefix $(SRC_DIR)$(PARSER_DIR), expander_vars.c replace_var_in_str.c) \
 					$(addprefix $(SRC_DIR)$(PARSER_DIR), tokenization.c tokenization_utils.c expander.c syntax_error.c ast.c ast1.c parser_utils.c remove_quotes.c) \
-				#	$(addprefix $(SRC_DIR), malloc.c) \
-				#	$(addprefix $(SRC_DIR)$(BUILDS_IN_DIR), pwd.c)
+#					$(addprefix $(SRC_DIR), malloc.c)
 
 OBJ_DIRS		=	$(OBJ_DIR) $(addprefix $(OBJ_DIR), $(PARSER_DIR)) \
 					$(addprefix $(OBJ_DIR), $(SIGNALS_DIR)) \
