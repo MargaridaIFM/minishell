@@ -52,6 +52,7 @@ void	ft_exit(t_minishell *minishell, char **dp)
 	}
 	if (dp[1])
 		g_signal = get_exit_code(dp[1]);
+	ft_putendl_fd("exit", 1);
 	free_array(dp);
 	free_exit(minishell, "");
 }

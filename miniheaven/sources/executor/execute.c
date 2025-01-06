@@ -89,13 +89,12 @@ void	ft_execute(t_minishell *minishell, char **cmd)
 
 	if (redirect_read(minishell) == -1)
 		free_exit(minishell, "Something went wrong with dup2\n");
-	if (check_execute(minishell, cmd) == 1)
-		return ;
 	if (find_builtin(minishell, cmd) == 1)
 	{
 		minishell->exit_status = WEXITSTATUS(minishell->exit_status);
 		return (free_array(cmd));
 	}
+
 	child = fork();
 	if (child == 0)
 		execute_cmd(minishell, cmd);
