@@ -127,5 +127,12 @@ void	execute_cmd(t_minishell *minishell, char **split_cmd)
 	cmd_path = find_path(minishell, split_cmd[0]);
 	if (cmd_path == NULL)
 		error_execute(minishell, split_cmd, cmd_path);
-	execve(cmd_path, split_cmd, minishell->envp);
+	if (execve(cmd_path, split_cmd, minishell->envp) != 0)
+	{
+		ft_putstr_fd("Couldn't find the command\n", 2);
+		g_signal = 127;
+		free(cmd_path);
+		free_array(split_cmd);
+		free_exit(minishell, " ");
+	}
 }

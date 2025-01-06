@@ -22,7 +22,7 @@ static int	check_permissions(t_ast *ast, char *file)
 	}
 	if (ast->token->type == REDIR_OUT || ast->token->type == REDIR_APPEND)
 	{
-		if (access(file, W_OK) != 0)
+		if (access(file, F_OK) != 0 && access(file, W_OK) != 0)
 			return (print_errors("bash: ", file, ": permissions denied\n"), -1);
 	}
 	return (0);
