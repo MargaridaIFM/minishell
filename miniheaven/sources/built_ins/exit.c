@@ -37,7 +37,7 @@ static int	get_exit_code(char *str)
 
 	code = ft_atoi(str);
 	if (check_number(str) == 1)
-		return (255);
+		return (2);
 	return (code);
 }
 
