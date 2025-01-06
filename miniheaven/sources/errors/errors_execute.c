@@ -29,9 +29,7 @@ int	check_execute(t_minishell *minishell, char **cmd)
 	}
 	if (my_getenv(minishell, "PATH") == NULL)
 	{
-		ft_putstr_fd("bash: ", 2);
-		ft_putstr_fd(cmd[0], 2);
-		ft_putstr_fd(": command not found\n", 2);
+		print_errors("bash: ", cmd[0], ": command not found\n");
 		g_signal = 127;
 		minishell->_str_ = 0;
 		return (free_array(cmd), 1);
@@ -72,7 +70,6 @@ char	*failed_to_open(t_minishell *minishell)
 	g_signal = 1;
 	if (minishell->_pipe_ == 1)
 	{
-		//close(minishell->fd[0]);
 		free_exit(minishell, "");
 	}
 	return (NULL);

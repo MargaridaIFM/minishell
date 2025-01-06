@@ -111,8 +111,8 @@ char	*find_path(t_minishell *minishell, char *cmd)
 	char	*full_path;
 	char	*path_envp;
 
-	if (!cmd[0]	 || ft_strncmp(cmd, ".", 1) == 0 || ft_strncmp(cmd, " ", 1) == 0) // Mexi nisto para arranjar o caso de ".." 
-		return NULL;
+	if (!cmd[0] || ft_strncmp(cmd, ".", 1) == 0 || ft_strncmp(cmd, " ", 1) == 0)
+		return (NULL);
 	path_envp = my_getenv(minishell, "PATH");
 	if (path_envp == NULL)
 		exit(0);

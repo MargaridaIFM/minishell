@@ -46,21 +46,6 @@ int	count_total_strings(t_minishell *minishell, t_ast *ast)
 	return (total);
 }
 
-/**
- * @brief Counts an array and returns the number of elements
- * @param char **arr
- * @return int
- */
-int	count_array(char **arr)
-{
-	int	i;
-
-	i = 0;
-	while (arr && arr[i])
-		i++;
-	return (i);
-}
-
 // Function to split a string by spaces and concatenate to cmd
 char	**split_cmd(char **cmd, const char *str)
 {
@@ -68,6 +53,15 @@ char	**split_cmd(char **cmd, const char *str)
 
 	split_str = ft_split(str, ' ');
 	return (concat_arrays(cmd, split_str));
+}
+
+void	process_token(t_ast *ast, int *count, char ***cmd)
+{
+	if (ft_strlen(ast->token->str) > 0)
+	{
+		*count += ft_count_words(ast->token->str);
+		*cmd = split_cmd(*cmd, ast->token->str);
+	}
 }
 
 /**
@@ -90,13 +84,7 @@ char	**collect_commands(t_minishell *minishell, t_ast *ast)
 			&& ft_count_words(ast->token->str) > 1)
 			minishell->_str_ = 1;
 		if (ast->token->expander == 1 && ast->token->dq == 0)
-		{
-			if (ft_strlen(ast->token->str) > 0)
-			{
-				count += ft_count_words(ast->token->str);
-				cmd = split_cmd(cmd, ast->token->str);
-			}
-		}
+			process_token(ast, &count, &cmd);
 		else
 			cmd = process_ast_commands(ast, &count, cmd);
 		ast = ast->right;
@@ -126,7 +114,6 @@ void	execute_redir(t_minishell *minishell, t_ast *ast, int flag)
 		free_all(minishell, "");
 		return ;
 	}
-	printf("entrou\n");
 	if (flag == -1)
 		ft_execute(minishell, cmd);
 	else if (minishell->_pipe_ == 1)
