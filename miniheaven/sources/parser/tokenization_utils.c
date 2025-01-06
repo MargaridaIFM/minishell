@@ -12,6 +12,14 @@
 
 #include "../includes/minishell.h"
 
+/**
+ * @brief If a symbol exists the function call another function to separete
+ * the symbol from the previouse word if exists. Update the idx;
+ * @param minishel->display
+ * @param int *start
+ * @param int *idx
+ * @return void;
+ */
 void	process_op_tokens(t_minishell *minishell, int *start, int *idx)
 {
 	if (minishell->display[*idx] == '>' && minishell->display[*idx + 1] == '>')
@@ -32,6 +40,12 @@ void	process_op_tokens(t_minishell *minishell, int *start, int *idx)
 	}
 }
 
+/**
+ * @brief Auxiliary function to add the previouse word (if exits) with the
+ * type WORD, and the symbol of operation with the respective type;
+ * Update de idx;
+ * @return void;
+ */
 void	add_operator_word(t_minishell *minishell, int *start, int idx,
 		int token_type)
 {
@@ -46,6 +60,12 @@ void	add_operator_word(t_minishell *minishell, int *start, int idx,
 	*start = idx + 2;
 }
 
+/**
+ * @brief Auxiliary function to add the previouse word (if exits) with the
+ * type WORD;
+ * Update de idx;
+ * @return void;
+ */
 void	add_word(t_minishell *minishell, int *start, int *idx)
 {
 	int	range;
@@ -57,6 +77,11 @@ void	add_word(t_minishell *minishell, int *start, int *idx)
 	*start = *idx + 1;
 }
 
+/**
+ * @brief Auxiliary function to add the symbol with the designeted type; 
+ * Update de idx;
+ * @return void;
+ */
 void	add_simple_token(t_minishell *minishell, int *start, int *idx)
 {
 	if (minishell->display[*idx] == '|')
@@ -70,6 +95,15 @@ void	add_simple_token(t_minishell *minishell, int *start, int *idx)
 	*start = *idx + 1;
 }
 
+/**
+ * @brief Auxiliary function that allocates memory for a new token and 
+ * add that token to end of the list of tokens;
+ * This token it will be initialized only with the string and type of token;
+ * @param minishel->display
+ * @param int *start
+ * @param int *idx
+ * @return void;
+ */
 void	add_token_back(t_minishell *minishell, char *token, t_tk_tp type)
 {
 	t_token	*new_token;

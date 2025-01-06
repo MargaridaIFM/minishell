@@ -12,19 +12,26 @@
 
 #include "./../includes/minishell.h"
 
-t_token	*create_node(void)
-{
-	t_token	*node;
-
-	node = malloc(sizeof(t_token));
-	return (node);
-}
-
+/**
+ * @brief Checks if a character is a delimiter:space (' '), tab ('\t'),
+ *  or newline ('\n').
+ * 
+ * @param c The character to check.
+ * @return `1` if the character is a delimiter, `0` otherwise.
+ */
 int	is_delimiter(char c)
 {
 	return (c == ' ' || c == '\t' || c == '\n');
 }
 
+/**
+ * @brief Counts the number of words in a string separated by delimiters.
+ * 
+ * This function iterates through the string, skipping delimiters and 
+ * counting sequences of non-delimiter characters as words. 
+ * @param s The input string to count words from.
+ * @return The number of words in the string.
+ */
 int	ft_count_words(char const *s)
 {
 	int	counter;
@@ -44,26 +51,4 @@ int	ft_count_words(char const *s)
 			idx++;
 	}
 	return (counter);
-}
-
-void	add_token_between(t_minishell *minishell, t_token *current, char *str)
-{
-	t_token	*new_node;
-
-	if (!current)
-		return ;
-	new_node = malloc(sizeof(t_token));
-	if (!new_node)
-		free_exit(minishell, "Error - Fail allocating token in split\n");
-	new_node->type = WORD;
-	new_node->str = ft_strdup(str);
-	new_node->cmd = NULL;
-	new_node->path = NULL;
-	if (!new_node->str)
-		free_exit(minishell, "Error - Fail allocating token str in split\n");
-	if (current->next)
-		new_node->next = current->next;
-	else
-		new_node->next = NULL;
-	current->next = new_node;
 }

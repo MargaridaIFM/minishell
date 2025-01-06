@@ -12,6 +12,17 @@
 
 #include "../includes/minishell.h"
 
+/**
+ * @brief Traverses the AST to identify and process `heredoc` nodes.
+ *  When such a heredoc node is found, it calls the process_heredoc` function
+ *  to handle the heredoc logic.
+ * 
+ * @param minishell Pointer to the `t_minishell` structure.
+ * @param ast The current AST node
+ * @param head The root node of the AST.
+ * 
+ * @return Void.
+ */
 void	process_ast_heredoc(t_minishell *minishell, t_ast *ast, t_ast *head)
 {
 	t_ast	*temp;
@@ -29,6 +40,19 @@ void	process_ast_heredoc(t_minishell *minishell, t_ast *ast, t_ast *head)
 	process_ast_heredoc(minishell, temp->right, top);
 }
 
+/**
+ * @brief Sets up and processes a heredoc node.
+ * 
+ * This function creates a new node to store heredoc information 
+ * and sets the delimiter. 
+ * It checks for quotes in the delimiter and configures a pipe
+ * for inter-process communication. A fork is created, where the 
+ * child process writes to the pipe.
+ * 
+ * @param minishell Pointer to the `t_minishell` structure.
+ * @param ast The AST node containing the heredoc redirection.
+ * @param top The root node of the AST.
+ */
 void	process_heredoc(t_minishell *minishell, t_ast *ast, t_ast *top)
 {
 	t_heredoc	*temp;
@@ -45,6 +69,18 @@ void	process_heredoc(t_minishell *minishell, t_ast *ast, t_ast *top)
 	}
 	process_prompt(minishell, temp, top);
 }
+/**
+ * @brief Manages user input and writes it to the heredoc pipe.
+ * 
+ * The child process write to the pipe, while the parent process waits 
+ * for the child to finish.
+ * Signals are configured to handle user interruptions (ctrl D == EOF
+ * ctrl C == return to the prompt)
+ * 
+ * @param minishell Pointer to the `t_minishell` structure.
+ * @param heredoc The structure containing the current heredoc's information.
+ * @param top The root node of the AST (not directly used in this function).
+ */
 
 void	process_prompt(t_minishell *minishell, t_heredoc *heredoc, t_ast *top)
 {
@@ -64,6 +100,17 @@ void	process_prompt(t_minishell *minishell, t_heredoc *heredoc, t_ast *top)
 		g_signal = 130;
 }
 
+/**
+ * @brief Reads user input and writes it to the pipe until the delimiter
+ *  is reached.
+ * 
+ * This function uses `readline` to capture user input. If the input
+ * matches the heredoc's delimiter, the loop terminates.
+ * 
+ * @param minishell Pointer to the `t_minishell` structure.
+ * @param minishell The main structure containing global shell data.
+ * @param heredoc The structure containing the current heredoc's information.
+ */
 void	write_to_pipe(t_minishell *minishell, t_heredoc *heredoc)
 {
 	char	*new_line;
@@ -93,6 +140,18 @@ void	write_to_pipe(t_minishell *minishell, t_heredoc *heredoc)
 	}
 }
 
+/**
+ * @brief Processes the delimiter of a heredoc to handle quotes.
+ * 
+ * Iterates through the delimiter of a heredoc, checking for single (`'`) 
+ * or double (`"`) quotes. If quotes are found activate a flag and call
+ * another functin to remove them.
+ * 
+ * @param minishell Pointer to the `t_minishell` structure.
+ * @param heredoc Pointer to the `t_heredoc` structure.
+ * 
+ * @return Void. Modifies the delimiter and `quotes`.
+ */
 void	heredoc_quotes(t_minishell *minishell, t_heredoc *heredoc)
 {
 	int	idx;
@@ -113,12 +172,6 @@ void	heredoc_quotes(t_minishell *minishell, t_heredoc *heredoc)
 		idx++;
 	}
 }
-
-// ! strut encadeada para os heredocs ou basta apenas ums 
-// ! struct processar e depois limpar?
-// ! wextitstatus - pesquisar e falar com a melhor parceira do mundo
-
-// while(wait(NULL) != -1 || errno != ECHILD)
 
 // fd[0] = read;
 // fd[1] = write;
@@ -158,23 +211,5 @@ void	heredoc_quotes(t_minishell *minishell, t_heredoc *heredoc)
 //              [] read from pipe
 //              [] waitpid;
 // signals
-
-// cat << HEREDOC1 | grep "test" | wc -l << HEREDOC2
-
-/*
-recebe 4 coisas:
-	[] expander especifico heredoc
-	[] como guardo os inputs\
-	[] onde guardo - fd ou buffer
-	[]excepcoes
-		[] crd D == EOF
-		[] ctl C == parar - retorno para o prompt
-
-	strut s_heredoc
-	{
-		t_input
-		idx_aspas;
-	}
-
-	struct s_input;
- */
+//	[] crd D == EOF
+//	[] ctl C == parar - retorno para o prompt

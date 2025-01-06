@@ -13,13 +13,15 @@
 #include "../includes/minishell.h"
 
 /**
- * @brief  process imput from display and add that input to tokens;
+ * @brief  Process imput from display and add that input to tokens;
  * Considers if the first token is a symbol, word, and the whitespaces.
  * Auxliary functions: process_op_tokens, add_op_word, add_word
+ * After the loop ends, if there is any remaining unprocessed segment 
+ * (from start to the end of the string), it is added as a token
+ * using add_token_back.
  * @param minishel->display;
  * @return (void);
  */
-
 void	tokenization(t_minishell *minishell)
 {
 	int	start;
@@ -48,6 +50,15 @@ void	tokenization(t_minishell *minishell)
 				- start), WORD);
 }
 
+/**
+ * @brief If a quote exists check if they are closed. If the quotes arent closed 
+ * a message is printed in stderror and the g_signal change to 2;
+ * Update the idx if the quotes are close;
+ * @param char quote
+ * @param minishel->display
+ * @param int *idx
+ * @return 0 or -1 if que quotes arent closed;
+ */
 int	check_quotes(char quote, t_minishell *minishell, int *idx)
 {
 	if (quote == '"')
@@ -71,6 +82,13 @@ int	check_quotes(char quote, t_minishell *minishell, int *idx)
 	return (0);
 }
 
+/**
+ * @brief auxiliary function to update the idx if the quotes are closed.
+ * @param char quote
+ * @param minishel->display
+ * @param int *idx
+ * @return 0 or -1 if que quotes arent closed;
+ */
 int	process_quotes(t_minishell *minishell, int *idx, char symb)
 {
 	int	flag;

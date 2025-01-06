@@ -28,16 +28,9 @@ static char	**copy_array(t_ast *ast, int count)
 	i = 0;
 	while (ast && (ast->token->type == WORD || ast->token->type == STR))
 	{
-		cmd_array[i] = ft_strdup(ast->token->str);
-		if (!cmd_array[i])
-		{
-			while (i > 0)
-				free(cmd_array[--i]);
-			free(cmd_array);
+		if (!copy_token_to_array(ast, cmd_array, &i))
 			return (NULL);
-		}
 		ast = ast->right;
-		i++;
 	}
 	cmd_array[i] = NULL;
 	return (cmd_array);
@@ -53,12 +46,20 @@ char	**built_cmd(t_ast *ast)
 	t_ast	*temp;
 	char	**cmd_array;
 	int		count;
+	char	**split_cmd;
 
 	count = 0;
 	temp = ast;
 	while (temp && (temp->token->type == WORD || temp->token->type == STR))
 	{
-		count++;
+		if (temp->token->expander == 1)
+		{
+			split_cmd = ft_split(temp->token->str, ' ');
+			count += count_array(split_cmd);
+			free_array(split_cmd);
+		}
+		else
+			count++;
 		temp = temp->right;
 	}
 	cmd_array = copy_array(ast, count);

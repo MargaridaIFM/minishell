@@ -12,7 +12,18 @@
 
 #include "../includes/minishell.h"
 
-void	split_utils(t_token	**last, t_token	**temp, t_tk_tp symbol)
+/**
+ * @brief Helper function to locate a specific symbol in the token list.
+ * 
+ * This function iterates through the token list, stopping at the first 
+ * occurrence of the specified symbol or at the end of the list. It 
+ * updates the provided pointers.
+ * 
+ * @param last Pointer to the last token before the specified symbol.
+ * @param temp Pointer to the current token being processed.
+ * @param symbol The token type to search for in the list.
+ */
+static void	split_utils(t_token	**last, t_token	**temp, t_tk_tp symbol)
 {
 	(void)last;
 	while (*temp)
@@ -23,6 +34,17 @@ void	split_utils(t_token	**last, t_token	**temp, t_tk_tp symbol)
 		*temp = (*temp)->next;
 	}
 }
+/**
+ * @brief Splits tokens at a specified symbol and builds an AST node.
+ * It creates a new AST node for the symbol 
+ * and recursively builds the left and right subtrees from the tokens
+ * before and after the symbol.
+ * 
+ * @param tokens Pointer to the list of tokens to be split.
+ * @param symbol The token type at which to split the list.
+ * 
+ * @return Pointer to the root of the newly created AST subtree.
+ */
 
 t_ast	*split_tokens_ast(t_token **tokens, t_tk_tp symbol)
 {
