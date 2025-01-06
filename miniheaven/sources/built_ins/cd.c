@@ -68,6 +68,22 @@ static char	*go_to_path(t_minishell *minishell, char *new_path)
 	return (full_path);
 }
 
+void	cd_expand(t_minishell *minishell, char **split_cmd, char **new_pwd)
+{
+	if (ft_strcmp(split_cmd[1], "..") == 0)
+		*new_pwd = go_back(minishell);
+	else if (ft_strcmp(split_cmd[1], ".") == 0)
+		*new_pwd = ft_strdup(my_getenv(minishell, "PWD"));
+	else if (ft_strcmp(split_cmd[1], "-") == 0)
+		*new_pwd = go_to_path(minishell, my_getenv(minishell, "OLDPWD"));
+	else if (ft_strlen(split_cmd[1]) > 1 && split_cmd[1][0] == '~')
+	{
+		if (my_getenv(minishell, "HOME") == NULL)
+			return (ft_putstr_fd("bash: cd: HOME not set\n", 2));
+		*new_pwd = ft_strjoin(my_getenv(minishell, "HOME"), split_cmd[1] + 1);
+	}
+}
+
 /**
  * @brief I will enter in the new_path folder, and 
  * change the value of the OLDPWD and PWD
@@ -83,9 +99,9 @@ void	ft_cd(char **split_cmd, t_minishell *minishell)
 	new_pwd = NULL;
 	if (!split_cmd[1])
 		new_pwd = my_getenv(minishell, "HOME");
-	else if (ft_strcmp(split_cmd[1], "..") == 0)
-		new_pwd = go_back(minishell);
-	else
+	else if (count_array(split_cmd) > 1)
+		cd_expand(minishell, split_cmd, &new_pwd);
+	if (new_pwd == NULL)
 		new_pwd = go_to_path(minishell, split_cmd[1]);
 	if (chdir(new_pwd) == 0)
 	{

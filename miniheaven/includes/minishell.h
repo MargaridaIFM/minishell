@@ -65,6 +65,7 @@ typedef struct s_token
 	char			*str;
 	char			*path;
 	char			**cmd;
+	int				expander;
 	int				dq;
 }	t_token;
 
@@ -199,6 +200,7 @@ void		ft_cd(char **split_cmd, t_minishell *minishell);
 
 // ECHO //
 void		ft_echo(char **cmd);
+int			find_char(char *str, char c);
 
 // ENV //
 void		ft_env(t_minishell *minishell, char **cmd);
@@ -269,6 +271,10 @@ void		free_exit(t_minishell *minishell, char *str);
 void		free_all(t_minishell *minishell, char *str);
 void		fd_clean(void);
 void		free_cmd_path(t_ast *left_side);
+char		**concat_arrays(char **arr1, char **arr2);
+char		**replace_null_with_empty(char **str);
+int			copy_token_to_array(t_ast *ast, char **cmd_array, int *i);
+char		**join_arrays(char **array_first, char *array);
 
 //errors1
 void		free_array(char **array);

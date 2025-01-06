@@ -111,6 +111,8 @@ char	*find_path(t_minishell *minishell, char *cmd)
 	char	*full_path;
 	char	*path_envp;
 
+	if (!cmd[0] || ft_strncmp(cmd, ".", 1) == 0 || ft_strncmp(cmd, " ", 1) == 0)
+		return (NULL);
 	path_envp = my_getenv(minishell, "PATH");
 	if (path_envp == NULL)
 		exit(0);
@@ -118,7 +120,9 @@ char	*find_path(t_minishell *minishell, char *cmd)
 	split_cmd = ft_split(cmd, ' ');
 	full_path = NULL;
 	if (cmd && access(cmd, X_OK) == 0)
+	{
 		return (cmd);
+	}
 	else
 		full_path = find_path_util(full_path, split_cmd, split_env);
 	return (full_path);

@@ -12,6 +12,27 @@
 
 #include "../includes/minishell.h"
 
+static int	check_permissions(t_ast *ast, char *file)
+{
+	if (ast->token->type == REDIR_IN)
+	{
+		if (access(file, F_OK) == 0 && access(file, R_OK) != 0)
+			return (print_errors("bash: ", file, ": permissions denied\n"), -1);
+	}
+	if (ast->token->type == REDIR_OUT || ast->token->type == REDIR_APPEND)
+	{
+		if (access(file, F_OK) == 0 && access(file, W_OK) != 0)
+			return (print_errors("bash: ", file, ": permissions denied\n"), -1);
+	}
+	return (0);
+}
+
+static int	print_error_opening(char *file)
+{
+	print_errors("bash: ", file, ": No such file or directory\n");
+	return (-1);
+}
+
 /**
  * @brief Utils for open_file function
  * @param t_minishell *minishell, t_ast *ast, char *file
@@ -19,18 +40,19 @@
  */
 static int	open_file_util(t_minishell *minishell, t_ast *ast, char *file)
 {
-	if (ast->token->type == REDIR_IN)
+	if (check_permissions(ast, file) == -1)
+		return (-1);
+	else if (ft_strlen(file) == 0)
+		return (print_error_opening(file));
+	else if (ast->token->type == REDIR_IN)
 	{
 		if (access(file, F_OK) != 0)
-		{
-			print_errors("bash: ", file, ": No such file or directory\n");
-			return (-1);
-		}
+			return (print_error_opening(file));
 		if (minishell->infile != -1)
 			close(minishell->infile);
 		minishell->infile = open(file, O_RDONLY, 0644);
 	}
-	if (ast->token->type == REDIR_OUT || ast->token->type == REDIR_APPEND)
+	else if (ast->token->type == REDIR_OUT || ast->token->type == REDIR_APPEND)
 	{
 		if (minishell->outfile != -1)
 			close(minishell->outfile);

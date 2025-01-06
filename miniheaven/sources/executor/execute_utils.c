@@ -111,10 +111,8 @@ static int	check_dir(char *str)
 void	execute_cmd(t_minishell *minishell, char **split_cmd)
 {
 	char	*cmd_path;
-	int		count;
 
-	count = count_array(split_cmd);
-	split_cmd = ft_split_cmd(split_cmd, count);
+	split_cmd = replace_null_with_empty(split_cmd);
 	if (split_cmd[0] && access(split_cmd[0], X_OK) == 0)
 		execve(split_cmd[0], split_cmd, minishell->envp);
 	if (check_dir(split_cmd[0]) == 1)
@@ -129,5 +127,12 @@ void	execute_cmd(t_minishell *minishell, char **split_cmd)
 	cmd_path = find_path(minishell, split_cmd[0]);
 	if (cmd_path == NULL)
 		error_execute(minishell, split_cmd, cmd_path);
-	execve(cmd_path, split_cmd, minishell->envp);
+	if (execve(cmd_path, split_cmd, minishell->envp) != 0)
+	{
+		ft_putstr_fd("Couldn't find the command\n", 2);
+		g_signal = 127;
+		free(cmd_path);
+		free_array(split_cmd);
+		free_exit(minishell, " ");
+	}
 }

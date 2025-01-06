@@ -36,7 +36,7 @@ static void	process_util(t_minishell *minishell, t_ast *ast)
 	}
 	if (g_signal)
 	{
-		free_ast(minishell->ast);
+		free_all(minishell, "");
 		minishell->ast = NULL;
 	}
 	else
@@ -77,6 +77,10 @@ static void	check_is_str(t_minishell *minishell)
 		}
 		else
 			temp->dq = 0;
+		if (temp->dq == 0 && ft_strchr(temp->str, '$'))
+			temp->expander = 1;
+		else
+			temp->expander = 0;
 		if (temp->type == PIPE)
 			flag = 0;
 		temp = temp->next;

@@ -36,15 +36,10 @@ static void	print_env(t_minishell *minishell)
  */
 void	ft_env(t_minishell *minishell, char **cmd)
 {
-	if (cmd[1])
+	if (count_array(cmd) > 1)
 	{
-		if (cmd[1][1])
-		{
-			ft_putstr_fd("env: invalid option -- '", 2);
-			ft_putchar_fd(cmd[1][1], 2);
-			ft_putstr_fd("'\n", 2);
-			return ;
-		}
+		ft_putstr_fd("env: too many arguments\n", 2);
+		g_signal = 125;
 		return ;
 	}
 	if (my_getenv(minishell, "PATH") == NULL)

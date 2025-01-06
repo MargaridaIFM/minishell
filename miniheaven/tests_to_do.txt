@@ -87,6 +87,10 @@ $c ("hello world")
 "ls -la"
 "ls"
 "cat | ls"
+echo $a
+echo $c
+echo $a "$a"
+echo $c "$c"
 
 Redireções ✅
 
@@ -135,7 +139,7 @@ ls << eof << eof2 << eof3
 
 < infile < infile < infile "echo hello" ✅
 $$ ✅
-echo < infile 1 < infile 2 --> Erro pode estar na criacao do comando
-echo $b     / b="hello       world"
-echo hello < infile ls < infile < infile world
-< khsadkh ls | wc \ < infile echo < sauidyai
+echo < infile 1 < infile 2 ✅
+echo $b     / b="hello       world" ✅
+echo hello < infile ls < infile < infile world ✅
+< khsadkh ls | wc \ < infile echo < sauidyai ✅
