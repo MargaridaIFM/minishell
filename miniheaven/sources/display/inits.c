@@ -54,7 +54,7 @@ static char	**add_string_to_array(char **array, char *new_string)
 	i = 0;
 	while (array && array[i] != NULL)
 		i++;
-	new_array = realloc(array, sizeof(char *) * (i + 2));
+	new_array = ft_realloc(array, sizeof(char *) * (i + 2));
 	if (!new_array)
 	{
 		ft_putendl_fd("Failed to allocate memory", 2);

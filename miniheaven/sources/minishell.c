@@ -26,7 +26,6 @@ int	g_signal;
  * 
  * @return 0 upon successful execution. or exits the program.
  */
-
 int	main(int argc, char *argv[], char *envp[])
 {
 	t_minishell	minishell;

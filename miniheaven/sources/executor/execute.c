@@ -94,7 +94,6 @@ void	ft_execute(t_minishell *minishell, char **cmd)
 		minishell->exit_status = WEXITSTATUS(minishell->exit_status);
 		return (free_array(cmd));
 	}
-
 	child = fork();
 	if (child == 0)
 		execute_cmd(minishell, cmd);

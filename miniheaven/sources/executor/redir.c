@@ -16,6 +16,7 @@ static int	check_permissions(t_ast *ast, char *file)
 {
 	if (ast->token->type == REDIR_IN)
 	{
+		//printf("%d %d", access(file, F_OK), access(file, R_OK));
 		if (access(file, F_OK) == 0 && access(file, R_OK) != 0)
 			return (print_errors("bash: ", file, ": permissions denied\n"), -1);
 	}
