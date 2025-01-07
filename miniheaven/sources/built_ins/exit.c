@@ -43,14 +43,18 @@ static int	get_exit_code(char *str)
 
 void	ft_exit(t_minishell *minishell, char **dp)
 {
-	if (count_array(dp) > 2)
+	int	count;
+
+	count = count_array(dp);
+	if (count > 2)
 	{
-		printf("exit\n");
+		//printf("exit\n");
 		ft_putstr_fd("bash: exit: too many arguments\n", 2);
 		g_signal = 2;
-		return ;
+		if (check_number(dp[1]) == 0)
+			return ;
 	}
-	if (dp[1])
+	else if (dp[1])
 		g_signal = get_exit_code(dp[1]);
 	ft_putendl_fd("exit", 1);
 	free_array(dp);

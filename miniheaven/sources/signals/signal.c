@@ -82,7 +82,7 @@ void	setup_signals(void)
 	sig_int.sa_handler = sig_handler;
 	sig_quit.sa_handler = SIG_IGN;
 	sig_int.sa_flags = SA_RESTART;
-	sig_quit.sa_flags = 0;
+	sig_quit.sa_flags = SA_RESTART;
 	sigaction(SIGINT, &sig_int, NULL);
 	sigaction(SIGQUIT, &sig_quit, NULL);
 }
@@ -103,7 +103,7 @@ void	stop_signals(void)
 
 	sigemptyset(&sig_ignore.sa_mask);
 	sig_ignore.sa_handler = SIG_IGN;
-	sig_ignore.sa_flags = 0;
+	sig_ignore.sa_flags = SA_RESTART;
 	sigaction(SIGINT, &sig_ignore, NULL);
 	sigaction(SIGQUIT, &sig_ignore, NULL);
 }
@@ -132,7 +132,7 @@ void	setup_signals_here(void)
 	sig_int.sa_handler = here_handler;
 	sig_quit.sa_handler = SIG_IGN;
 	sig_int.sa_flags = SA_RESTART;
-	sig_quit.sa_flags = 0;
+	sig_quit.sa_flags = SA_RESTART;
 	sigaction(SIGINT, &sig_int, NULL);
 	sigaction(SIGQUIT, &sig_quit, NULL);
 }

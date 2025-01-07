@@ -63,13 +63,13 @@ void	ft_execute_pipe(t_minishell *minishell, char **cmd)
 	char	*cmd_path;
 
 	redirect_read(minishell);
-	if (check_execute(minishell, cmd) == 1)
-		free_exit(minishell, "");
-	if (find_builtin(minishell, cmd) == 1)
+	if (find_builtin(minishell, cmd) == 1 && minishell->_str_ == 0)
 	{
 		free_array(cmd);
 		free_exit(minishell, "");
 	}
+	if (check_execute(minishell, cmd) == 1)
+		free_exit(minishell, "");
 	if (access(cmd[0], X_OK) == 0)
 	{
 		if (execve(cmd[0], cmd, minishell->envp) == -1)

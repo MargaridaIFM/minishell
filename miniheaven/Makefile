@@ -46,7 +46,7 @@ LFT_PATH		=	$(addprefix $(LIBS_DIR), libft/)
 SRC				=	$(addprefix $(SRC_DIR), minishell.c) \
 					$(addprefix $(SRC_DIR)$(SIGNALS_DIR), signal.c signal2.c) \
 					$(addprefix $(SRC_DIR)$(DISPLAY_DIR), display.c find_files.c find_files_utils.c inits.c) \
-					$(addprefix $(SRC_DIR)$(ERROR_DIR), errors.c errors1.c errors2.c debug_functions.c errors_execute.c) \
+					$(addprefix $(SRC_DIR)$(ERROR_DIR), errors.c errors1.c errors2.c errors_execute.c) \
 					$(addprefix $(SRC_DIR)$(BUILT_INS_DIR), pwd.c exit.c) \
 					$(addprefix $(SRC_DIR)$(BUILT_INS_DIR), env.c) \
 					$(addprefix $(SRC_DIR)$(BUILT_INS_DIR), export.c local_export.c) \
@@ -60,8 +60,7 @@ SRC				=	$(addprefix $(SRC_DIR), minishell.c) \
 					$(addprefix $(SRC_DIR)$(EXECUTOR_DIR), my_getenv.c array_utils.c array_utils2.c) \
 					$(addprefix $(SRC_DIR)$(PARSER_DIR), expander_vars.c replace_var_in_str.c) \
 					$(addprefix $(SRC_DIR)$(PARSER_DIR), tokenization.c tokenization_utils.c expander.c syntax_error.c ast.c ast1.c parser_utils.c remove_quotes.c) \
-				#	$(addprefix $(SRC_DIR), malloc.c) \
-				#	$(addprefix $(SRC_DIR)$(BUILDS_IN_DIR), pwd.c)
+#					$(addprefix $(SRC_DIR), malloc.c)
 
 OBJ_DIRS		=	$(OBJ_DIR) $(addprefix $(OBJ_DIR), $(PARSER_DIR)) \
 					$(addprefix $(OBJ_DIR), $(SIGNALS_DIR)) \

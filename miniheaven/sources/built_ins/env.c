@@ -39,7 +39,7 @@ void	ft_env(t_minishell *minishell, char **cmd)
 	if (count_array(cmd) > 1)
 	{
 		ft_putstr_fd("env: too many arguments\n", 2);
-		g_signal = 125;
+		g_signal = 127;
 		return ;
 	}
 	if (my_getenv(minishell, "PATH") == NULL)

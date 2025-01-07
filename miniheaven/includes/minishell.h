@@ -138,6 +138,7 @@ char		*extrat_var_content(t_minishell *minishell);
 
 // expander vars
 void		expand_vars(t_minishell *minishell, t_token *token);
+void rm_dollar(t_token *token, t_minishell *minishell, int *idx);
 
 // replace_var_in_str
 char		*replace_var_in_str(char *str, t_minishell *minishell, int *idx);
@@ -147,6 +148,7 @@ int			ft_count_words(char const *s);
 int			is_delimiter(char c);
 
 // remove_quotes
+void		rm_one_single_quotes(t_token *token, t_minishell *minishell, int *idx);
 void		rm_single_quotes(t_token *token, t_minishell *minishell, int *idx);
 void		rm_double_quote(t_token *token, t_minishell *minishell, int *idx);
 
