@@ -6,7 +6,7 @@
 /*   By: mfrancis <mfrancis@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/07 21:12:49 by mistery576        #+#    #+#             */
-/*   Updated: 2025/01/07 10:49:46 by mfrancis         ###   ########.fr       */
+/*   Updated: 2025/01/07 11:47:08 by mfrancis         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,13 @@ static void	expand_vars_utils1(t_minishell *minishell, t_token *token, int *idx)
 {
 	if (token->str[*idx] == '\'')
 	{
-		printf("Index 5: %d\n", *idx);
+		//printf("Index 5: %d\n", *idx);
 		if (!minishell->expander->dq)
 		{
-			printf("Index 5_1: %d\n", *idx);
-			
+			//printf("Index 5_1: %d\n", *idx);
+			rm_single_quotes(token, minishell, idx);
 			// rm_one_single_quotes(token, minishell, idx);
-			// printf("Index 5_2: %d\n", *idx);
+			//printf("Index 5_2: %d\n", *idx);
 			// while(token->str[*idx] != '\'')
 			// 	idx++;
 			// printf("Index 5_3: %d\n", *idx);
@@ -113,17 +113,9 @@ void	expand_vars(t_minishell *minishell, t_token *token)
 			
 			rm_dollar(token, minishell, &idx);
 			printf("str dollar apos: %s\n", token->str);
-
 			printf("Index 4.1: %d\n", idx);
-
-			rm_one_single_quotes(token, minishell, &idx);
-			printf("Index 4.2: %d\n", idx);
-			while(token->str[idx] != '\'')
-				idx++;
+			rm_single_quotes(token, minishell, &idx);
 			printf("Index 4.3: %d\n", idx);
-				
-			rm_one_single_quotes(token, minishell, &idx);
-
 		}
 		if (token->str[idx] == '$' && token->str[idx + 1] == '\"')
 		{
@@ -148,34 +140,4 @@ void	expand_vars(t_minishell *minishell, t_token *token)
 		}
 		idx++;
 	}
-}
-void rm_dollar(t_token *token, t_minishell *minishell, int *idx)
-{
-	int		i;
-	char	*new_str;
-	int j;
-	
-	printf("aqui\n");
-	(void)minishell;
-	i = 0;
-	new_str = malloc(sizeof(char) * (ft_strlen(token->str)));
-	if (!new_str) {
-        free_exit(minishell, "Error - Fail allocating memory for new str\n");
-    }
-	while(i < *idx)
-	{
-		new_str[i] = token->str[i];
-		i++;
-	}
-	j = i;
-	i++;
-	while (token->str[i])
-	{
-		new_str[j] = token->str[i];
-		j++;
-		i++;
-	}
-	new_str[j] = '\0';
-	free(token->str);
-	token->str = new_str;
 }
