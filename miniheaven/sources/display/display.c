@@ -70,7 +70,7 @@ static void	check_is_str(t_minishell *minishell)
 	temp = minishell->tokens;
 	while (temp)
 	{
-		if ((temp->str[0] == '"' || temp->str[0] == '\'')  && flag == 0)
+		if ((temp->str[0] == '"' || temp->str[0] == '\'') && flag == 0)
 		{
 			temp->dq = 1;
 			flag = 1;
