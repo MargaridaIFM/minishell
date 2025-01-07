@@ -118,9 +118,10 @@ void	execute_cmd(t_minishell *minishell, char **split_cmd)
 	if (check_dir(split_cmd[0]) == 1)
 	{
 		g_signal = 126;
-		ft_putstr_fd("bash: ", 2);
-		ft_putstr_fd(split_cmd[0], 2);
-		ft_putendl_fd(": Is a directory", 2);
+		if (access(split_cmd[0], F_OK) == 0 && access(split_cmd[0], X_OK) != 0)
+			print_errors("bash: ", split_cmd[0], ": Permission denied\n");
+		else
+			print_errors("bash: ", split_cmd[0], ": Is a directory\n");
 		free_array(split_cmd);
 		free_exit(minishell, " ");
 	}
@@ -129,10 +130,9 @@ void	execute_cmd(t_minishell *minishell, char **split_cmd)
 		error_execute(minishell, split_cmd, cmd_path);
 	if (execve(cmd_path, split_cmd, minishell->envp) != 0)
 	{
-		ft_putstr_fd("Couldn't find the command\n", 2);
 		g_signal = 127;
 		free(cmd_path);
 		free_array(split_cmd);
-		free_exit(minishell, " ");
+		free_exit(minishell, "Couldn't find the command\n");
 	}
 }
