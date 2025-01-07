@@ -37,18 +37,14 @@ void	rm_single_quotes(t_token *token, t_minishell *minishell, int *idx)
 	new_str = malloc(sizeof(char) * (ft_strlen(token->str) - 1));
 	if (!new_str)
 		free_exit(minishell, "Error - Fail allocating memory for new str\n");
-	i = 0;
-	j = 0;
-	while (token->str[i])
+	i = -1;
+	j = -1;
+	while (token->str[++i])
 	{
 		if (i != *idx && i != pair)
-		{
-			new_str[j] = token->str[i];
-			j++;
-		}
-		i++;
+			new_str[++j] = token->str[i];
 	}
-	new_str[j] = '\0';
+	new_str[++j] = '\0';
 	free(token->str);
 	token->str = new_str;
 	*idx = pair - 2;
