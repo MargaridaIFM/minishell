@@ -1,4 +1,3 @@
-.SILENT:
 MAKEFLAGS += --no-print-directory
 
 GREEN   		= \033[0;32m
