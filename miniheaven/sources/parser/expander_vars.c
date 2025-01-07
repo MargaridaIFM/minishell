@@ -6,7 +6,7 @@
 /*   By: mistery576 <mistery576@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/07 21:12:49 by mistery576        #+#    #+#             */
-/*   Updated: 2025/01/07 15:54:06 by mistery576       ###   ########.fr       */
+/*   Updated: 2025/01/07 22:04:48 by mistery576       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,12 +74,14 @@ static void	expand_vars_utils2(t_minishell *minishell,
 void	handle_expansion_cases(t_minishell *minishell,
 		t_token *token, int *idx, char **new_str)
 {
-	if (token->str[*idx] == '$' && token->str[*idx + 1] == '\'')
+	if (token->str[*idx] == '$' && token->str[*idx + 1] == '\''
+		&& !minishell->expander->dq)
 	{
 		rm_dollar(token, minishell, idx);
 		rm_single_quotes(token, minishell, idx);
 	}
-	else if (token->str[*idx] == '$' && token->str[*idx + 1] == '"')
+	else if (token->str[*idx] == '$' && token->str[*idx + 1] == '"'
+		&& !minishell->expander->dq)
 	{
 		rm_dollar(token, minishell, idx);
 		(*idx)--;
@@ -90,9 +92,7 @@ void	handle_expansion_cases(t_minishell *minishell,
 	}
 	else if (token->str[*idx] == '$' && !token->str[*idx + 1]
 		&& !minishell->expander->dq)
-	{
 		return ;
-	}
 	else if (token->str[*idx] == '$')
 	{
 		expand_vars_utils2(minishell, token, idx, new_str);
