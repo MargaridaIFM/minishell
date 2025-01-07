@@ -12,6 +12,16 @@
 
 #include "../includes/minishell.h"
 
+/**
+ * @brief Initializes variables and finds the position of a variable in the str.
+ * 
+ * @param minishell Pointer to the `t_minishell` 
+ * @param var_pos Pointer to a character pointer to store the position of 
+ * the variable
+ * @param idx Pointer to the current index
+ * @param str The original string being processed.
+ */
+
 static void	ft_initialize(t_minishell *minishell,
 	char	**var_pos, int *idx, char *str)
 {
@@ -27,6 +37,23 @@ static void	ft_initialize(t_minishell *minishell,
 		free(temp);
 	}
 }
+/**
+ * @brief Replaces the placeholder of an environment variable in a string 
+ * with its value.
+ * 
+ * This function locates a variable in the input string starting with `$`,
+ * extracts its position, and creates a new string with the variable replaced by 
+ * its corresponding value. It calculates the lengths of substrings before and
+ * after the variable and combines them with the variable's content into a 
+ * new allocated string. 
+ * Updates the index.
+ * 
+ * @param str The original string containing the variable to be replaced.
+ * @param minishell Pointer to the `t_minishell`.
+ * @param idx Pointer to the current index in the string.
+ * @return A new string with the variable replaced by its value.
+ * Returns `NULL` if memory allocation fails.
+ */
 
 char	*replace_var_in_str(char *str, t_minishell *minishell, int *idx)
 {
