@@ -63,7 +63,7 @@ void	ft_execute_pipe(t_minishell *minishell, char **cmd)
 	char	*cmd_path;
 
 	redirect_read(minishell);
-	if (find_builtin(minishell, cmd) == 1 && minishell->_str_ == 0)
+	if (find_builtin(minishell, cmd) == 1)
 	{
 		free_array(cmd);
 		free_exit(minishell, "");
