@@ -114,6 +114,12 @@ void	no_pipe_util(t_ast *orig, t_ast *temp_copy)
 	}
 }
 
+/**
+ * @brief Set the information for the last redirection
+ * @param _ast *temp_copy, t_ast *orig, t_ast *save_node
+ * @return (void);
+ */
+
 void	complete_last_redir(t_ast *temp_copy, t_ast *orig, t_ast *save_node)
 {
 	if (temp_copy->left && temp_copy->left->right)

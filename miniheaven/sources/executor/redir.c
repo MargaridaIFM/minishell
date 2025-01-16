@@ -12,6 +12,11 @@
 
 #include "../includes/minishell.h"
 
+/**
+ * @brief Checks the permissions of the file that im trying to open
+ * @param t_ast *ast, char *file
+ * @return (int);
+ */
 static int	check_permissions(t_ast *ast, char *file)
 {
 	if (ast->token->type == REDIR_IN)
@@ -27,6 +32,11 @@ static int	check_permissions(t_ast *ast, char *file)
 	return (0);
 }
 
+/**
+ * @brief Prints the error if doesnt find the file
+ * @param char *file
+ * @return (int);
+ */
 static int	print_error_opening(char *file)
 {
 	print_errors("bash: ", file, ": No such file or directory\n");

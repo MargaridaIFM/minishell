@@ -12,6 +12,12 @@
 
 #include "../../includes/minishell.h"
 
+/**
+ * @brief Checks if the first char is '+' or '-'
+ * @param char *str;
+ * @return (int);
+ */
+
 static int	check_number(char *str)
 {
 	int	i;
@@ -31,6 +37,11 @@ static int	check_number(char *str)
 	return (0);
 }
 
+/**
+ * @brief Transforms the str into exit code
+ * @param char *str;
+ * @return (int);)
+ */
 static int	get_exit_code(char *str)
 {
 	int	code;
@@ -41,6 +52,11 @@ static int	get_exit_code(char *str)
 	return (code);
 }
 
+/**
+ * @brief Exit built_in
+ * @param t_minishell *minishell, char **dp
+ * @return (void);
+ */
 void	ft_exit(t_minishell *minishell, char **dp)
 {
 	int	count;
