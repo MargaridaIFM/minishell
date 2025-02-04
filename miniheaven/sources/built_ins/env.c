@@ -12,6 +12,11 @@
 
 #include "../../includes/minishell.h"
 
+/**
+ * @brief Prints all envps
+ * @param t_minishell *minishell
+ * @return (void);
+*/
 static void	print_env(t_minishell *minishell)
 {
 	int	i;
@@ -25,15 +30,22 @@ static void	print_env(t_minishell *minishell)
 }
 
 /**
- * @brief Imprime todas os envps
- * @param char *cmd, char **envp
+ * @brief Executes the env command
+ * @param t_minishell *minishell, char **cmd
  * @return (void);
  */
-void	ft_env(t_minishell *minishell)
+void	ft_env(t_minishell *minishell, char **cmd)
 {
+	if (count_array(cmd) > 1)
+	{
+		ft_putstr_fd("env: too many arguments\n", 2);
+		g_signal = 127;
+		return ;
+	}
 	if (my_getenv(minishell, "PATH") == NULL)
 	{
-		printf("bash: env: No such file or directory\n");
+		print_errors("bash: env: No such file or directory\n", NULL, NULL);
+		g_signal = 127;
 		return ;
 	}
 	print_env(minishell);

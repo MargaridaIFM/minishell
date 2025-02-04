@@ -3,67 +3,113 @@
 /*                                                        :::      ::::::::   */
 /*   redir.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mistery576 <mistery576@student.42.fr>      +#+  +:+       +#+        */
+/*   By: mfrancis <mfrancis@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/07 00:59:02 by mistery576        #+#    #+#             */
-/*   Updated: 2024/12/07 00:59:02 by mistery576       ###   ########.fr       */
+/*   Created: 2024/12/16 16:38:11 by mfrancis          #+#    #+#             */
+/*   Updated: 2024/12/16 16:38:11 by mfrancis         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	open_file(t_minishell *minishell, t_ast *ast)
+/**
+ * @brief Checks the permissions of the file that im trying to open
+ * @param t_ast *ast, char *file
+ * @return (int);
+ */
+static int	check_permissions(t_ast *ast, char *file)
 {
-	char	*file;
-	t_heredoc *temp_here;
-
-	temp_here = minishell->heredoc;
 	if (ast->token->type == REDIR_IN)
 	{
-		file = ast->token->path;
-		if (access(file, F_OK) != 0)
-		{
-			printf("bash: %s: No such file or directory\n", file);
-			return (-1);
-		}
-		if (minishell->infile != -1)
-			close(minishell->infile);
-		minishell->infile = open(file, O_RDONLY, 0644);
-		free(ast->token->path);
-	}	
-	else if (ast->token->type == REDIR_OUT || ast->token->type == REDIR_APPEND)
-	{
-		file = ast->token->path;
-		if (minishell->outfile != -1)
-			close(minishell->outfile);
-		if (ast->token->type == REDIR_OUT)
-			minishell->outfile = open(file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-		else
-			minishell->outfile = open(file, O_WRONLY | O_CREAT | O_APPEND, 0644);
-		free(ast->token->path);
+		if (access(file, F_OK) == 0 && access(file, R_OK) != 0)
+			return (print_errors("bash: ", file, ": permissions denied\n"), -1);
 	}
-	else if (ast->token->type == REDIR_HEREDOC)
+	if (ast->token->type == REDIR_OUT || ast->token->type == REDIR_APPEND)
 	{
-		// if (minishell->temp_stdin == -1)
-		// 	minishell->temp_stdin = dup(STDIN_FILENO);
-		free(ast->token->path);
-		if (minishell->infile != -1)
-			close(minishell->infile);
-		minishell->infile = dup(minishell->heredoc->fd[0]);
-		//dup2(minishell->heredoc->fd[0], minishell->infile);
-		close(minishell->heredoc->fd[0]);
-		//minishell->heredoc->fd[0] = -1;
-		minishell->heredoc = minishell->heredoc->next;
-		free(temp_here->delimiter);
-		free(temp_here);
-		//free(minishell->heredoc->delimiter);
-		//free(minishell->heredoc);
-		// if (minishell->heredoc != NULL)
-		// 	minishell->heredoc = minishell->heredoc->next;
+		if (access(file, F_OK) == 0 && access(file, W_OK) != 0)
+			return (print_errors("bash: ", file, ": permissions denied\n"), -1);
 	}
 	return (0);
 }
 
+/**
+ * @brief Prints the error if doesnt find the file
+ * @param char *file
+ * @return (int);
+ */
+static int	print_error_opening(char *file)
+{
+	print_errors("bash: ", file, ": No such file or directory\n");
+	return (-1);
+}
+
+/**
+ * @brief Utils for open_file function
+ * @param t_minishell *minishell, t_ast *ast, char *file
+ * @return (int)
+ */
+static int	open_file_util(t_minishell *minishell, t_ast *ast, char *file)
+{
+	if (check_permissions(ast, file) == -1)
+		return (-1);
+	else if (ft_strlen(file) == 0)
+		return (print_error_opening(file));
+	else if (ast->token->type == REDIR_IN)
+	{
+		if (access(file, F_OK) != 0)
+			return (print_error_opening(file));
+		if (minishell->infile != -1)
+			close(minishell->infile);
+		minishell->infile = open(file, O_RDONLY, 0644);
+	}
+	else if (ast->token->type == REDIR_OUT || ast->token->type == REDIR_APPEND)
+	{
+		if (minishell->outfile != -1)
+			close(minishell->outfile);
+		if (ast->token->type == REDIR_OUT)
+			minishell->outfile = open(file, O_WRONLY | O_CREAT | O_TRUNC,
+					0644);
+		else
+			minishell->outfile = open(file, O_WRONLY | O_CREAT | O_APPEND,
+					0644);
+	}
+	return (0);
+}
+
+/**
+ * @brief Set the file descriptor for the redirection 
+ * in infile or outfile var in minishell struct
+ * @param t_minishell *minishell, t_ast *ast, char *file
+ * @return (int)
+ */
+int	open_file(t_minishell *minishell, t_ast *ast)
+{
+	char		*file;
+	t_heredoc	*temp_here;
+
+	temp_here = minishell->heredoc;
+	file = ast->token->path;
+	if (open_file_util(minishell, ast, file) == -1)
+		return (-1);
+	else if (ast->token->type == REDIR_HEREDOC)
+	{
+		if (minishell->infile != -1)
+			close(minishell->infile);
+		minishell->infile = dup(minishell->heredoc->fd[0]);
+		close(minishell->heredoc->fd[0]);
+		free(minishell->heredoc->delimiter);
+		temp_here = minishell->heredoc->next;
+		free(minishell->heredoc);
+		minishell->heredoc = temp_here;
+	}
+	return (0);
+}
+
+/**
+ * @brief Redirect the input and output file descriptors
+ * @param t_minishell *minishell
+ * @return (int)
+ */
 int	redirect_read(t_minishell *minishell)
 {
 	if (minishell->infile != -1)
@@ -80,63 +126,6 @@ int	redirect_read(t_minishell *minishell)
 		if (dup2(minishell->outfile, STDOUT_FILENO) == -1)
 			return (-1);
 		close(minishell->outfile);
-	}
-	return (0);
-}
-
-void	redir_in(t_minishell *minishell, t_ast *ast, int flag)
-{
-	t_ast	*node_cmd;
-
-	node_cmd = ast;
-	if (open_file(minishell, ast) == 0)
-	{
-		if (ast->right->token->type == REDIR_OUT)
-		{
-			while (ast->right->token->type == REDIR_OUT)
-			{
-				if (minishell->outfile != -1)
-					close(minishell->outfile);
-				ast = ast->right;
-				open_file(minishell, ast);
-			}
-			execute_ast(minishell, node_cmd->right->left->right, flag);
-		}
-		else
-			execute_ast(minishell, ast->right->right, flag);
-	}
-}
-
-void	redir_out(t_minishell *minishell, t_ast *ast, int flag)
-{
-	t_ast	*node_cmd;
-
-	node_cmd = ast->left;
-	while (ast->token->type == REDIR_OUT)
-	{
-		if (minishell->outfile != -1)
-			close(minishell->outfile);
-		open_file(minishell, ast);
-		ast = ast->right;
-	}
-	execute_ast(minishell, node_cmd, flag);
-}
-
-int	rebuild_fileno(t_minishell *minishell)
-{
-	if (minishell->infile != -1)
-	{
-		if (dup2(minishell->temp_stdin, STDIN_FILENO) == -1)
-			return (-1);
-		close(minishell->temp_stdin);
-		//minishell->temp_stdin = -1;
-	}
-	if (minishell->outfile != -1)
-	{
-		if (dup2(minishell->temp_stdout, STDOUT_FILENO) == -1)
-			return (-1);
-		close(minishell->temp_stdout);
-		//minishell->temp_stdout = -1;
 	}
 	return (0);
 }

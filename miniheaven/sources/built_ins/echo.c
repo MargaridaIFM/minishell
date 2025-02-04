@@ -13,96 +13,74 @@
 #include "../../includes/minishell.h"
 
 /**
- * @brief Vou dar skip no 'echo' e no '-n', caso tenha o '-n', ativar a flag.
- * @param char *str, int *flag.
+ * @brief Reads str to the end, until is equal to c.
+ * @param char *str, char c.
  * @return (int);
  */
-static int	skip(char *str, int *flag)
-{
-	char	**split_str;
-	int		i;
-
-	i = 0;
-	split_str = ft_split(str, ' ');
-	if (ft_strcmp(split_str[1], "-n") == 0)
-		*flag = 1;
-	while (str[i] != 'o')
-		i++;
-	if (*flag == 1)
-	{
-		while (str[i] != 'n')
-			i++;
-	}
-	i++;
-	free_array(split_str);
-	return (i);
-}
-
-/**
- * @brief Vai permitir imprimir espacos enquanto nao encontrar o sinal ( " || ' )
- * @param char *sign, char *str
- * @return (int);
- */
-static int	print_space(char sign, char *str)
-{
-	int	i;
-
-	i = 0;
-	i++;
-	while (str[i] != sign)
-	{
-		printf("%c", str[i]);
-		i++;
-	}
-	i++;
-	return (i);
-}
-
-/**
- * @brief Vou printar a str, mas sem os espacos
- * @param char *str.
- * @return (int);
- */
-static int	print_no_space(char *str)
-{
-	int	i;
-
-	i = 0;
-	while (str[i] && (str[i] != '\'' || str[i] != '"'))
-	{
-		if ((str[i] >= 9 && str[i] <= 13) || str[i] == 32)
-		{
-			printf("%c", str[i]);
-			while ((str[i] >= 9 && str[i] <= 13) || str[i] == 32)
-				i++;
-			return (i);
-		}
-		printf("%c", str[i]);
-		i++;
-	}
-	return (i);
-}
-
-/**
- * @brief Vai imprimir a 'str' que recebe
- * @param char *str
- * @return (void);
- */
-void	ft_echo(char *str)
+int	find_char(char *str, char c)
 {
 	int	i;
 	int	flag;
 
-	flag = 0;
-	i = skip(str, &flag);
-	while ((str[i] >= 9 && str[i] <= 13) || str[i] == 32)
-		i++;
-	while (str[i])
+	i = 0;
+	if (!str || !str[i])
+		return (0);
+	while (str[i] && str[i] == c)
 	{
-		if (str[i] == '"' || str[i] == '\'' )
-			i += print_space(str[i], str + i);
-		else
-			i += print_no_space(str + i);
+		flag = 1;
+		i++;
+	}
+	if (!str[i] && flag)
+		return (1);
+	return (0);
+}
+
+/**
+ * @brief Skips the flags of the echo command.
+ * @param char *str, int *flag.
+ * @return (int);
+ */
+static int	skip(char **cmd, int *flag)
+{
+	int	i;
+
+	i = 1;
+	if (ft_strlen(cmd[i]) >= 2)
+	{
+		while (ft_strlen(cmd[i]) > 0
+			&& cmd[i][0] == '-'
+			&& find_char(cmd[i] + 1, 'n') == 1)
+		{
+			*flag = 1;
+			i++;
+		}
+	}
+	if (*flag == 1)
+		return (i);
+	return (i);
+}
+
+/**
+ * @brief Prints the string passed as argument.
+ * @param char *str
+ * @return (void);
+ */
+void	ft_echo(char **cmd)
+{
+	int	flag;
+	int	i;
+
+	flag = 0;
+	if (cmd[1])
+	{
+		i = skip(cmd, &flag);
+		while (cmd[i])
+		{
+			printf("%s", cmd[i]);
+			i++;
+			if (cmd[i])
+				printf(" ");
+		}
 	}
 	if (flag == 0)
 		printf("\n");

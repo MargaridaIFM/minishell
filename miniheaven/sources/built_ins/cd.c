@@ -13,9 +13,8 @@
 #include "../../includes/minishell.h"
 
 /**
- * @brief Vou dividir o meu PWD pelas '/', vou tirar o ultimo 
- * diretorio, e em seguida
- * vou montar novamente o PATH e returna-lo
+ * @brief "I will split my PWD by '/', remove the last 
+ * directory, and then reconstruct the PATH and return it"
  * @param t_minishell *minishell.
  * @return (char *);
  */
@@ -44,7 +43,7 @@ static char	*go_back(t_minishell *minishell)
 }
 
 /**
- * @brief Vou entrar diretamente no novo path, seja um path relativo ou absoluto
+ * @brief Will enter in the new_path folder
  * @param t_minishell *minishell, char *new_path.
  * @return (char *full_path);
  */
@@ -69,8 +68,25 @@ static char	*go_to_path(t_minishell *minishell, char *new_path)
 	return (full_path);
 }
 
+void	cd_expand(t_minishell *minishell, char **split_cmd, char **new_pwd)
+{
+	if (ft_strcmp(split_cmd[1], "..") == 0)
+		*new_pwd = go_back(minishell);
+	else if (ft_strcmp(split_cmd[1], ".") == 0)
+		*new_pwd = ft_strdup(my_getenv(minishell, "PWD"));
+	else if (ft_strcmp(split_cmd[1], "-") == 0)
+		*new_pwd = go_to_path(minishell, my_getenv(minishell, "OLDPWD"));
+	else if (ft_strlen(split_cmd[1]) > 1 && split_cmd[1][0] == '~')
+	{
+		if (my_getenv(minishell, "HOME") == NULL)
+			return (ft_putstr_fd("bash: cd: HOME not set\n", 2));
+		*new_pwd = ft_strjoin(my_getenv(minishell, "HOME"), split_cmd[1] + 1);
+	}
+}
+
 /**
- * @brief Vou entrar no novo path, e atualizar o PWD e o OLDPWD
+ * @brief I will enter in the new_path folder, and 
+ * change the value of the OLDPWD and PWD
  * @param char **split_cmd, t_minishell *minishell.
  * @return (void);
  */
@@ -83,19 +99,21 @@ void	ft_cd(char **split_cmd, t_minishell *minishell)
 	new_pwd = NULL;
 	if (!split_cmd[1])
 		new_pwd = my_getenv(minishell, "HOME");
-	else if (ft_strcmp(split_cmd[1], "..") == 0)
-		new_pwd = go_back(minishell);
-	else
+	else if (count_array(split_cmd) > 1)
+		cd_expand(minishell, split_cmd, &new_pwd);
+	if (new_pwd == NULL)
 		new_pwd = go_to_path(minishell, split_cmd[1]);
 	if (chdir(new_pwd) == 0)
 	{
 		change_old_path(minishell, temp_pwd);
 		change_pwd(minishell, new_pwd);
 	}
+	else
+	{
+		g_signal = 1;
+		print_errors("bash: cd: ", split_cmd[1],
+			": No such file or directory\n");
+	}
 	if (split_cmd[1])
 		free(new_pwd);
 }
-
-// Primeiro trocar o OLDPWD, caso o Path seja possivel
-// Segundo, mudar o valor do PWD
-// Terceiro abrir o diretorio, com o valor de PWD

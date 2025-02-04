@@ -13,7 +13,7 @@
 #include "../../includes/minishell.h"
 
 /**
- * @brief Vai pegar no **split_pwd, e vai junta-lo novamente
+ * @brief Rebuilds the split_pwd, and returns the new string
  * @param char **split_pwd.
  * @return (char *new_pwd);
  */
@@ -37,13 +37,11 @@ char	*rebuild_pwd(char **split_pwd)
 }
 
 /**
- * @brief Vai receber o *new_path (o atual path), 
- * e vai substituir o valor do OLDPATH
+ * @brief It will change the OLDPWD, with the new_path
  * no minishell->envp.
  * @param t_minishell *minishell, char *new_path.
  * @return (int);
  */
-// Atualiza o OLDPWD com o Path onde estamos atualmente
 int	change_old_path(t_minishell *minishell, char *new_path)
 {
 	char	*new_old_path;
@@ -67,9 +65,7 @@ int	change_old_path(t_minishell *minishell, char *new_path)
 }
 
 /**
- * @brief Vai receber o *new_path (o atual path), 
- * e vai substituir o valor do PATH
- * no minishell->envp.
+ * @brief It will change the PWD with the new_path
  * @param t_minishell *minishell, char *new_path.
  * @return (int);
  */

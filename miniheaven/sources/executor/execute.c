@@ -12,143 +12,96 @@
 
 #include "../../includes/minishell.h"
 
-//wextitstatus - pesquisar e falar com a melhor parceira do mundo 
-
-char	*built_cmd(t_ast *ast)
-{
-	char	*cmd;
-
-	cmd = NULL;
-	free(cmd);
-	if (!cmd)
-		cmd = ft_strdup(ast->token->str);
-	while (ast->right && (ast->token->type == WORD || ast->token->type == STR))
-	{
-		cmd = ft_strjoin_gnl(cmd, " ");
-		cmd = ft_strjoin_gnl(cmd, ast->right->token->str);
-		ast = ast->right;
-	}
-	return (cmd);
-}
-
+/**
+ * @brief Execute the ast, if it is redirection, pipe, or word.
+ * @param t_minishell *minishell, t_ast *ast, int flag
+ * @return (void);
+ */
 void	execute_ast(t_minishell *minishell, t_ast *ast, int flag)
 {
-	char	*cmd;
+	char	**cmd;
 
 	cmd = NULL;
-	while (ast->token->type <= 3)
+	if (ast->token->type <= 3)
 	{
-		if (ast->token->cmd)
-		{
-			if (!cmd)
-			{
-				cmd = ft_strdup(ast->token->cmd);
-				free(ast->token->cmd);
-			}
-			else
-			{
-				cmd = ft_strjoin_gnl(cmd, " ");
-				cmd = ft_strjoin_gnl(cmd, ast->token->cmd);
-				free(ast->token->cmd);
-			}
-		}
-		open_file(minishell, ast);
-		ast = ast->right;
-	}
-	if (cmd)
-	{
-		if (flag == -1)
-			ft_execute(minishell, cmd);
-		else
-			ft_execute_pipe(minishell, cmd);
-		rebuild_fileno(minishell);
-		close_redir(minishell);
-		free(cmd);
+		execute_redir(minishell, ast, flag);
 		return ;
 	}
 	if (ast->token->type == WORD || ast->token->type == STR)
 	{
-		cmd = built_cmd(ast);
+		cmd = collect_commands(minishell, ast);
+		if (!cmd)
+		{
+			g_signal = 0;
+			return ;
+		}
 		if (flag == -1)
 			ft_execute(minishell, cmd);
 		else
 			ft_execute_pipe(minishell, cmd);
 	}
 	if (ast->token->type == PIPE)
-	{
-		if (ast->right->token->type != PIPE)
-			do_one_pipe(minishell, ast);
-		else
-			do_pipeline(minishell, ast);
-	}
+		do_pipeline(minishell, ast);
 	rebuild_fileno(minishell);
 	close_redir(minishell);
-	free(cmd);
 }
 
-void	error_execute(t_minishell *minishell,
-		char **split_cmd, char *cmd_path, char *cmd)
-{
-	printf("%s: commad not found\n", split_cmd[0]);
-	free(cmd_path);
-	free(cmd);
-	free_array(split_cmd);
-	free_exit(minishell, "");
-}
-
-int	find_builtin(t_minishell *minishell, char **dp, char *cmd)
+/**
+ * @brief Checks if it is built_in
+ * @param t_minishell *minishell, char **dp
+ * @return (int);
+ */
+int	find_builtin(t_minishell *minishell, char **dp)
 {
 	if (ft_strcmp(dp[0], "cd") == 0)
+	{
+		if (count_array(dp) > 2)
+		{
+			ft_putstr_fd("cd: too many arguments\n", 2);
+			g_signal = 1;
+			return (1);
+		}
 		return (ft_cd(dp, minishell), 1);
+	}
 	else if (ft_strcmp(dp[0], "echo") == 0)
-		return (ft_echo(cmd), 1);
+		return (ft_echo(dp), 1);
 	else if (ft_strcmp(dp[0], "env") == 0)
-		return (ft_env(minishell), 1);
+		return (ft_env(minishell, dp), 1);
 	else if (ft_strcmp(dp[0], "export") == 0)
-		return (ft_export(dp, minishell), 1);
-	else if (ft_strcmp(dp[0], "pwd") == 0)
-		return (ft_pwd(minishell), 1);
+		return (ft_export(minishell, dp), 1);
 	else if (ft_strcmp(dp[0], "unset") == 0)
 		return (ft_unset(dp, minishell), 1);
+	else if (ft_strcmp(dp[0], "pwd") == 0)
+		return (ft_pwd(), 1);
 	else if (ft_strcmp(dp[0], "exit") == 0)
-	{
-		free(cmd);
-		free_array(dp);
-		free_exit(minishell, "");
-	}
+		return (ft_exit(minishell, dp), 1);
 	return (0);
 }
 
 /**
- * @brief Vai executar o comando recebido 
- * pelo (split_cmd). Ele encontra primeiro o path,
- * na variavel minishell->envp, (ex /bin/ls), significa que executa o comando ls.
- * @param t_minishell *minishell, char **split_cmd
+ * @brief Executes the cmd
+ * @param t_minishell *minishell, char **cmd
  * @return (void);
  */
-void	ft_execute(t_minishell *minishell, char *cmd)
+void	ft_execute(t_minishell *minishell, char **cmd)
 {
-	char	**split_cmd;
 	int		child;
 
-	split_cmd = ft_split(cmd, ' ');
 	if (redirect_read(minishell) == -1)
 		free_exit(minishell, "Something went wrong with dup2\n");
-	if (minishell->_pipe_ == 0)
+	if (find_builtin(minishell, cmd) == 1)
 	{
-		if (find_builtin(minishell, split_cmd, cmd) == 1)
-			return (free_array(split_cmd));
+		minishell->exit_status = WEXITSTATUS(minishell->exit_status);
+		return (free_array(cmd));
 	}
-	if (my_getenv(minishell, "PATH") == NULL)
-	{
-		printf("%s: command not found\n", split_cmd[0]);
+	if (check_execute(minishell, cmd) == 1)
 		return ;
-	}
 	child = fork();
 	if (child == 0)
-		execute_cmd(minishell, split_cmd, cmd);
+		execute_cmd(minishell, cmd);
 	else
-		waitpid(child, NULL, 0);
+		waitpid(child, &minishell->exit_status, 0);
+	minishell->exit_status = WEXITSTATUS(minishell->exit_status);
 	rebuild_fileno(minishell);
-	free_array(split_cmd);
+	free_array(cmd);
 }

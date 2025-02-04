@@ -3,59 +3,29 @@
 /*                                                        :::      ::::::::   */
 /*   errors2.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mistery576 <mistery576@student.42.fr>      +#+  +:+       +#+        */
+/*   By: mfrancis <mfrancis@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/06 19:00:58 by mistery576        #+#    #+#             */
-/*   Updated: 2024/12/10 19:10:39 by mistery576       ###   ########.fr       */
+/*   Created: 2024/12/16 17:08:09 by mfrancis          #+#    #+#             */
+/*   Updated: 2024/12/16 17:26:32 by mfrancis         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-static void	free_utils(t_minishell *minishell)
+/* void	free_exit(t_minishell *minishell, char *str)
 {
-	if (minishell->ast)
+	if (minishell->local)
 	{
-		free_ast(minishell->ast);
-		minishell->ast = NULL;
+		free_array(minishell->local);
+		minishell->local = NULL;
 	}
-	if (minishell->display)
-	{
-		free(minishell->display);
-		minishell->display = NULL;
-	}
-	if (minishell->tokens)
-		free_tokens(minishell);
-	if (minishell->heredoc)
-	{
-		free_heredoc(minishell->heredoc);
-		// free(minishell->heredoc);
-		minishell->heredoc = NULL;
-	}
-	if (minishell->expander)
-	{
-		free_expand(minishell->expander);
-		free(minishell->expander);
-		minishell->expander = NULL;
-    }
-}
-
-void	free_all(t_minishell *minishell, char *str)
-{
-	free_utils(minishell);
-	if (str && str[0] != '\0')
-		ft_putstr_fd(str, 2);
-}
-
-void	free_exit(t_minishell *minishell, char *str)
-{
 	if (str && str[0] != '\0')
 		ft_putstr_fd(str, 2);
 	if (minishell->envp)
 		free_array(minishell->envp);
 	if (minishell->temp_stdin != -1)
 		close (minishell->temp_stdin);
-	if (minishell->temp_stdout != -1) 
+	if (minishell->temp_stdout != -1)
 		close (minishell->temp_stdout);
 	if (minishell->_pipe_ == 1)
 	{
@@ -79,17 +49,52 @@ void	free_exit(t_minishell *minishell, char *str)
 		close(1);
 	free_utils(minishell);
 	fd_clean();
-	exit(0);
+	exit(g_signal);
+} */
+
+/**
+ * @brief Closse the fd
+ * @param int fd
+ * @return void
+ */
+void	close_pipe(int fd)
+{
+	if (fd >= 0)
+		close(fd);
 }
 
-void	fd_clean(void)
+/**
+ * @brief Free the pointer
+ * @param void *ptr
+ * @return void
+ */
+void	free_pointer(void *ptr)
 {
-	int	i;
-
-	i = 3;
-	while (i < FOPEN_MAX)
+	if (ptr)
 	{
-		close(i);
-		i++;
+		free(ptr);
+		ptr = NULL;
 	}
+}
+
+/**
+ * @brief If some file fails to open.
+ * @param t_minishell *minishell, char **split_cmd, char *cmd_path
+ * @return void
+ */
+void	error_execute(t_minishell *minishell,
+		char **split_cmd, char *cmd_path)
+{
+	if (g_signal == 1)
+	{
+		free_array(split_cmd);
+		free_exit(minishell, "");
+	}
+	g_signal = 127;
+	ft_putstr_fd(split_cmd[0], 2);
+	ft_putstr_fd(": command not found\n", 2);
+	if (cmd_path != NULL)
+		free(cmd_path);
+	free_array(split_cmd);
+	free_exit(minishell, "");
 }

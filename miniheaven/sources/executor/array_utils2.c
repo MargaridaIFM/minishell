@@ -1,24 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   malloc.c                                           :+:      :+:    :+:   */
+/*   array_utils2.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mfrancis <mfrancis@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/16 14:31:31 by mfrancis          #+#    #+#             */
-/*   Updated: 2024/12/16 14:31:31 by mfrancis         ###   ########.fr       */
+/*   Created: 2025/01/06 12:33:09 by mfrancis          #+#    #+#             */
+/*   Updated: 2025/01/06 12:33:09 by mfrancis         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <time.h>
-#include <stdlib.h>
+#include "../includes/minishell.h"
 
-extern void	*__real_malloc(size_t size);
-
-void	*__wrap_malloc(size_t size)
+/**
+ * @brief Counts an array and returns the number of elements
+ * @param char **arr
+ * @return int
+ */
+int	count_array(char **arr)
 {
-	srand(time(NULL));
-	if (rand() % 2)
-		return (NULL);
-	return (__real_malloc(size));
+	int	i;
+
+	i = 0;
+	while (arr && arr[i])
+		i++;
+	return (i);
 }

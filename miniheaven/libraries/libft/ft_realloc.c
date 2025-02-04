@@ -1,32 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pwd.c                                              :+:      :+:    :+:   */
+/*   ft_realloc.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mistery576 <mistery576@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/13 23:37:16 by mistery576        #+#    #+#             */
-/*   Updated: 2024/10/29 17:03:58 by mistery576       ###   ########.fr       */
+/*   Created: 2024/12/18 22:29:42 by mistery576        #+#    #+#             */
+/*   Updated: 2024/12/23 23:52:58 by mistery576       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
+#include "libft.h"
 
-/**
- * @brief Prints the current working directory
- * @param void
- * @return (void);
- */
-void	ft_pwd(void)
+void	*ft_realloc(void *ptr, size_t old_size, size_t new_size)
 {
-	char	*pwd;
+	size_t	copy_size;
+	void	*new_ptr;
 
-	pwd = getcwd(NULL, 0);
-	if (pwd != NULL)
+	if (new_size == 0)
 	{
-		printf("%s\n", pwd);
-		free(pwd);
+		free(ptr);
+		return (NULL);
 	}
-	else
-		ft_putstr_fd("Error doing getcwd\n", 2);
+	new_ptr = malloc(new_size);
+	if (!new_ptr)
+		return (NULL);
+	if (ptr)
+	{
+		if (old_size < new_size)
+			copy_size = old_size;
+		else
+			copy_size = new_size;
+		ft_memcpy(new_ptr, ptr, copy_size);
+		free(ptr);
+	}
+	return (new_ptr);
 }

@@ -61,7 +61,8 @@ SRCS =	ft_isalpha.c \
 		get_next_line_utils_bonus.c\
 		test_list_functions.c \
 		ft_strstr.c \
-		ft_strcmp.c
+		ft_strcmp.c \
+		ft_realloc.c
 
 OBJECTS = $(SRCS:.c=.o)
 
