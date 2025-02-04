@@ -70,7 +70,7 @@ static void	check_is_str(t_minishell *minishell)
 	temp = minishell->tokens;
 	while (temp)
 	{
-		if (temp->str[0] == '"' && flag == 0)
+		if ((temp->str[0] == '"' || temp->str[0] == '\'') && flag == 0)
 		{
 			temp->dq = 1;
 			flag = 1;
@@ -140,13 +140,13 @@ static void	process_input(t_minishell *minishell)
 
 void	display_prompt(t_minishell *minishell)
 {
+	if (!minishell->display)
+		minishell->display = readline("[minishell]$ ");
 	if (g_signal != 0)
 	{
 		minishell->exit_status = g_signal;
 		g_signal = 0;
 	}
-	if (!minishell->display)
-		minishell->display = readline("[minishell]$ ");
 	if (!minishell->display)
 		free_exit(minishell, "");
 	if (!*minishell->display)

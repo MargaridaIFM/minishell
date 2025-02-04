@@ -44,6 +44,11 @@ char	**join_array(char **array_first, char *array)
 	return (new_array);
 }
 
+/**
+ * @brief Concatenates the arr2 with arr1
+ * @param char **array, char *new_string
+ * @return (char **);
+ */
 char	**concat_arrays(char **arr1, char **arr2)
 {
 	char	**result;
@@ -71,6 +76,11 @@ char	**concat_arrays(char **arr1, char **arr2)
 	return (result);
 }
 
+/**
+ * @brief Sets value of NULL to empty string
+ * @param char **array, char *new_string
+ * @return (char **);
+ */
 char	**replace_null_with_empty(char **str)
 {
 	int	i;

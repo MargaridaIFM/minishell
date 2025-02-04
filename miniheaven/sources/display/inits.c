@@ -12,6 +12,11 @@
 
 #include "../../includes/minishell.h"
 
+/**
+ * @brief It takes the SHLVL value, and increment it by 1
+ * @param t_minishell *minishell, char **envp, int start;
+ * @return (void);
+ */
 static void	update_lvl(t_minishell *minishell, char *envp, int start)
 {
 	char	*new_lvl;
@@ -24,6 +29,11 @@ static void	update_lvl(t_minishell *minishell, char *envp, int start)
 	free(new_lvl);
 }
 
+/**
+ * @brief  It whill create the envp array
+ * @param t_minishell *minishell, char *envp[], int envp_counter
+ * @return (int);
+ */
 static int	create_env(t_minishell *minishell, char *envp[], int envp_counter)
 {
 	int	i;
@@ -46,6 +56,11 @@ static int	create_env(t_minishell *minishell, char *envp[], int envp_counter)
 	return (i);
 }
 
+/**
+ * @brief It takes the new_string and adds it to array
+ * @param char **array, char *new_string
+ * @return (char **);
+ */
 static char	**add_string_to_array(char **array, char *new_string)
 {
 	char	**new_array;
@@ -70,6 +85,11 @@ static char	**add_string_to_array(char **array, char *new_string)
 	return (new_array);
 }
 
+/**
+ * @brief Sets the mandatory env variables (OLDPWD, PWD, SHLVL)
+ * @param t_minishell *minishell;
+ * @return (char **);
+ */
 static void	mandatory_env(t_minishell *minishell)
 {
 	char	*pwd;
@@ -96,6 +116,11 @@ static void	mandatory_env(t_minishell *minishell)
 	}
 }
 
+/**
+ * @brief Set all the values in the minishell structure
+ * @param char *envp[], t_minishell *minishell
+ * @return (void);
+ */
 void	initialization(char *envp[], t_minishell *minishell)
 {
 	int	envp_counter;

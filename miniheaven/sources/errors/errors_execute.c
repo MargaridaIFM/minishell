@@ -19,15 +19,13 @@
  */
 int	check_execute(t_minishell *minishell, char **cmd)
 {
-	if (!cmd[0] && access(cmd[0], X_OK) != 0)
+	if (!cmd[0])
 	{
-		ft_putstr_fd(cmd[0], 2);
-		ft_putstr_fd(": command not found\n", 2);
 		g_signal = 127;
 		minishell->_str_ = 0;
 		return (free_array(cmd), 1);
 	}
-	if (my_getenv(minishell, "PATH") == NULL)
+	if (my_getenv(minishell, "PATH") == NULL && access(cmd[0], X_OK) != 0)
 	{
 		print_errors("bash: ", cmd[0], ": command not found\n");
 		g_signal = 127;
